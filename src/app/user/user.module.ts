@@ -10,4 +10,4 @@ import { reducer } from './state/user.reducer';
 
 })
 
-export class UserModule{ }
+export class UserModule { }
