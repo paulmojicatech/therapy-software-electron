@@ -11,7 +11,13 @@ import { HomeComponent } from './home.component';
 
 const appRoutes: Route[] = [
   {
-    path: '', component: HomeComponent
+    path: '', component: HomeComponent,
+    children: [
+      {
+        path: 'login', 
+        loadChildren: './user/user.module#UserModule'
+      }
+    ]
   }
 ]
 

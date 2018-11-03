@@ -1,15 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { Store, select } from '@ngrx/store';
+import * as fromUser from './user/state/index';
+import { UserState } from './user/state/user.reducer';
+
+import { Observable } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { User } from './user/models/userModel';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
+  selector: 'pmt-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  constructor(private _router:Router, private _store:Store<UserState>) { }
+
+  isActive:boolean;
 
   ngOnInit() {
+    this.isActive = true;
+    this._store.pipe(
+      select(fromUser.getCurrentUser),
+      takeWhile(() => this.isActive)
+    ).subscribe(u => {
+      if (u === null){
+        this._router.navigate(['login']);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.isActive = false;
+  }
+
+  isLoggedIn() {
+
   }
 
 }
