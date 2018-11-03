@@ -1,13 +1,13 @@
 <div class="container">
-  <form novalidate>
+  <form novalidate (ngSubmit)="login()" [formGroup]="loginForm">
     <mat-form-field>
-      <input matInput placeholder="User Email" />
+      <input matInput placeholder="User Email" formControlName="user" />
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="password" placeholder="Password" />
+      <input matInput type="password" placeholder="Password" formControlName="password" />
     </mat-form-field>
     <div>
-        <button mat-raised-button color="primary">Login</button>
+        <button mat-raised-button color="primary" type="submit">Login</button>
     </div>
   </form>
 </div>

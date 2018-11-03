@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { MatFormFieldModule, 
          MatInputModule,
@@ -9,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/user.reducer';
 import { LoginComponent } from './login.component';
+import { LoginService } from './services/login.service';
 
 const userRoutes: Route[] = [
     {
@@ -20,14 +23,18 @@ const userRoutes: Route[] = [
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        ReactiveFormsModule,
+        HttpModule,
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
         RouterModule.forChild(userRoutes),
         StoreModule.forFeature('users', reducer)
     ],
-    declarations: [LoginComponent]
-
+    declarations: [LoginComponent],
+    providers: [
+        LoginService
+    ]
 })
 
 export class UserModule { }
