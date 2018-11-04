@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
+import { PanelComponent } from './shared/panel.component';
 
 const appRoutes: Route[] = [
   {
@@ -24,7 +25,8 @@ const appRoutes: Route[] = [
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    PanelComponent
   ],
   imports: [
     BrowserModule,
