@@ -39,12 +39,11 @@ export class LoginComponent implements OnInit {
     this._loginSvc.Login(obj).subscribe(resp => {
         let curUser:User = { 
           email: this.loginForm.value.user, 
-          name: 'Kirstin',
-          token: resp
+          name: 'Kirstin'
         };
+        localStorage.setItem('session-token', resp);
         this._router.navigate(['']);
         this._store.dispatch(new userActions.SetCurrentUser(curUser));
     });
   }
-
 }

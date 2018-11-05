@@ -1,3 +1,16 @@
-<p>
-  panel works!
-</p>
+<div class="container">
+  <div class="clientSection">
+    <span>
+      <i (click)="toggleExpander()" [class]="isExpanded ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
+      Clients
+    </span>
+    <div class="filterSection" [hidden]="!isExpanded">
+        <mat-form-field>
+            <input matInput type="text" placeholder="Filter" />
+        </mat-form-field>
+        <div class="clientsFilteredSection" *ngFor="let c of clients$ | async">
+          {{c.GeneralDetails.ClientName}}
+        </div>
+      </div>
+  </div>
+</div>

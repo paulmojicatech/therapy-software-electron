@@ -17,8 +17,8 @@ export function reducer(state:ClientState = initialState,
         switch (action.type){
             case ClientActionTypes.LoadClientsSuccess:
                 return {
-                    allClients: action.payload,
-                    ...state
+                    ...state,
+                    allClients: action.payload
                 }
             case ClientActionTypes.LoadClientsFail:
                 return {
