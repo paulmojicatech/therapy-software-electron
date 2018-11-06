@@ -1,14 +1,14 @@
 <div class="container">
   <div class="clientSection">
-    <span>
-      <i (click)="toggleExpander()" [class]="isExpanded ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
+    <span (click)="toggleExpander()">
+      <i [class]="isExpanded ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
       Clients
     </span>
     <div class="filterSection" [hidden]="!isExpanded">
         <mat-form-field>
-            <input matInput type="text" placeholder="Filter" />
+            <input matInput type="text" placeholder="Filter" (keyup)="filterClients($event)" />
         </mat-form-field>
-        <div class="clientsFilteredSection" *ngFor="let c of clients$ | async">
+        <div class="clientsFilteredSection" *ngFor="let c of filteredClients">
           {{c.GeneralDetails.ClientName}}
         </div>
       </div>

@@ -5,7 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { MatFormFieldModule, 
          MatInputModule,
-         MatButtonModule } from '@angular/material';
+         MatButtonModule,
+         MatProgressSpinnerModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StoreModule } from '@ngrx/store';
@@ -28,6 +29,7 @@ const userRoutes: Route[] = [
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        MatProgressSpinnerModule,
         RouterModule.forChild(userRoutes),
         StoreModule.forFeature('users', reducer)
     ],

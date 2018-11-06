@@ -6,7 +6,9 @@
 
 .panel-section {
     flex: 1 1 auto;
-    min-width: 25vw;
+    max-width: 25vw;
+    background-color: #e8e9ea;
+    border: solid #6c6e70 2px;
 }
 
 .main-section {

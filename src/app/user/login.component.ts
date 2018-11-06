@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private _loginSvc: LoginService) { }
 
   loginForm:FormGroup;
-
+  isLoading:boolean = false;
 
   ngOnInit() {
     this.loginForm = this._builder.group({
@@ -32,11 +32,13 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.isLoading = true;
     let obj = {
       userName: this.loginForm.value.user,
       password: btoa(this.loginForm.value.password)
     };
     this._loginSvc.Login(obj).subscribe(resp => {
+        this.isLoading = false;
         let curUser:User = { 
           email: this.loginForm.value.user, 
           name: 'Kirstin'
