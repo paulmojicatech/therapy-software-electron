@@ -1,11 +1,13 @@
 .container {
     margin-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .clientsSection {
-    max-height: 75vh;
     display: flex;
     flex-direction: row;
+    margin-top:1em;
 }
 
 .clientsFilteredSection {
