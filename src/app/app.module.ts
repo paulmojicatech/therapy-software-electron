@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { MatInputModule, MatFormFieldModule } from '@angular/material';
+import { MatInputModule, 
+         MatFormFieldModule,
+         MatToolbarModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -40,6 +42,7 @@ const appRoutes: Route[] = [
     RouterModule.forRoot(appRoutes),
     MatInputModule,
     MatFormFieldModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
