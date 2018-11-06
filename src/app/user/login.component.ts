@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 
 import { LoginService } from './services/login.service';
 import { User } from './models/userModel';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'pmt-login',
@@ -16,17 +17,18 @@ import { User } from './models/userModel';
 
 export class LoginComponent implements OnInit {
 
-  constructor(private _router: Router, 
-    private _store:Store<fromUser.UserState>,
+  constructor(private _router: Router,
+    private _store: Store<fromUser.UserState>,
     private _builder: FormBuilder,
-    private _loginSvc: LoginService) { }
+    private _loginSvc: LoginService,
+    private _snackbar: MatSnackBar) { }
 
-  loginForm:FormGroup;
-  isLoading:boolean = false;
+  loginForm: FormGroup;
+  isLoading: boolean = false;
 
   ngOnInit() {
     this.loginForm = this._builder.group({
-      user: ['',Validators.required],
+      user: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -38,14 +40,20 @@ export class LoginComponent implements OnInit {
       password: btoa(this.loginForm.value.password)
     };
     this._loginSvc.Login(obj).subscribe(resp => {
+      if (resp.Type === 1) {
         this.isLoading = false;
         let curUser:User = { 
           email: this.loginForm.value.user, 
           name: 'Kirstin'
         };
-        localStorage.setItem('session-token', resp);
-        this._router.navigate(['']);
+        localStorage.setItem('session-token', resp.Message);
         this._store.dispatch(new userActions.SetCurrentUser(curUser));
+        this._router.navigate(['']);
+      }
+      else {
+        this.isLoading = false;
+        this._snackbar.open(resp.Message, 'Dismiss');
+      }
     });
   }
 }

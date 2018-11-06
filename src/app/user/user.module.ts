@@ -6,7 +6,8 @@ import { Route, RouterModule } from '@angular/router';
 import { MatFormFieldModule, 
          MatInputModule,
          MatButtonModule,
-         MatProgressSpinnerModule } from '@angular/material';
+         MatProgressSpinnerModule,
+         MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StoreModule } from '@ngrx/store';
@@ -30,6 +31,7 @@ const userRoutes: Route[] = [
         MatInputModule,
         MatButtonModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
         RouterModule.forChild(userRoutes),
         StoreModule.forFeature('users', reducer)
     ],

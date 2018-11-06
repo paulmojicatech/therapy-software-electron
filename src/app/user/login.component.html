@@ -1,13 +1,13 @@
 <div class="container">
   <form novalidate (ngSubmit)="login()" [formGroup]="loginForm">
     <mat-form-field>
-      <input [attr.disabled]="isLoading" matInput placeholder="User Email" formControlName="user" />
+      <input [readonly]="isLoading" matInput placeholder="User Email" formControlName="user" />
     </mat-form-field>
     <mat-form-field>
-      <input [attr.disabled]="isLoading" matInput type="password" placeholder="Password" formControlName="password" />
+      <input [readonly]="isLoading" matInput type="password" placeholder="Password" formControlName="password" />
     </mat-form-field>
     <div>
-        <button [attr.disabled]="isLoading" mat-raised-button color="primary" type="submit">Login</button>
+        <button mat-raised-button color="primary" type="submit">Login</button>
     </div>
   </form>
 </div>
