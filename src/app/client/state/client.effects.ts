@@ -21,4 +21,13 @@ export class ClientEffects {
             catchError(err => of(new fromClient.LoadClientsFail(err)))
         )
     ));
+
+    @Effect() 
+    updateClient$: Observable<Action> = this.actions$.pipe(
+        ofType(fromClient.ClientActionTypes.UpdateClient),
+        mergeMap((action:fromClient.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
+            map(client => (new fromClient.UpdateClientSuccess(client))),
+            catchError(err => of(new fromClient.UpdateClientFail(err)))
+        )
+    ));
 }

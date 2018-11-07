@@ -27,9 +27,19 @@ export function reducer(state:ClientState = initialState,
                 }
             case ClientActionTypes.SetCurrentClient:
                 return {
-                    currentClient: action.payload,
-                    ...state
+                    ...state,
+                    currentClient: action.payload
                 }
+            case ClientActionTypes.UpdateClientSuccess:
+                const updatedClients = state.allClients.map(
+                    c => c.GeneralDetails.ClientID === action.payload.GeneralDetails.ClientID ?
+                        action.payload : c
+                );
+                return {
+                    ...state,
+                    allClients:updatedClients,
+                    currentClient: action.payload
+                }  
             default:
                 return state;
         }

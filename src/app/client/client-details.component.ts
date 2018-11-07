@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import * as fromClient from './state/index';
+import * as clientActions from './state/client.actions';
 import { ClientState } from './state/client.reducer';
 import { Clients } from './models/clientModel';
-import { takeWhile, first } from 'rxjs/operators';
-import { LoadClients } from './state/client.actions';
+import { takeWhile } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -15,7 +15,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ClientDetailsComponent implements OnInit, OnDestroy {
 
-  constructor(private _route:ActivatedRoute,
+  constructor(
+              private _route:ActivatedRoute,
+              private _router:Router,
               private _builder:FormBuilder,
               private _store:Store<ClientState>) { }
 
@@ -59,7 +61,25 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  goBack() {
-    this._route.snapshot.parent
-  }  
+  save() {
+    this.currentClient = {
+      GeneralDetails: {
+        'ClientName': this.clientDetailsGroup.value.clientName,
+        'ClientSSN': this.clientDetailsGroup.value.clientSSN,
+        'ClientDoB': this.clientDetailsGroup.value.clientDoB,
+        'ClientAddress': this.clientDetailsGroup.value.clientAddress,
+        'ClientCity': this.clientDetailsGroup.value.clientCity,
+        'ClientState': this.clientDetailsGroup.value.clientState,
+        'ClientZip': this.clientDetailsGroup.value.clientZip,
+        'ClientEmail': this.clientDetailsGroup.value.clientEmail,
+        'ClientID': this.currentClient.GeneralDetails.ClientID,
+        'ClientPhone': this.clientDetailsGroup.value.clientPhone,
+        'ClientSecondaryEmail': this.clientDetailsGroup.value.clientSecEmail,
+        'ClientSecondaryPhone': this.clientDetailsGroup.value.clientSecPhone,
+        'ClientLastName': this.currentClient.GeneralDetails.ClientLastName
+      }
+    };
+    this._store.dispatch(new clientActions.UpdateClient(this.currentClient));
+    this._router.navigate(['']);
+  }
 }
