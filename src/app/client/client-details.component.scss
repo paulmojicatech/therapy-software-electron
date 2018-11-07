@@ -1,17 +1,30 @@
+form {
+    width: 100%;
+}
 .prev-section {
     span {
         i {
-            color: dodgerblue;
+            color: #3f51b5;
             font-size: 3rem;
         }
         font-size: 2em;
         line-height: 3rem;
         vertical-align: top;
-        color: dodgerblue;
+        color: #3f51b5;
     }
 }
 .client-detail-tab-section {
     mat-form-field {
         width: 65%;
     }
+    display: flex;
+}
+.action-section {
+    background-color: #e8e9ea;
+    width: 5rem;
+    font-size: 2rem;
+    height: 100%;
+    border: solid #6c6e70 2px;
+    text-align: center;
+    position: flex-end;
 }
