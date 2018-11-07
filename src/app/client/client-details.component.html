@@ -1,3 +1,52 @@
-<p>
-  client-details works!
-</p>
+<div class="container">
+  <div class="prev-section">
+    <span>
+      <i class="fa fa-arrow-circle-o-left" [routerLink]="['']"></i>
+      Previous
+    </span>
+  </div>
+  <div class="client-detail-tab-section">
+    <form novalidate #form [formGroup]="clientDetailsGroup">
+      <mat-tab-group>
+        <mat-tab label="General Details">
+          <mat-form-field>
+            <input matInput placeholder="Client Name" formControlName="clientName" readonly/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Email" formControlName="clientEmail"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Secondary Email" formControlName="clientSecEmail"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Phone" formControlName="clientPhone"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Secondary Phone" formControlName="clientSecPhone"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Social Security" formControlName="clientSSN"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Client Date of Birth" formControlName="clientDoB"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Address" formControlName="clientAddress"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="City" formControlName="clientCity"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="State" formControlName="clientState"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Zip" formControlName="clientZip"/>
+          </mat-form-field>
+        </mat-tab>
+        <mat-tab label="Insurance Details" class="insurance-section">
+          Test
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
+</div>

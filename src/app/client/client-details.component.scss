@@ -1,0 +1,17 @@
+.prev-section {
+    span {
+        i {
+            color: dodgerblue;
+            font-size: 3rem;
+        }
+        font-size: 2em;
+        line-height: 3rem;
+        vertical-align: top;
+        color: dodgerblue;
+    }
+}
+.client-detail-tab-section {
+    mat-form-field {
+        width: 65%;
+    }
+}

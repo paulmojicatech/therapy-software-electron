@@ -1,6 +1,8 @@
 {
   "name": "therapy-software",
   "version": "0.0.0",
+  "author": "Paul Mojica Technologies",
+  "description": "Therapy Software",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,8 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build --base-href ./ && electron .",
-    "dist": "build"
+    "electron": "ng build --base-href ./ && electron ."
   },
   "main": "main.js",
   "private": true,
@@ -44,7 +45,6 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "electron": "^3.0.7",
-    "electron-builder": "^20.31.2",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",

@@ -7,6 +7,7 @@ import { Clients } from '../client/models/clientModel';
 import * as fromClient from '../client/state/index';
 import * as clientActions from '../client/state/client.actions';
 import { takeWhile } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pmt-panel',
@@ -15,7 +16,8 @@ import { takeWhile } from 'rxjs/operators';
 })
 export class PanelComponent implements OnInit, OnDestroy {
 
-  constructor(private _store:Store<State>) { }
+  constructor(private _store:Store<State>,
+              private _router:Router) { }
 
   isExpanded:boolean = false;
   filteredClients:Clients[] = [];
@@ -49,5 +51,10 @@ export class PanelComponent implements OnInit, OnDestroy {
       return c.GeneralDetails.ClientName.toLowerCase()
         .lastIndexOf(ev.target.value.toLowerCase()) > -1;
     });
+  }
+
+  selectClient(client:Clients){
+    this._store.dispatch(new clientActions.SetCurrentClient(client));
+    this._router.navigate(['clients/' + client.GeneralDetails.ClientID]);
   }
 }

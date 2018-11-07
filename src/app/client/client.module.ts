@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Route } from '@angular/router';
+import { MatFormFieldModule,
+         MatInputModule,
+         MatTabsModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './state/client.reducer';
@@ -19,6 +23,10 @@ const clientRoutes:Route[] = [
     imports: [
         BrowserModule, 
         HttpModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
         RouterModule.forChild(clientRoutes),
         StoreModule.forFeature('clients', reducer),
         EffectsModule.forFeature([ ClientEffects ])

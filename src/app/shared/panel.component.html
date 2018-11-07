@@ -8,7 +8,9 @@
         <mat-form-field>
             <input matInput type="text" placeholder="Filter" (keyup)="filterClients($event)" />
         </mat-form-field>
-        <div class="clientsFilteredSection" *ngFor="let c of filteredClients">
+        <div class="clientsFilteredSection" 
+          *ngFor="let c of filteredClients"
+          (click)="selectClient(c)">
           {{c.GeneralDetails.ClientName}}
         </div>
       </div>
