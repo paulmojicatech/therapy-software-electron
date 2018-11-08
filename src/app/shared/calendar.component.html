@@ -1,0 +1,23 @@
+<div class="main-section">
+  <div class="header">
+      <button class="btn btn-primary" mwlCalendarPreviousView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Prev</button>
+      <button class="btn btn-primary" mwlCalendarNextView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Next</button>
+  </div>
+  <div class="day-view" *ngIf="view === 'day'">
+      <mwl-calendar-day-view [events]="appointments" [viewDate]="startDate">
+      </mwl-calendar-day-view>
+  </div>
+  <div class="week-view" *ngIf="view === 'week'">
+      <mwl-calendar-week-view [events]="appointments" 
+          [excludeDays]="daysToExclude" [viewDate]="startDate" 
+          (eventClicked)="selectDate($event)" [tooltipAppendToBody]="false">
+      </mwl-calendar-week-view>
+  </div>
+  <div class="month-view" *ngIf="view === 'month'">
+      <mwl-calendar-month-view [events]="appointments" [viewDate]="startDate" [tooltipPlacement]="none">
+      </mwl-calendar-month-view>
+  </div>
+</div>
+<!-- <div class="spinner-container" *ngIf="isLoading">
+  <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" value="25"></mat-progress-spinner>
+</div> -->

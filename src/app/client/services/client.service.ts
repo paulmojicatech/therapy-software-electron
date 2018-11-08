@@ -41,7 +41,6 @@ export class ClientService {
                     if (resStatue.Type === 1) {
                         return details;
                     }
-                    
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()));

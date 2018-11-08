@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { MatInputModule, 
          MatFormFieldModule,
-         MatToolbarModule } from '@angular/material';
+         MatToolbarModule,
+         MatProgressSpinnerModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -14,6 +15,9 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 import { PanelComponent } from './shared/panel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarComponent } from './shared/calendar.component';
+import { DateAdapter, CalendarModule } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const appRoutes: Route[] = [
   {
@@ -35,7 +39,8 @@ const appRoutes: Route[] = [
   declarations: [
     AppComponent,
     HomeComponent,
-    PanelComponent
+    PanelComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +48,7 @@ const appRoutes: Route[] = [
     MatInputModule,
     MatFormFieldModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
@@ -52,7 +58,11 @@ const appRoutes: Route[] = [
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([]),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

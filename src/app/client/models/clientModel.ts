@@ -1,6 +1,10 @@
+import { CPTCodes } from "./cptCodeModel";
+import { ICDCodes } from "./icdCodeModel";
+
 export class Clients {
     GeneralDetails: GeneralDetails;
     InsuranceDetails?: InsuranceDetails;
+    SessionDetails?: SessionDetails[];
 }
 
 export class GeneralDetails {
@@ -33,4 +37,12 @@ export class InsuranceCompanies {
     InsuranceCompanyID: number;
     InsuranceCompanyName?: string;
     InsurancePhone?: string;
+}
+
+export class SessionDetails {
+    ClientSessionID: number;
+    ClientSessionDate: string;
+    ClientSessionNotes: string;
+    ClientSessionICDCodes?:ICDCodes[];
+    ClientSessionCPTCodes?:CPTCodes[];
 }

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
-import { Observable } from 'rxjs';
 import { Clients } from '../client/models/clientModel';
 import * as fromClient from '../client/state/index';
 import * as clientActions from '../client/state/client.actions';
