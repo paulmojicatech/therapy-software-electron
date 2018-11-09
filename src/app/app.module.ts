@@ -4,7 +4,8 @@ import { Route, RouterModule } from '@angular/router';
 import { MatInputModule, 
          MatFormFieldModule,
          MatToolbarModule,
-         MatProgressSpinnerModule } from '@angular/material';
+         MatProgressSpinnerModule, 
+         MatButtonModule} from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -49,6 +50,7 @@ const appRoutes: Route[] = [
     MatFormFieldModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
+    MatButtonModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,

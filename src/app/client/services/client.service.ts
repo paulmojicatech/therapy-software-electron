@@ -48,4 +48,29 @@ export class ClientService {
             );
         }
     }
+
+    public GetAvailableAppointments(startDate:string, endDate:string): Observable<Clients[]> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const token = localStorage.getItem('session-token');
+        if (token){
+            const opts = new RequestOptions({headers: headers});
+            const url = 'https://api.paulmojicatech.com/api/TherapySoftware/GetClientApointments'
+                + '?encodedToken=' + btoa(token)
+                + '&startDate=' + startDate 
+                + '&endDate=' + endDate;
+            return this._http.get(url, opts).pipe(
+                map(resp => {
+                    const res:ResultStatus = JSON.parse(resp.json());
+                    if (res.Type === 1){
+                        return res.Message;
+                    }
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err.json()));
+                })
+            );
+            
+        }
+    }
 }

@@ -1,7 +1,7 @@
 <div class="main-section">
   <div class="header">
-      <button class="btn btn-primary" mwlCalendarPreviousView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Prev</button>
-      <button class="btn btn-primary" mwlCalendarNextView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Next</button>
+      <button mat-button color="primary" mwlCalendarPreviousView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Prev</button>
+      <button mat-button color="primary" mwlCalendarNextView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Next</button>
   </div>
   <div class="day-view" *ngIf="view === 'day'">
       <mwl-calendar-day-view [events]="appointments" [viewDate]="startDate">
@@ -10,6 +10,7 @@
   <div class="week-view" *ngIf="view === 'week'">
       <mwl-calendar-week-view [events]="appointments" 
           [excludeDays]="daysToExclude" [viewDate]="startDate" 
+          [dayStartHour]="9" [dayEndHour]="18"
           (eventClicked)="selectDate($event)" [tooltipAppendToBody]="false">
       </mwl-calendar-week-view>
   </div>
@@ -18,6 +19,6 @@
       </mwl-calendar-month-view>
   </div>
 </div>
-<!-- <div class="spinner-container" *ngIf="isLoading">
+<div class="spinner-container" *ngIf="isLoading">
   <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" value="25"></mat-progress-spinner>
-</div> -->
+</div>

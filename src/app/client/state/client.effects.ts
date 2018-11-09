@@ -30,4 +30,13 @@ export class ClientEffects {
             catchError(err => of(new fromClient.UpdateClientFail(err)))
         )
     ));
+
+    @Effect()
+    loadAvailableAppointments$: Observable<Action> = this.actions$.pipe(
+        ofType(fromClient.ClientActionTypes.LoadAvailableAppointments),
+        mergeMap((action:fromClient.LoadAvailableAppointments) => this._clientSvc.GetAvailableAppointments(action.payload.startDate, action.payload.endDate).pipe(
+            map(clients => (new fromClient.LoadAvailableAppointmentsSuccess(clients))),
+            catchError(err => of(new fromClient.LoadAvailableAppointmentsFail(err)))
+        )
+    ));
 }

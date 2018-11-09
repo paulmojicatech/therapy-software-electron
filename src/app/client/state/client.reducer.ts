@@ -4,12 +4,14 @@ import { ClientActions, ClientActionTypes } from "./client.actions";
 export interface ClientState {
     allClients: Clients[],
     currentClient: Clients,
-    errorMsg?: string
+    availableAppointments: Clients[],
+    errorMsg?: string,
 }
 
 const initialState: ClientState = {
     allClients: [],
-    currentClient: null
+    currentClient: null,
+    availableAppointments: []
 };
 
 export function reducer(state:ClientState = initialState, 
@@ -40,6 +42,21 @@ export function reducer(state:ClientState = initialState,
                     allClients:updatedClients,
                     currentClient: action.payload
                 }  
+            case ClientActionTypes.UpdateClientFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                }
+            case ClientActionTypes.LoadAvailableAppointmentsSuccess:
+                return {
+                    ...state,
+                    availableAppointments: action.payload
+                }
+            case ClientActionTypes.LoadAvailableAppointmentsFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                }
             default:
                 return state;
         }

@@ -1,8 +1,10 @@
-export class AppointmentsModel {
+import { CalendarEvent } from "calendar-utils";
+
+export class AppointmentsModel implements CalendarEvent {
     clientName: string;
     clientSessionId: number;
     appointmentTime: Date;
-    title?: string;
-    start?: Date;
-    color?: any;
+    title: string;
+    start: Date;
+    color: any;
   }

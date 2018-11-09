@@ -22,6 +22,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   view: string;
   appointments:AppointmentsModel[] = [];
   isActive:boolean;
+  daysToExclude: number[] = [0, 1, 6];
 
   ngOnInit(): void {
     this.isActive = true;
@@ -73,13 +74,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
               clientSessionId: s.ClientSessionID,
               appointmentTime: new Date(s.ClientSessionDate),
               title: c.GeneralDetails.ClientName,
-              start: new Date(s.ClientSessionDate)
+              start: new Date(s.ClientSessionDate),
+              color: '#f7efb2'
             };
             this.appointments.push(apptToAdd);
           }
         });
-
       });
+      this.isLoading = false;
     });
 
     // this._apiSvc.GetFirstAvailableAppointments(this.endDate.toDateString()).subscribe(resp => {
