@@ -11,7 +11,7 @@
       <mwl-calendar-week-view [events]="appointments" 
           [excludeDays]="daysToExclude" [viewDate]="startDate" 
           [dayStartHour]="9" [dayEndHour]="18"
-          (eventClicked)="selectDate($event)" [tooltipAppendToBody]="false">
+          (eventClicked)="eventClicked($event)" [tooltipAppendToBody]="false">
       </mwl-calendar-week-view>
   </div>
   <div class="month-view" *ngIf="view === 'month'">

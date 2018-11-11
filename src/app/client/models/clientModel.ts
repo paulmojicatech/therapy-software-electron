@@ -4,7 +4,7 @@ import { ICDCodes } from "./icdCodeModel";
 export class Clients {
     GeneralDetails: GeneralDetails;
     InsuranceDetails?: InsuranceDetails;
-    SessionDetails?: SessionDetails[];
+    ClientSessionDetails?: ClientSessionDetails[];
 }
 
 export class GeneralDetails {
@@ -39,7 +39,7 @@ export class InsuranceCompanies {
     InsurancePhone?: string;
 }
 
-export class SessionDetails {
+export class ClientSessionDetails {
     ClientSessionID: number;
     ClientSessionDate: string;
     ClientSessionNotes: string;

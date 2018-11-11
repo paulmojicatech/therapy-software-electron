@@ -49,17 +49,21 @@ export class ClientService {
         }
     }
 
-    public GetAvailableAppointments(startDate:string, endDate:string): Observable<Clients[]> {
+    public GetClientAppointments(startDate:string, endDate:string): Observable<Clients[]> {
         let headers:Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const token = localStorage.getItem('session-token');
         if (token){
-            const opts = new RequestOptions({headers: headers});
-            const url = 'https://api.paulmojicatech.com/api/TherapySoftware/GetClientApointments'
-                + '?encodedToken=' + btoa(token)
-                + '&startDate=' + startDate 
-                + '&endDate=' + endDate;
-            return this._http.get(url, opts).pipe(
+            let opts = new RequestOptions({
+                headers: headers, 
+                body:{ 
+                    'token': btoa(token), 
+                    'startDate': startDate,
+                    'endDate': endDate 
+                }
+            });
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/GetClientAppointments', 
+                opts).pipe(
                 map(resp => {
                     const res:ResultStatus = JSON.parse(resp.json());
                     if (res.Type === 1){

@@ -12,3 +12,13 @@ export const getCurrentClient = createSelector(
     getClientsFeatureState,
     state => state.currentClient
 );
+
+export const getErrorMsg = createSelector(
+    getClientsFeatureState,
+    state => state.errorMsg
+);
+
+export const getClientAppointments = createSelector(
+    getClientsFeatureState,
+    state => state.clientAppointments
+);

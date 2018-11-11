@@ -9,9 +9,9 @@ export enum ClientActionTypes {
     UpdateClient = '[CLIENTS] Update Client',
     UpdateClientSuccess = '[CLIENTS] Update Client Success',
     UpdateClientFail = '[CLIENTS] Update Client Fail',
-    LoadAvailableAppointments = '[CLIENTS] Load Available Appointments',
-    LoadAvailableAppointmentsSuccess = '[CLIENTS] Load Available Appointments Success',
-    LoadAvailableAppointmentsFail = '[CLIENTS] Load AvailableAppointments Fail'
+    LoadClientAppointments = '[CLIENTS] Load Client Appointments',
+    LoadClientAppointmentsSuccess = '[CLIENTS] Load Client Appointments Success',
+    LoadClientAppointmentsFail = '[CLIENTS] Load Client Appointments Fail'
 }
 
 export class LoadClients implements Action {
@@ -49,19 +49,19 @@ export class UpdateClientFail implements Action {
     readonly type = ClientActionTypes.UpdateClientFail;
 }
 
-export class LoadAvailableAppointments implements Action {
+export class LoadClientAppointments implements Action {
     constructor(public payload:any) { }
-    readonly type = ClientActionTypes.LoadAvailableAppointments;
+    readonly type = ClientActionTypes.LoadClientAppointments;
 }
 
-export class LoadAvailableAppointmentsSuccess implements Action {
+export class LoadClientAppointmentsSuccess implements Action {
     constructor(public payload:Clients[]){ }
-    readonly type = ClientActionTypes.LoadAvailableAppointmentsSuccess;
+    readonly type = ClientActionTypes.LoadClientAppointmentsSuccess;
 }
 
-export class LoadAvailableAppointmentsFail implements Action {
+export class LoadClientAppointmentsFail implements Action {
     constructor(public payload:string) { }
-    readonly type = ClientActionTypes.LoadAvailableAppointmentsFail;
+    readonly type = ClientActionTypes.LoadClientAppointmentsFail;
 }
 
 export type ClientActions = LoadClients |
@@ -71,6 +71,6 @@ export type ClientActions = LoadClients |
             UpdateClient | 
             UpdateClientSuccess |
             UpdateClientFail |
-            LoadAvailableAppointments |
-            LoadAvailableAppointmentsSuccess |
-            LoadAvailableAppointmentsFail;
+            LoadClientAppointments |
+            LoadClientAppointmentsSuccess |
+            LoadClientAppointmentsFail;

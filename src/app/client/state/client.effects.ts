@@ -32,11 +32,11 @@ export class ClientEffects {
     ));
 
     @Effect()
-    loadAvailableAppointments$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.LoadAvailableAppointments),
-        mergeMap((action:fromClient.LoadAvailableAppointments) => this._clientSvc.GetAvailableAppointments(action.payload.startDate, action.payload.endDate).pipe(
-            map(clients => (new fromClient.LoadAvailableAppointmentsSuccess(clients))),
-            catchError(err => of(new fromClient.LoadAvailableAppointmentsFail(err)))
+    loadClientAppointments$: Observable<Action> = this.actions$.pipe(
+        ofType(fromClient.ClientActionTypes.LoadClientAppointments),
+        mergeMap((action:fromClient.LoadClientAppointments) => this._clientSvc.GetClientAppointments(action.payload.startDate, action.payload.endDate).pipe(
+            map(clients => (new fromClient.LoadClientAppointmentsSuccess(clients))),
+            catchError(err => of(new fromClient.LoadClientAppointmentsFail(err)))
         )
     ));
 }

@@ -13,15 +13,15 @@ import { takeWhile, map } from 'rxjs/operators';
 
 export class CalendarComponent implements OnInit, OnDestroy {
 
-  constructor(private _store:Store<State>) { }
+  constructor(private _store: Store<State>) { }
 
   private _msPerDay: number = 1000 * 60 * 60 * 24;
   isLoading: boolean;
-  startDate:Date;
-  endDate:Date;
+  startDate: Date;
+  endDate: Date;
   view: string;
-  appointments:AppointmentsModel[] = [];
-  isActive:boolean;
+  appointments: AppointmentsModel[] = [];
+  isActive: boolean;
   daysToExclude: number[] = [0, 1, 6];
 
   ngOnInit(): void {
@@ -47,7 +47,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   updateView() {
-    let newEndDate = this.addDays(this.endDate, 5);
     let dateDiff = this.getDateDiff(this.startDate, this.endDate);
     if (dateDiff < 6) {
       this.endDate = this.startDate;
@@ -59,28 +58,32 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (!this.endDate) {
       this.endDate = new Date();
     }
-    
+
+    this.endDate = this.addDays(this.endDate, 5);
+
     this._store.pipe(
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
-      clients.forEach(c => {
-        // check client has appointments
-        const sessions = c.SessionDetails ? c.SessionDetails : [];
-        sessions.forEach(s => {
-          if (this.appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) !== -1) {
-            const apptToAdd:AppointmentsModel = { 
-              clientName: c.GeneralDetails.ClientName,
-              clientSessionId: s.ClientSessionID,
-              appointmentTime: new Date(s.ClientSessionDate),
-              title: c.GeneralDetails.ClientName,
-              start: new Date(s.ClientSessionDate),
-              color: '#f7efb2'
-            };
-            this.appointments.push(apptToAdd);
-          }
+      if (clients && clients.length) {
+        clients.forEach(c => {
+          // check client has appointments
+          const sessions = c ? c.ClientSessionDetails : [];
+          sessions.forEach(s => {
+            if (this.appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
+              const apptToAdd: AppointmentsModel = {
+                clientName: c.GeneralDetails.ClientName,
+                clientSessionId: s.ClientSessionID,
+                appointmentTime: new Date(s.ClientSessionDate),
+                title: c.GeneralDetails.ClientName,
+                start: new Date(s.ClientSessionDate),
+                color: '#f7efb2'
+              };
+              this.appointments.push(apptToAdd);
+            }
+          });
         });
-      });
+      }
       this.isLoading = false;
     });
 
@@ -123,6 +126,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     let formattedDate = selectedEvent.event.start.toDateString() + ' ' + selectedEvent.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     // this.selectedDate = formattedDate;
     // this.close();
+  }
+
+  eventClicked(event:AppointmentsModel){
+    console.log('CLICKED EVENT', event);
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {
