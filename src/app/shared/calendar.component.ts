@@ -4,6 +4,8 @@ import { State } from '../state/app.state';
 import * as fromClient from '../client/state/index';
 import { Store, select } from '@ngrx/store';
 import { takeWhile, map } from 'rxjs/operators';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { CalendarEventModalComponent } from './calendar-event-modal.component';
 
 @Component({
   selector: 'pmt-calendar',
@@ -13,7 +15,8 @@ import { takeWhile, map } from 'rxjs/operators';
 
 export class CalendarComponent implements OnInit, OnDestroy {
 
-  constructor(private _store: Store<State>) { }
+  constructor(private _store: Store<State>,
+              private _dialog: MatDialog) { }
 
   private _msPerDay: number = 1000 * 60 * 60 * 24;
   isLoading: boolean;
@@ -130,6 +133,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   eventClicked(event:AppointmentsModel){
     console.log('CLICKED EVENT', event);
+    const dialogRef = this._dialog.open(CalendarEventModalComponent);
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {

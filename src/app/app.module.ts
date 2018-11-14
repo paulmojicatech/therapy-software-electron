@@ -5,7 +5,8 @@ import { MatInputModule,
          MatFormFieldModule,
          MatToolbarModule,
          MatProgressSpinnerModule, 
-         MatButtonModule} from '@angular/material';
+         MatButtonModule, 
+         MatDialogModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarComponent } from './shared/calendar.component';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarEventModalComponent } from './shared/calendar-event-modal.component';
 
 const appRoutes: Route[] = [
   {
@@ -41,7 +43,8 @@ const appRoutes: Route[] = [
     AppComponent,
     HomeComponent,
     PanelComponent,
-    CalendarComponent
+    CalendarComponent,
+    CalendarEventModalComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +54,7 @@ const appRoutes: Route[] = [
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
@@ -67,6 +71,9 @@ const appRoutes: Route[] = [
     })
   ],
   providers: [],
+  entryComponents: [
+    CalendarEventModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
