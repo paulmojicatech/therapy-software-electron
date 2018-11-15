@@ -6,5 +6,6 @@ export class AppointmentsModel implements CalendarEvent {
     appointmentTime: Date;
     title: string;
     start: Date;
+    end: Date;
     color: any;
   }

@@ -41,7 +41,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     // Default values
     this.startDate = new Date();
     this.view = 'week';
-    //this.isSelected = false;
     this.loadCalendar();
   }
 
@@ -80,6 +79,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
                 appointmentTime: new Date(s.ClientSessionDate),
                 title: c.GeneralDetails.ClientName,
                 start: new Date(s.ClientSessionDate),
+                end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
                 color: '#f7efb2'
               };
               this.appointments.push(apptToAdd);
@@ -89,51 +89,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
       }
       this.isLoading = false;
     });
-
-    // this._apiSvc.GetFirstAvailableAppointments(this.endDate.toDateString()).subscribe(resp => {
-    //   let json: AvailableAppointments = JSON.parse(resp.json());
-    //   let dates = json.AvailableDates;
-    //   this.endDate = new Date(json.LastDay);
-    //   if (dates) {
-    //     let events: CalendarEvent[] = [];
-    //     dates.map(d => {
-    //       let dateInst = new Date(d);
-    //       let text: string = dateInst.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    //       events.push({
-    //         title: text,
-    //         start: dateInst,
-    //         color: { primary: '#C7EBAF', secondary: '#95C177' }
-    //       });
-    //     });
-    //     if (this.availableAppointments) {
-    //       events.map(x => {
-    //         let found = this.availableAppointments.find(y => y.start.getDate() === x.start.getDate()
-    //           && x.start.getHours() === y.start.getHours()
-    //           && x.start.getMinutes() === y.start.getMinutes());
-    //         if (!found) {
-    //           this.availableAppointments = this.availableAppointments.concat(x);
-    //         }
-    //       });
-    //     }
-    //     else {
-    //       this.availableAppointments = events;
-    //     }
-    //     // this.availableAppointments = this.availableAppointments ? 
-    //     //     this.availableAppointments.concat(events) : events;
-    //     this.isLoading = false;
-    //   }
-    // });
-  }
-
-  selectDate(selectedEvent) {
-    let formattedDate = selectedEvent.event.start.toDateString() + ' ' + selectedEvent.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    // this.selectedDate = formattedDate;
-    // this.close();
   }
 
   eventClicked(event:AppointmentsModel){
-    console.log('CLICKED EVENT', event);
     const dialogRef = this._dialog.open(CalendarEventModalComponent);
+  }
+
+  hourClicked(event:AppointmentsModel){
+    console.log('DAY CLICKED', event);
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {

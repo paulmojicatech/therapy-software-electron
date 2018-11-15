@@ -1,21 +1,59 @@
-<div class="main-section">
+<div class="main-section" *ngIf="!isLoading">
   <div class="header">
-      <button mat-button color="primary" mwlCalendarPreviousView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Prev</button>
-      <button mat-button color="primary" mwlCalendarNextView [(viewDate)]="startDate" [view]="view" (viewDateChange)="updateView()">Next</button>
-  </div>
+      <div class="btn-group-left">
+        <button mat-button color="primary" 
+            mwlCalendarPreviousView 
+            [(viewDate)]="startDate" 
+            [view]="view" 
+            (viewDateChange)="updateView()">
+            Prev
+        </button>
+        <button mat-button color="primary" 
+            mwlCalendarNextView 
+            [(viewDate)]="startDate" 
+            [view]="view" 
+            (viewDateChange)="updateView()">
+            Next
+        </button>
+      </div>
+      <div class="date-section">
+          <h3>{{ startDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
+      </div>
+      <div class="btn-group-right">
+        <button mat-button color="primary" 
+            (click)="changeView('day')">
+            Day
+        </button>
+        <button mat-button color="primary" 
+            (click)="changeView('week')">
+            Week
+        </button>
+        <button mat-button color="primary" 
+            (click)="changeView('month')">
+            Month
+        </button>
+      </div>
+    </div>
   <div class="day-view" *ngIf="view === 'day'">
-      <mwl-calendar-day-view [events]="appointments" [viewDate]="startDate">
+      <mwl-calendar-day-view [events]="appointments" 
+      [viewDate]="startDate"
+      [dayStartHour]="9"
+      [dayEndHour]="18">
       </mwl-calendar-day-view>
   </div>
   <div class="week-view" *ngIf="view === 'week'">
       <mwl-calendar-week-view [events]="appointments" 
           [excludeDays]="daysToExclude" [viewDate]="startDate" 
           [dayStartHour]="9" [dayEndHour]="18"
-          (eventClicked)="eventClicked($event)" [tooltipAppendToBody]="false">
+          (eventClicked)="eventClicked($event)" 
+          (hourSegmentClicked)="hourClicked($event)"
+          [tooltipAppendToBody]="false">
       </mwl-calendar-week-view>
   </div>
   <div class="month-view" *ngIf="view === 'month'">
-      <mwl-calendar-month-view [events]="appointments" [viewDate]="startDate" [tooltipPlacement]="none">
+      <mwl-calendar-month-view [events]="appointments" 
+        [viewDate]="startDate" 
+        [tooltipPlacement]="none">
       </mwl-calendar-month-view>
   </div>
 </div>
