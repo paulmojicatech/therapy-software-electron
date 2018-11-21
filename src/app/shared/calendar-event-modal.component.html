@@ -1,3 +1,27 @@
-<p>
-  calendar-event-modal works!
-</p>
+<div *ngIf="data.selectedEvent">
+  <mat-form-field>
+    <mat-select placeholder="Client Name" disabled="true" [(value)]="data.selectedEvent.event.clientSessionId">
+      <mat-option [value]="data.selectedEvent.event.clientSessionId">
+        {{data.selectedEvent.event.clientName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Client Session Time" disabled="true" [(value)]="data.selectedEvent.event.clientSessionId">
+      <mat-option [value]="data.selectedEvent.event.clientSessionId">
+        {{data.selectedEvent.event.appointmentTime | date: "MMM dd yyyy h:mm a" }} 
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="btn-group">
+    <button mat-raised-button class="close-btn">
+      Close
+    </button>
+    <button mat-raised-button color="accent">
+      Delete
+    </button>
+  </div>  
+</div>
+<div *ngIf="data.selectedDate">
+
+</div>

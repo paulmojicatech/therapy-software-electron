@@ -1,0 +1,14 @@
+:host() {
+    width: 100%;
+}
+mat-form-field {
+    width: 85%;
+}
+.btn-group {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.close-btn {
+    margin-right:1rem;
+}

@@ -4,7 +4,7 @@ import { State } from '../state/app.state';
 import * as fromClient from '../client/state/index';
 import { Store, select } from '@ngrx/store';
 import { takeWhile, map } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { CalendarEventModalComponent } from './calendar-event-modal.component';
 
 @Component({
@@ -92,7 +92,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   eventClicked(event:AppointmentsModel){
-    const dialogRef = this._dialog.open(CalendarEventModalComponent);
+    this._dialog.open(CalendarEventModalComponent, {
+      data: {
+        selectedEvent: event
+      }
+    });
   }
 
   hourClicked(event:AppointmentsModel){

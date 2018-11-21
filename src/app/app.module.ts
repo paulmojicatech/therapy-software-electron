@@ -6,7 +6,9 @@ import { MatInputModule,
          MatToolbarModule,
          MatProgressSpinnerModule, 
          MatButtonModule, 
-         MatDialogModule } from '@angular/material';
+         MatDialogModule,
+         MatSelectModule, 
+         MatOptionModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -55,6 +57,8 @@ const appRoutes: Route[] = [
     MatProgressSpinnerModule,
     MatButtonModule,
     MatDialogModule,
+    MatSelectModule,
+    MatOptionModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
