@@ -6,6 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { takeWhile, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { CalendarEventModalComponent } from './calendar-event-modal.component';
+import { Clients } from '../client/models/clientModel';
 
 @Component({
   selector: 'pmt-calendar',
@@ -26,6 +27,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   appointments: AppointmentsModel[] = [];
   isActive: boolean;
   daysToExclude: number[] = [0, 1, 6];
+  allClients: Clients[] = [];
 
   ngOnInit(): void {
     this.isActive = true;
@@ -68,6 +70,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
       if (clients && clients.length) {
+        this.allClients = clients;
         clients.forEach(c => {
           // check client has appointments
           const sessions = c ? c.ClientSessionDetails : [];
@@ -100,7 +103,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   hourClicked(event:AppointmentsModel){
-    console.log('DAY CLICKED', event);
+    console.log(event);
+    const dialogRef = this._dialog.open(CalendarEventModalComponent, {
+      data: {
+        selectedDate: event,
+        clients: this.allClients
+      }
+    });
+    
+    
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {
