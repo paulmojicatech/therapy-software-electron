@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private _router:Router, private _store:Store<UserState>) { }
 
   isActive:boolean;
+  currentUser:User;
 
   ngOnInit() {
     this.isActive = true;
@@ -28,6 +29,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     ).subscribe(u => {
       if (u === null){
         this._router.navigate(['login']);
+      }
+      else {
+        this.currentUser = u;
       }
     });
   }

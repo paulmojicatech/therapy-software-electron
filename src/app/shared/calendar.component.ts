@@ -7,6 +7,7 @@ import { takeWhile, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { CalendarEventModalComponent } from './calendar-event-modal.component';
 import { Clients } from '../client/models/clientModel';
+import { of, Observable } from 'rxjs';
 
 @Component({
   selector: 'pmt-calendar',
@@ -24,7 +25,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   startDate: Date;
   endDate: Date;
   view: string;
-  appointments: AppointmentsModel[] = [];
+  appointments$: Observable<AppointmentsModel[]>;
   isActive: boolean;
   daysToExclude: number[] = [0, 1, 6];
   allClients: Clients[] = [];
@@ -69,13 +70,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
+      let appointments:AppointmentsModel[] = [];
       if (clients && clients.length) {
         this.allClients = clients;
         clients.forEach(c => {
           // check client has appointments
           const sessions = c ? c.ClientSessionDetails : [];
           sessions.forEach(s => {
-            if (this.appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
+            if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
               const apptToAdd: AppointmentsModel = {
                 clientName: c.GeneralDetails.ClientName,
                 clientSessionId: s.ClientSessionID,
@@ -85,10 +87,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
                 end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
                 color: '#f7efb2'
               };
-              this.appointments.push(apptToAdd);
+              appointments.push(apptToAdd);
             }
           });
         });
+        this.appointments$ = of(appointments);
       }
       this.isLoading = false;
     });

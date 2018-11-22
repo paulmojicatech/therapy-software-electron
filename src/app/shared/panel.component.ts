@@ -25,6 +25,10 @@ export class PanelComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     this.isActive = true;
+    
+    // Load Clients
+    this._store.dispatch(new clientActions.LoadClients());
+
     // Subscribe to Clients
     this._store.pipe(
       select(fromClient.getAllClients),
@@ -33,8 +37,6 @@ export class PanelComponent implements OnInit, OnDestroy {
       this.allClients = c;
       this.filteredClients = c;
     });
-    // Load Clients
-    this._store.dispatch(new clientActions.LoadClients());
   }
 
   ngOnDestroy() {
