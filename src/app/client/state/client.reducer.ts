@@ -21,17 +21,17 @@ export function reducer(state:ClientState = initialState,
                 return {
                     ...state,
                     allClients: action.payload
-                }
+                };
             case ClientActionTypes.LoadClientsFail:
                 return {
                     errorMsg: action.payload,
                     ...state
-                }
+                };
             case ClientActionTypes.SetCurrentClient:
                 return {
                     ...state,
                     currentClient: action.payload
-                }
+                };
             case ClientActionTypes.UpdateClientSuccess:
                 const updatedClients = state.allClients.map(
                     c => c.GeneralDetails.ClientID === action.payload.GeneralDetails.ClientID ?
@@ -41,22 +41,36 @@ export function reducer(state:ClientState = initialState,
                     ...state,
                     allClients:updatedClients,
                     currentClient: action.payload
-                }  
+                };  
             case ClientActionTypes.UpdateClientFail:
                 return {
                     ...state,
                     errorMsg: action.payload
-                }
+                };
             case ClientActionTypes.LoadClientAppointmentsSuccess:
                 return {
                     ...state,
                     clientAppointments: action.payload
-                }
+                };
             case ClientActionTypes.LoadClientAppointmentsFail:
                 return {
                     ...state,
                     errorMsg: action.payload
-                }
+                };
+            case ClientActionTypes.AddClientAppointmentSuccess:
+                const updatedClientsApptsSuccess = state.allClients.map(
+                    c => c.GeneralDetails.ClientID === action.payload.GeneralDetails.ClientID ?
+                        action.payload : c
+                );
+                return {
+                    ...state,
+                    allClients: updatedClientsApptsSuccess
+                };
+            case ClientActionTypes.AddClientAppointmentFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                };
             default:
                 return state;
         }

@@ -77,4 +77,32 @@ export class ClientService {
             
         }
     }
+
+    public AddClientAppointment(c:Clients): Observable<Clients> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            const clientId = c.GeneralDetails.ClientID;
+            // get last session
+            const lastSession = c.ClientSessionDetails.length - 1;
+            const clientSessionTime = c.ClientSessionDetails[lastSession].ClientSessionDate;
+            let opts = new RequestOptions({headers: headers, body:{ 
+                'token': btoa(token), 
+                'clientId': clientId,
+                'apptDate': clientSessionTime
+            }});
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/AddClientSesson', opts).pipe(
+                map(resp => {
+                    const resStatus:ResultStatus = JSON.parse(resp.json());
+                    if (resStatus.Type === 1) {
+                        return JSON.parse(resStatus.Message);
+                    }
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err.json()));
+                })
+            );
+        }
+    }
 }

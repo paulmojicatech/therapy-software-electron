@@ -106,8 +106,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   hourClicked(event:AppointmentsModel){
-    console.log(event);
-    const dialogRef = this._dialog.open(CalendarEventModalComponent, {
+    this._dialog.open(CalendarEventModalComponent, {
       data: {
         selectedDate: event,
         clients: this.allClients

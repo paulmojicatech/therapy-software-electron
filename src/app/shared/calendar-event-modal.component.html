@@ -14,7 +14,7 @@
     </mat-select>
   </mat-form-field>
   <div class="btn-group">
-    <button mat-raised-button class="close-btn">
+    <button mat-raised-button class="close-btn" (click)="close()">
       Close
     </button>
     <button mat-raised-button color="accent">
@@ -24,7 +24,7 @@
 </div>
 <div *ngIf="data.selectedDate">
   <mat-form-field>
-    <mat-select placeholder="Client Name">
+    <mat-select placeholder="Client Name" (selectionChange)="clientChanged($event.value)">
       <mat-option *ngFor="let c of data.clients" [value]="c.GeneralDetails.ClientID">
         {{ c.GeneralDetails.ClientName }}
       </mat-option>
@@ -38,10 +38,10 @@
     </mat-select>
   </mat-form-field>
   <div class="btn-group">
-    <button mat-raised-button class="close-btn">
+    <button mat-raised-button class="close-btn" (click)="close()">
       Close
     </button>
-    <button mat-raised-button color="primary">
+    <button mat-raised-button color="primary" (click)="createClientSession()">
       Create
     </button>
   </div>
