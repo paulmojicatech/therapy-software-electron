@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { User } from './user/models/userModel';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { InputModalComponent } from './shared/input-modal.component';
 
 @Component({
   selector: 'pmt-home',
@@ -16,7 +18,9 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor(private _router:Router, private _store:Store<UserState>) { }
+  constructor(private _router:Router, 
+    private _store:Store<UserState>,
+    private _dialog:MatDialog) { }
 
   isActive:boolean;
   currentUser:User;
@@ -40,8 +44,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isActive = false;
   }
 
-  isLoggedIn() {
-
+  sendEmail() {
+    this._dialog.open(InputModalComponent, {
+      data: {
+        sendEmail: true
+      }
+    });
   }
 
 }

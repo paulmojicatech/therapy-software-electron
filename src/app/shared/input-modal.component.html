@@ -46,3 +46,19 @@
     </button>
   </div>
 </div>
+<div *ngIf="data.sendEmail">
+  <mat-form-field>
+    <input placeholder="Subject" matInput type="text" #subject />
+  </mat-form-field> 
+  <mat-form-field>
+    <textarea matInput rows="20" cols="50" placeholder="Email Message" #message></textarea>
+  </mat-form-field>
+  <div class="btn-group">
+      <button mat-raised-button class="close-btn" (click)="close()">
+        Close
+      </button>
+      <button mat-raised-button color="primary" (click)="sendEmail(subject.value, message.value)">
+        Send Email
+      </button>
+    </div>
+</div>

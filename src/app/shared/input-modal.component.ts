@@ -46,5 +46,9 @@ export class InputModalComponent {
     this._store.dispatch(new clientActions.DeleteClientAppointment(+this.data.selectedEvent.event.clientSessionId));
     this.dialogRef.close();
   }
+  sendEmail(subject, message) {
+    console.log('SEND EMAIL', 'SUB:' + subject + ';MSG:', message);
+    this.dialogRef.close();
+  }
 
 }
