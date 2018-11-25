@@ -4,6 +4,7 @@ import { Clients } from '../models/clientModel';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
+import { identifierName } from '@angular/compiler';
 
 @Injectable()
 export class ClientService {
@@ -101,6 +102,29 @@ export class ClientService {
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()));
+                })
+            );
+        }
+    }
+
+    public DeleteClientAppointment(id:number): Observable<Clients[]> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            const opts = new RequestOptions({headers: headers, body:{ 
+                'token': btoa(token), 
+                'clientSessionId': id
+            }});
+            return this._http.delete('https://api.paulmojicatech.com/api/TherapySoftware/DeleteClientSession', opts).pipe(
+                map(resp => {
+                    const respStatus:ResultStatus = JSON.parse(resp.json());
+                    if (respStatus.Type === 1){
+                        return JSON.parse(respStatus.Message);
+                    }
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err.json()))
                 })
             );
         }

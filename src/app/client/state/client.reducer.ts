@@ -71,6 +71,16 @@ export function reducer(state:ClientState = initialState,
                     ...state,
                     errorMsg: action.payload
                 };
+            case ClientActionTypes.DeleteClientAppointmentSuccess:
+                return {
+                    ...state,
+                    allClients: action.payload
+                };
+            case ClientActionTypes.DeleteClientAppointmentFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                };
             default:
                 return state;
         }

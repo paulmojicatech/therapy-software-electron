@@ -42,4 +42,9 @@ export class CalendarEventModalComponent {
       this.currentClient = newClient[0];
     }
   }
+  deleteSession() {
+    this._store.dispatch(new clientActions.DeleteClientAppointment(+this.data.selectedEvent.event.clientSessionId));
+    this.dialogRef.close();
+  }
+
 }

@@ -14,7 +14,10 @@ export enum ClientActionTypes {
     LoadClientAppointmentsFail = '[CLIENTS] Load Client Appointments Fail',
     AddClientAppointment = '[CLIENTS] Add Client Appointment',
     AddClientAppointmentSuccess = '[CLIENTS] Add Client Appointment Success',
-    AddClientAppointmentFail = '[CLIENTS] Add Client Appointment Fail'
+    AddClientAppointmentFail = '[CLIENTS] Add Client Appointment Fail',
+    DeleteClientAppointment = '[CLIENTS] Delete Client Appointment',
+    DeleteClientAppointmentSuccess = '[CLIENTS] Delete Client Appointment Success',
+    DeleteClientAppointmentFail = '[CLIENTS] Delete Client Appointment Fail'
 }
 
 export class LoadClients implements Action {
@@ -82,6 +85,21 @@ export class AddClientAppointmentFail implements Action {
     readonly type = ClientActionTypes.AddClientAppointmentFail;
 }
 
+export class DeleteClientAppointment implements Action {
+    constructor(public payload:number){ }
+    readonly type = ClientActionTypes.DeleteClientAppointment;
+}
+
+export class DeleteClientAppointmentSuccess implements Action {
+    constructor(public payload:Clients[]){ }
+    readonly type = ClientActionTypes.DeleteClientAppointmentSuccess;
+}
+
+export class DeleteClientAppointmentFail implements Action {
+    constructor(public payload:string){ }
+    readonly type = ClientActionTypes.DeleteClientAppointmentFail;
+}
+
 export type ClientActions = LoadClients |
             LoadClientsSuccess | 
             LoadClientsFail |
@@ -94,4 +112,7 @@ export type ClientActions = LoadClients |
             LoadClientAppointmentsFail |
             AddClientAppointment |
             AddClientAppointmentSuccess |
-            AddClientAppointmentFail;
+            AddClientAppointmentFail |
+            DeleteClientAppointment |
+            DeleteClientAppointmentSuccess |
+            DeleteClientAppointmentFail;
