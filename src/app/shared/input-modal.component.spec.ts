@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CalendarEventModalComponent } from './calendar-event-modal.component';
+import { InputModalComponent } from './input-modal.component';
 
-describe('CalendarEventModalComponent', () => {
-  let component: CalendarEventModalComponent;
-  let fixture: ComponentFixture<CalendarEventModalComponent>;
+describe('InputModalComponent', () => {
+  let component: InputModalComponent;
+  let fixture: ComponentFixture<InputModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendarEventModalComponent ]
+      declarations: [ InputModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CalendarEventModalComponent);
+    fixture = TestBed.createComponent(InputModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

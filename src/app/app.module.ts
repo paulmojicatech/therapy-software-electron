@@ -22,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarComponent } from './shared/calendar.component';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { CalendarEventModalComponent } from './shared/calendar-event-modal.component';
+import { InputModalComponent } from './shared/input-modal.component';
 
 const appRoutes: Route[] = [
   {
@@ -46,7 +46,7 @@ const appRoutes: Route[] = [
     HomeComponent,
     PanelComponent,
     CalendarComponent,
-    CalendarEventModalComponent
+    InputModalComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +76,7 @@ const appRoutes: Route[] = [
   ],
   providers: [],
   entryComponents: [
-    CalendarEventModalComponent
+    InputModalComponent
   ],
   bootstrap: [AppComponent]
 })

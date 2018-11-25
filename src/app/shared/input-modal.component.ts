@@ -7,13 +7,13 @@ import { AppointmentsModel } from '../models/appointmentsModel';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 
 @Component({
-  selector: 'pmt-calendar-event-modal',
-  templateUrl: './calendar-event-modal.component.html',
-  styleUrls: ['./calendar-event-modal.component.scss']
+  selector: 'pmt-input-modal',
+  templateUrl: './input-modal.component.html',
+  styleUrls: ['./input-modal.component.scss']
 })
-export class CalendarEventModalComponent {
+export class InputModalComponent {
 
-  constructor(public dialogRef:MatDialogRef<CalendarEventModalComponent>,
+  constructor(public dialogRef:MatDialogRef<InputModalComponent>,
               @Inject(MAT_DIALOG_DATA)public data:any,
               private _store:Store<fromClient.ClientState>) { }
 

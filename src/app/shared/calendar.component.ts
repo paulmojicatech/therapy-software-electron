@@ -5,7 +5,7 @@ import * as fromClient from '../client/state/index';
 import { Store, select } from '@ngrx/store';
 import { takeWhile, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
-import { CalendarEventModalComponent } from './calendar-event-modal.component';
+import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
 import { of, Observable } from 'rxjs';
 
@@ -98,7 +98,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   eventClicked(event:AppointmentsModel){
-    this._dialog.open(CalendarEventModalComponent, {
+    this._dialog.open(InputModalComponent, {
       data: {
         selectedEvent: event
       }
@@ -106,7 +106,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   hourClicked(event:AppointmentsModel){
-    this._dialog.open(CalendarEventModalComponent, {
+    this._dialog.open(InputModalComponent, {
       data: {
         selectedDate: event,
         clients: this.allClients
