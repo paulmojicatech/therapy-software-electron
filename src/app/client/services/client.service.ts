@@ -40,7 +40,7 @@ export class ClientService {
                 map(resp => {
                     const resStatue:ResultStatus = JSON.parse(resp.json());
                     if (resStatue.Type === 1) {
-                        return details;
+                        return JSON.parse(resStatue.Message);
                     }
                 }),
                 catchError(err => {
