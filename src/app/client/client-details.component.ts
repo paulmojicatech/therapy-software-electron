@@ -24,10 +24,15 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   currentClient:Clients;
   isActive:boolean;
   clientDetailsGroup:FormGroup;
+  isNew: boolean;
 
   ngOnInit() {
     this.isActive = true;
     const id = +this._route.snapshot.paramMap.get('id');
+    this.isNew = id > -1 ? false : true;
+    if (this.isNew) {
+      this.loadClient();
+    }
     this._store.pipe(
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
@@ -59,6 +64,21 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'clientZip': this.currentClient.GeneralDetails.ClientZip
       });
     }
+    else {
+      this.clientDetailsGroup = this._builder.group({
+        'clientName': '',
+        'clientSSN': '',
+        'clientDoB': '',
+        'clientEmail': '',
+        'clientSecEmail': '',
+        'clientPhone': '',
+        'clientSecPhone': '',
+        'clientAddress': '',
+        'clientCity': '',
+        'clientState': '',
+        'clientZip': ''
+      });
+    }
   }
 
   save() {
@@ -79,7 +99,12 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'ClientLastName': this.currentClient.GeneralDetails.ClientLastName
       }
     };
-    this._store.dispatch(new clientActions.UpdateClient(this.currentClient));
+    if (this.isNew){
+
+    }
+    else {
+      this._store.dispatch(new clientActions.UpdateClient(this.currentClient));
+    }
     this._router.navigate(['']);
   }
 }

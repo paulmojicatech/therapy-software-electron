@@ -8,6 +8,16 @@
     margin-top:1em;
 }
 
+.filter-header-section {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    .fa-plus-circle {
+        margin:auto;
+        font-size: 1.5rem;
+    }
+}
+
 .clientsFilteredSection {
     flex: 1;
 }

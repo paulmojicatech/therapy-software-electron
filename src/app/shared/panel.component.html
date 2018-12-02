@@ -5,9 +5,12 @@
       Clients
     </span>
     <div class="filterSection" [hidden]="!isExpanded">
-        <mat-form-field>
-            <input matInput type="text" placeholder="Filter" (keyup)="filterClients($event)" />
-        </mat-form-field>
+        <div class="filter-header-section">
+            <mat-form-field>
+                <input matInput type="text" placeholder="Filter" (keyup)="filterClients($event)" />
+            </mat-form-field>
+            <i class="fa fa-plus-circle" (click)="selectClient(null)"></i>
+        </div>
         <div class="clientsFilteredSection" 
           *ngFor="let c of filteredClients"
           (click)="selectClient(c)">

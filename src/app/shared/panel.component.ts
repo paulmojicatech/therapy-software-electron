@@ -55,7 +55,12 @@ export class PanelComponent implements OnInit, OnDestroy {
   }
 
   selectClient(client:Clients){
-    this._store.dispatch(new clientActions.SetCurrentClient(client));
-    this._router.navigate(['clients/' + client.GeneralDetails.ClientID]);
+    if (client){
+      this._store.dispatch(new clientActions.SetCurrentClient(client));
+      this._router.navigate(['clients/' + client.GeneralDetails.ClientID]);
+    }
+    else {
+      this._router.navigate(['clients/-1']);
+    }
   }
 }

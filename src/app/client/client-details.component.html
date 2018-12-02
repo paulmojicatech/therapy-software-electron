@@ -10,7 +10,8 @@
       <mat-tab-group>
         <mat-tab label="General Details">
           <mat-form-field>
-            <input matInput placeholder="Client Name" formControlName="clientName" readonly/>
+            <input matInput placeholder="Client Name" formControlName="clientName" 
+              [readonly]="!isNew" />
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Client Email" formControlName="clientEmail"/>
