@@ -129,4 +129,26 @@ export class ClientService {
             );
         }
     }
+
+    public SendMassEmail(emailSubject: string, emailMsg: string): Observable<ResultStatus> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            let opts = new RequestOptions({headers: headers, body:{ 
+                'token': btoa(token), 
+                'emailSubject': emailSubject,
+                'emailMsg': emailMsg
+            }});
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/SendMassEmail', opts).pipe(
+                map(resp => {
+                    const resStatus:ResultStatus = JSON.parse(resp.json());
+                    return resStatus;
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err.json()));
+                })
+            );
+        }
+    }
 }

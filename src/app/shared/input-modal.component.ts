@@ -3,8 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Store } from '@ngrx/store';
 import * as clientActions from '../client/state/client.actions';
 import * as fromClient from '../client/state/client.reducer';
-import { AppointmentsModel } from '../models/appointmentsModel';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
+import { ClientService } from '../client/services/client.service';
 
 @Component({
   selector: 'pmt-input-modal',
@@ -15,7 +15,8 @@ export class InputModalComponent {
 
   constructor(public dialogRef:MatDialogRef<InputModalComponent>,
               @Inject(MAT_DIALOG_DATA)public data:any,
-              private _store:Store<fromClient.ClientState>) { }
+              private _store:Store<fromClient.ClientState>,
+              private _clientSvc:ClientService) { }
 
   private currentClient:Clients;
 
@@ -47,8 +48,9 @@ export class InputModalComponent {
     this.dialogRef.close();
   }
   sendEmail(subject, message) {
-    console.log('SEND EMAIL', 'SUB:' + subject + ';MSG:', message);
-    this.dialogRef.close();
+    this._clientSvc.SendMassEmail(subject, message).subscribe(resp => {
+      this.dialogRef.close();
+    });
   }
 
 }
