@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build --base-href ./ && electron ."
+    "electron": "ng build --base-href ./ && electron .",
+    "package-mac": "ng build --base-href ./ && electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds --electron-version=3.0.7"
   },
   "main": "main.js",
   "private": true,
