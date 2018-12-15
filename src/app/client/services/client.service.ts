@@ -151,4 +151,24 @@ export class ClientService {
             );
         }
     }
+
+    public AddClient(client:Clients): Observable<Clients> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            const opts = {headers: headers, body:{token: btoa(token), client: client}};
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/AddClient', opts).pipe(
+                map(resp => {
+                    const resStatus:ResultStatus = JSON.parse(resp.json());
+                    if (resStatus.Type === 1){
+                        return JSON.parse(resStatus.Message);
+                    }
+                }),
+                catchError(err => {
+                    return of (JSON.parse(err));
+                })
+            );
+        }
+    }
 }

@@ -6,6 +6,9 @@ export enum ClientActionTypes {
     LoadClientsSuccess = '[CLIENTS] Load Clients Success',
     LoadClientsFail = '[CLIENTS] Load Clients Fail',
     SetCurrentClient = '[CLIENTS] Set Current Client',
+    AddClient = '[CLIENTS] Add Client',
+    AddClientSuccess = '[CLIENTS] Add Client Success',
+    AddClientFail = '[CLIENTS] Add Client Fail',
     UpdateClient = '[CLIENTS] Update Client',
     UpdateClientSuccess = '[CLIENTS] Update Client Success',
     UpdateClientFail = '[CLIENTS] Update Client Fail',
@@ -38,6 +41,21 @@ export class LoadClientsFail implements Action {
 export class SetCurrentClient implements Action {
     constructor(public payload:Clients){ }
     readonly type = ClientActionTypes.SetCurrentClient;
+}
+
+export class AddClient implements Action {
+    constructor(public payload:Clients){ }
+    readonly type = ClientActionTypes.AddClient;
+}
+
+export class AddClientSuccess implements Action {
+    constructor(public payload:Clients){ }
+    readonly type = ClientActionTypes.AddClientSuccess;
+}
+
+export class AddClientFail implements Action {
+    constructor(public payload: string){ }
+    readonly type = ClientActionTypes.AddClientFail;
 }
 
 export class UpdateClient implements Action {
@@ -104,6 +122,9 @@ export type ClientActions = LoadClients |
             LoadClientsSuccess | 
             LoadClientsFail |
             SetCurrentClient |
+            AddClient |
+            AddClientSuccess |
+            AddClientFail |
             UpdateClient | 
             UpdateClientSuccess |
             UpdateClientFail |

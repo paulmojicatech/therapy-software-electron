@@ -65,6 +65,14 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       });
     }
     else {
+      this.currentClient = {
+        GeneralDetails: {
+          'ClientID': -1,
+          'ClientName': '',
+          'ClientSSN': '',
+          'ClientLastName': ''
+        }
+      };
       this.clientDetailsGroup = this._builder.group({
         'clientName': '',
         'clientSSN': '',
@@ -100,7 +108,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       }
     };
     if (this.isNew){
-
+      this._store.dispatch(new clientActions.AddClient(this.currentClient));
     }
     else {
       this._store.dispatch(new clientActions.UpdateClient(this.currentClient));

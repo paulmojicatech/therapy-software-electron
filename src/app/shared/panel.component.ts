@@ -7,6 +7,7 @@ import * as fromClient from '../client/state/index';
 import * as clientActions from '../client/state/client.actions';
 import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pmt-panel',
@@ -22,6 +23,7 @@ export class PanelComponent implements OnInit, OnDestroy {
   filteredClients:Clients[] = [];
   allClients:Clients[] = [];
   isActive: boolean;
+  allClients$:Observable<Clients[]>;
   
   ngOnInit() {
     this.isActive = true;

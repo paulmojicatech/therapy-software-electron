@@ -81,6 +81,16 @@ export function reducer(state:ClientState = initialState,
                     ...state,
                     errorMsg: action.payload
                 };
+            case ClientActionTypes.AddClientSuccess:
+                return {
+                    ...state,
+                    allClients: [...state.allClients, action.payload]
+                }
+            case ClientActionTypes.AddClientFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                }
             default:
                 return state;
         }
