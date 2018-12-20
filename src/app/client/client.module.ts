@@ -12,6 +12,7 @@ import { reducer } from './state/client.reducer';
 import { ClientDetailsComponent } from './client-details.component';
 import { ClientService } from './services/client.service';
 import { ClientEffects } from './state/client.effects';
+import { InsuranceDetailsComponent } from './insurance-details.component';
 
 const clientRoutes:Route[] = [
     {
@@ -31,7 +32,7 @@ const clientRoutes:Route[] = [
         StoreModule.forFeature('clients', reducer),
         EffectsModule.forFeature([ ClientEffects ])
     ],
-    declarations: [ClientDetailsComponent],
+    declarations: [ClientDetailsComponent, InsuranceDetailsComponent],
     providers: [
         ClientService
     ]

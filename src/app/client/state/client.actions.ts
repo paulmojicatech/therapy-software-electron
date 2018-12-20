@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Clients } from '../models/clientModel';
+import { Clients, InsuranceCompanies } from '../models/clientModel';
 
 export enum ClientActionTypes {
     LoadClients = '[CLIENTS] Load Clients',
@@ -20,7 +20,10 @@ export enum ClientActionTypes {
     AddClientAppointmentFail = '[CLIENTS] Add Client Appointment Fail',
     DeleteClientAppointment = '[CLIENTS] Delete Client Appointment',
     DeleteClientAppointmentSuccess = '[CLIENTS] Delete Client Appointment Success',
-    DeleteClientAppointmentFail = '[CLIENTS] Delete Client Appointment Fail'
+    DeleteClientAppointmentFail = '[CLIENTS] Delete Client Appointment Fail',
+    LoadInsuranceCompanies = '[CLIENTS] Load Insurance Companies',
+    LoadInsuranceCompaniesSuccess = '[CLIENTS] Load Insurance Companies Success',
+    LoadInsuranceCompaniesFail = '[CLIENTS] Load Insurance Companies Fail'
 }
 
 export class LoadClients implements Action {
@@ -118,6 +121,21 @@ export class DeleteClientAppointmentFail implements Action {
     readonly type = ClientActionTypes.DeleteClientAppointmentFail;
 }
 
+export class LoadInsuranceCompanies implements Action {
+    constructor(public payload:InsuranceCompanies){ }
+    readonly type = ClientActionTypes.LoadInsuranceCompanies;
+}
+
+export class LoadInsuranceCompaniesSuccess implements Action {
+    constructor(public payload:InsuranceCompanies){ }
+    readonly type = ClientActionTypes.LoadInsuranceCompaniesSuccess;
+}
+
+export class LoadInsuranceCompaniesFail implements Action {
+    constructor(public payload:string){ }
+    readonly type = ClientActionTypes.LoadInsuranceCompaniesFail;
+}
+
 export type ClientActions = LoadClients |
             LoadClientsSuccess | 
             LoadClientsFail |
@@ -136,4 +154,7 @@ export type ClientActions = LoadClients |
             AddClientAppointmentFail |
             DeleteClientAppointment |
             DeleteClientAppointmentSuccess |
-            DeleteClientAppointmentFail;
+            DeleteClientAppointmentFail |
+            LoadInsuranceCompanies |
+            LoadInsuranceCompaniesSuccess |
+            LoadInsuranceCompaniesFail;
