@@ -1,24 +1,45 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { State } from '../state/app.state';
 import * as clientActions from '../client/state/client.actions';
-import * as fromClient from '../client/state/client.reducer';
+import * as fromClient from '../client/state/index';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 import { ClientService } from '../client/services/client.service';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-input-modal',
   templateUrl: './input-modal.component.html',
   styleUrls: ['./input-modal.component.scss']
 })
-export class InputModalComponent {
+export class InputModalComponent implements OnInit, OnDestroy {
 
   constructor(public dialogRef:MatDialogRef<InputModalComponent>,
               @Inject(MAT_DIALOG_DATA)public data:any,
-              private _store:Store<fromClient.ClientState>,
+              private _store:Store<State>,
               private _clientSvc:ClientService) { }
 
   private currentClient:Clients;
+  isActive:boolean = false;
+  clients:Clients[] = [];
+  selectedClients:number[] = [];
+
+  ngOnInit():void {
+    if (this.data.sendEmail) {
+     this.isActive = true;
+     this._store.pipe(
+      select(fromClient.getAllClients),
+      takeWhile(() => this.isActive)
+     ).subscribe(clients => {
+      this.clients = clients;
+     }); 
+    }
+  }
+
+  ngOnDestroy():void {
+    this.isActive = false;
+  }
 
   close() {
     this.dialogRef.close();
@@ -51,6 +72,32 @@ export class InputModalComponent {
     this._clientSvc.SendMassEmail(subject, message).subscribe(resp => {
       this.dialogRef.close();
     });
+  }
+  toggleClientSelected(ev, client:Clients) {
+    const found = this.selectedClients.filter(c => c === client.GeneralDetails.ClientID);
+    if (ev.checked){
+      if (!found || !found.length){
+        this.selectedClients.push(client.GeneralDetails.ClientID);
+      }
+    }
+    else {
+      if (found && found.length){
+        const index = this.selectedClients.indexOf(client.GeneralDetails.ClientID);
+        this.selectedClients.splice(index, 1);
+      }
+    }
+  }
+  toggleSelectAll(ev) {
+    this.selectedClients = [];
+    if (ev.checked) {
+      this.clients.forEach(c => {
+        this.selectedClients.push(c.GeneralDetails.ClientID);
+      });
+    }
+  }
+  isChecked(client:Clients) {
+    const found = this.selectedClients.filter(c => c === client.GeneralDetails.ClientID);
+    return found && found.length;
   }
 
 }

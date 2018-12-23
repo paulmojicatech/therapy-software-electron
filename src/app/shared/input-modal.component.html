@@ -9,7 +9,7 @@
   <mat-form-field>
     <mat-select placeholder="Client Session Time" disabled="true" [(value)]="data.selectedEvent.event.clientSessionId">
       <mat-option [value]="data.selectedEvent.event.clientSessionId">
-        {{data.selectedEvent.event.appointmentTime | date: "MMM dd yyyy h:mm a" }} 
+        {{data.selectedEvent.event.appointmentTime | date: "MMM dd yyyy h:mm a" }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -20,7 +20,7 @@
     <button mat-raised-button color="accent" (click)="deleteSession()">
       Delete
     </button>
-  </div>  
+  </div>
 </div>
 <div *ngIf="data.selectedDate">
   <mat-form-field>
@@ -33,7 +33,7 @@
   <mat-form-field>
     <mat-select disabled="true" placeholder="Appointment Date" [(value)]="data.selectedDate.date">
       <mat-option [value]="data.selectedDate.date">
-        {{ data.selectedDate.date | date: "MMM dd yyyy h:mm:a" }}      
+        {{ data.selectedDate.date | date: "MMM dd yyyy h:mm:a" }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -46,22 +46,36 @@
     </button>
   </div>
 </div>
-<div *ngIf="data.sendEmail">
-  <mat-form-field>
-    <input placeholder="Subject" matInput type="text" #subject />
-  </mat-form-field> 
-  <mat-form-field>
-    <textarea matInput rows="20" cols="50" placeholder="Email Message" #message></textarea>
-  </mat-form-field>
-  <div class="btn-group">
-      <button mat-raised-button class="close-btn" (click)="close()">
-        Close
-      </button>
-      <button mat-raised-button color="primary" (click)="sendEmail(subject.value, message.value)">
-        Send Email
-      </button>
+<div *ngIf="data.sendEmail" class="send-email-section">
+  <div class="email-container" *ngIf="!showClientFilter.checked">
+    <mat-form-field>
+      <input placeholder="Subject" matInput type="text" #subject />
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput rows="20" cols="50" placeholder="Email Message" #message></textarea>
+    </mat-form-field>
+  </div>
+  <div class="clients-filter-section">
+    <mat-checkbox #showClientFilter>Show /Hide Clients</mat-checkbox>
+    <div class="show-hide-clients-section" *ngIf="showClientFilter.checked">
+      <mat-checkbox #selectAll (change)="toggleSelectAll($event)">Select All</mat-checkbox>
+      <mat-checkbox *ngFor="let client of clients" 
+        value="client.GeneralDetails.CientID"
+        [checked]="isChecked(client)"
+        (change)="toggleClientSelected($event, client)">
+        {{client.GeneralDetails.ClientName}}
+      </mat-checkbox>
     </div>
+  </div>
+  <div class="btn-group" *ngIf="!showClientFilter.checked">
+    <button mat-raised-button class="close-btn" (click)="close()">
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="sendEmail(subject.value, message.value)">
+      Send Email
+    </button>
+  </div>
 </div>
 <div *ngIf="data.addInsurance">
-  
+
 </div>

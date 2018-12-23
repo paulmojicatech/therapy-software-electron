@@ -8,7 +8,8 @@ import { MatInputModule,
          MatButtonModule, 
          MatDialogModule,
          MatSelectModule, 
-         MatOptionModule } from '@angular/material';
+         MatOptionModule,
+         MatCheckboxModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -59,6 +60,7 @@ const appRoutes: Route[] = [
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
+    MatCheckboxModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,

@@ -12,3 +12,20 @@ mat-form-field {
 .close-btn {
     margin-right:1rem;
 }
+
+.send-email-section {
+    display:flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .show-hide-clients-section {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        overflow: auto;
+        mat-checkbox {
+            flex-basis: 25%;
+        }
+    }
+
+}
