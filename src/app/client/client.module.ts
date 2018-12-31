@@ -11,6 +11,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './state/client.reducer';
 import { ClientDetailsComponent } from './client-details.component';
 import { ClientService } from './services/client.service';
+import { InsuranceService } from './services/insurance.service';
 import { ClientEffects } from './state/client.effects';
 import { InsuranceDetailsComponent } from './insurance-details.component';
 
@@ -34,7 +35,8 @@ const clientRoutes:Route[] = [
     ],
     declarations: [ClientDetailsComponent, InsuranceDetailsComponent],
     providers: [
-        ClientService
+        ClientService,
+        InsuranceService
     ]
 })
 

@@ -3,7 +3,9 @@ import { InsuranceCompanies } from "release-builds/therapy-software-darwin-x64/t
 import * as env from '../../../env'
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class InsuranceService {
     constructor(private _http:Http){ }
 

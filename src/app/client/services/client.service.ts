@@ -4,7 +4,6 @@ import { Clients } from '../models/clientModel';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
-import { identifierName } from '@angular/compiler';
 
 @Injectable()
 export class ClientService {
