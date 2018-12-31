@@ -127,7 +127,7 @@ export class LoadInsuranceCompanies implements Action {
 }
 
 export class LoadInsuranceCompaniesSuccess implements Action {
-    constructor(public payload:InsuranceCompanies){ }
+    constructor(public payload:InsuranceCompanies[]){ }
     readonly type = ClientActionTypes.LoadInsuranceCompaniesSuccess;
 }
 
