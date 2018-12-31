@@ -33,6 +33,12 @@ export class InputModalComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive)
      ).subscribe(clients => {
       this.clients = clients;
+      clients.forEach(c => {
+        const found = this.selectedClients.filter(f => c.GeneralDetails.ClientID === f);
+        if (!found || !found.length){
+          this.selectedClients.push(c.GeneralDetails.ClientID);
+        }
+      });
      }); 
     }
   }
