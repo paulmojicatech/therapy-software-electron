@@ -1,17 +1,20 @@
 import { Clients } from "../models/clientModel";
 import { ClientActions, ClientActionTypes } from "./client.actions";
+import { InsuranceCompanies } from "../models/clientModel";
 
 export interface ClientState {
     allClients: Clients[],
     currentClient: Clients,
     clientAppointments: Clients[],
+    allInsuranceCos:InsuranceCompanies[],
     errorMsg?: string,
 }
 
 const initialState: ClientState = {
     allClients: [],
     currentClient: null,
-    clientAppointments: []
+    clientAppointments: [],
+    allInsuranceCos: []
 };
 
 export function reducer(state:ClientState = initialState, 
@@ -87,6 +90,16 @@ export function reducer(state:ClientState = initialState,
                     allClients: [...state.allClients, action.payload]
                 }
             case ClientActionTypes.AddClientFail:
+                return {
+                    ...state,
+                    errorMsg: action.payload
+                }
+            case ClientActionTypes.LoadInsuranceCompaniesSuccess:
+                return {
+                    ...state,
+                    allInsuranceCos: action.payload                    
+                }
+            case ClientActionTypes.LoadInsuranceCompaniesFail:
                 return {
                     ...state,
                     errorMsg: action.payload

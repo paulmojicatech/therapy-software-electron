@@ -45,7 +45,15 @@
           </mat-form-field>
         </mat-tab>
         <mat-tab label="Insurance Details" class="insurance-section">
-          Test
+          <mat-form-field>
+            <mat-select placeholder="Insurance Provider"
+              formControlName="assignedInsCo">
+              <mat-option *ngFor="let ins of allInsuranceCos$ | async"
+                [value]="+ins.InsuranceCompanyID">
+                {{ ins.InsuranceCompanyName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-tab>
       </mat-tab-group>
     </form>

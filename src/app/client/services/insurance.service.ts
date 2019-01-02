@@ -1,5 +1,5 @@
 import { Http, RequestOptions, Headers } from "@angular/http";
-import { InsuranceCompanies } from "release-builds/therapy-software-darwin-x64/therapy-software.app/Contents/Resources/app/src/app/client/models/clientModel";
+import { InsuranceCompanies } from '../models/clientModel';
 import * as env from '../../../env'
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
@@ -13,9 +13,19 @@ export class InsuranceService {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const opts = new RequestOptions({ headers: headers, body: {}}); 
-        return this._http.post(env.GetInsuranceUri + '&auth=' + env.AUTH, opts).pipe(
+        return this._http.get(env.GetInsuranceUri + '&auth=' + env.AUTH, opts).pipe(
             map(resp => {
-                return resp.json();
+                const insCos:any[] = resp.json();
+                let returnObj: InsuranceCompanies[] = [];
+                insCos.forEach(c => {
+                    const obj:InsuranceCompanies = {
+                        InsuranceCompanyID: c.InsuranceCoID,
+                        InsuranceCompanyName: c.InsuranceCoName,
+                        InsurancePhone: c.InsuranceCoPhone
+                    };
+                    returnObj.push(obj);
+                });
+                return returnObj;
             })    
         );
     }

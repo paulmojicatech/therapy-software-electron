@@ -22,3 +22,8 @@ export const getClientAppointments = createSelector(
     getClientsFeatureState,
     state => state.clientAppointments
 );
+
+export const getInsuranceCompanies = createSelector(
+    getClientsFeatureState,
+    state => state.allInsuranceCos
+);

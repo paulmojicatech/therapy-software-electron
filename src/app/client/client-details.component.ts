@@ -7,7 +7,8 @@ import { ClientState } from './state/client.reducer';
 import { Clients } from './models/clientModel';
 import { takeWhile } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
+import { InsuranceCompanies } from './models/clientModel';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'pmt-client-details',
   templateUrl: './client-details.component.html',
@@ -16,15 +17,16 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class ClientDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
-              private _route:ActivatedRoute,
-              private _router:Router,
-              private _builder:FormBuilder,
-              private _store:Store<ClientState>) { }
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _builder: FormBuilder,
+    private _store: Store<ClientState>) { }
 
-  currentClient:Clients;
-  isActive:boolean;
-  clientDetailsGroup:FormGroup;
+  currentClient: Clients;
+  isActive: boolean;
+  clientDetailsGroup: FormGroup;
   isNew: boolean;
+  allInsuranceCos$: Observable<InsuranceCompanies[]>;
 
   ngOnInit() {
     this.isActive = true;
@@ -38,18 +40,21 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
       const found = clients.filter(c => c.GeneralDetails.ClientID === id);
-      if (found){
+      if (found) {
         this.currentClient = found[0];
         this.loadClient();
       }
     });
+    this.allInsuranceCos$ = this._store.pipe(
+      select(fromClient.getInsuranceCompanies)
+    );
   }
 
   ngOnDestroy() {
     this.isActive = false;
   }
   loadClient() {
-    if (this.currentClient){
+    if (this.currentClient) {
       this.clientDetailsGroup = this._builder.group({
         'clientName': this.currentClient.GeneralDetails.ClientName,
         'clientSSN': this.currentClient.GeneralDetails.ClientSSN,
@@ -61,8 +66,12 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'clientAddress': this.currentClient.GeneralDetails.ClientAddress,
         'clientCity': this.currentClient.GeneralDetails.ClientCity,
         'clientState': this.currentClient.GeneralDetails.ClientState,
-        'clientZip': this.currentClient.GeneralDetails.ClientZip
+        'clientZip': this.currentClient.GeneralDetails.ClientZip,
+        'assignedInsCo': -1
       });
+      if (this.currentClient.InsuranceDetails && this.currentClient.InsuranceDetails.InsuranceCompany) {
+        this.clientDetailsGroup.get('assignedInsCo').setValue(this.currentClient.InsuranceDetails.InsuranceCompany.InsuranceCompanyID);
+      }
     }
     else {
       this.currentClient = {
@@ -71,6 +80,11 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
           'ClientName': '',
           'ClientSSN': '',
           'ClientLastName': ''
+        },
+        InsuranceDetails: {
+          InsuranceCompany: {
+            InsuranceCompanyID: -1
+          }
         }
       };
       this.clientDetailsGroup = this._builder.group({
@@ -84,7 +98,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'clientAddress': '',
         'clientCity': '',
         'clientState': '',
-        'clientZip': ''
+        'clientZip': '',
+        'assignedInsCo': -1
       });
     }
   }
@@ -105,9 +120,14 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'ClientSecondaryEmail': this.clientDetailsGroup.value.clientSecEmail,
         'ClientSecondaryPhone': this.clientDetailsGroup.value.clientSecPhone,
         'ClientLastName': this.currentClient.GeneralDetails.ClientLastName
+      },
+      InsuranceDetails: {
+        InsuranceCompany: {
+          InsuranceCompanyID: this.clientDetailsGroup.value.assignedInsCo
+        }
       }
     };
-    if (this.isNew){
+    if (this.isNew) {
       this._store.dispatch(new clientActions.AddClient(this.currentClient));
     }
     else {

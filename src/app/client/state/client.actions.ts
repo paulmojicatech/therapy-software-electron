@@ -122,7 +122,7 @@ export class DeleteClientAppointmentFail implements Action {
 }
 
 export class LoadInsuranceCompanies implements Action {
-    constructor(public payload:InsuranceCompanies){ }
+    constructor(){ }
     readonly type = ClientActionTypes.LoadInsuranceCompanies;
 }
 
