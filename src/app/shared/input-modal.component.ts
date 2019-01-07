@@ -24,6 +24,8 @@ export class InputModalComponent implements OnInit, OnDestroy {
   isActive:boolean = false;
   clients:Clients[] = [];
   selectedClients:number[] = [];
+  subject: string = '';
+  message: string = '';
 
   ngOnInit():void {
     if (this.data.sendEmail) {
@@ -74,8 +76,8 @@ export class InputModalComponent implements OnInit, OnDestroy {
     this._store.dispatch(new clientActions.DeleteClientAppointment(+this.data.selectedEvent.event.clientSessionId));
     this.dialogRef.close();
   }
-  sendEmail(subject, message) {
-    this._clientSvc.SendMassEmail(subject, message).subscribe(resp => {
+  sendEmail() {
+    this._clientSvc.SendMassEmail(this.subject, this.message, this.selectedClients).subscribe(resp => {
       this.dialogRef.close();
     });
   }

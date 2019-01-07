@@ -129,7 +129,7 @@ export class ClientService {
         }
     }
 
-    public SendMassEmail(emailSubject: string, emailMsg: string): Observable<ResultStatus> {
+    public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<ResultStatus> {
         let headers:Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let token = localStorage.getItem('session-token');
@@ -137,7 +137,8 @@ export class ClientService {
             let opts = new RequestOptions({headers: headers, body:{ 
                 'token': btoa(token), 
                 'emailSubject': emailSubject,
-                'emailMsg': emailMsg
+                'emailMsg': emailMsg,
+                'clientsToInclude': clientsToInclude
             }});
             return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/SendMassEmail', opts).pipe(
                 map(resp => {

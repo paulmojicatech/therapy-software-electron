@@ -67,10 +67,14 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'clientCity': this.currentClient.GeneralDetails.ClientCity,
         'clientState': this.currentClient.GeneralDetails.ClientState,
         'clientZip': this.currentClient.GeneralDetails.ClientZip,
-        'assignedInsCo': -1
+        'assignedInsCo': -1,
+        'insuranceMemberID': '',
+        'insuranceCoPhone': ''
       });
       if (this.currentClient.InsuranceDetails && this.currentClient.InsuranceDetails.InsuranceCompany) {
         this.clientDetailsGroup.get('assignedInsCo').setValue(this.currentClient.InsuranceDetails.InsuranceCompany.InsuranceCompanyID);
+        this.clientDetailsGroup.get('insuranceMemberID').setValue(this.currentClient.InsuranceDetails.InsuranceMemberID);
+        this.clientDetailsGroup.get('insuranceCoPhone').setValue(this.currentClient.InsuranceDetails.InsuranceCompanyPhone);
       }
     }
     else {
@@ -124,7 +128,9 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       InsuranceDetails: {
         InsuranceCompany: {
           InsuranceCompanyID: this.clientDetailsGroup.value.assignedInsCo
-        }
+        },
+        InsuranceCompanyPhone: this.clientDetailsGroup.value.insuranceCoPhone,
+        InsuranceMemberID: this.clientDetailsGroup.value.insuranceMemberID
       }
     };
     if (this.isNew) {

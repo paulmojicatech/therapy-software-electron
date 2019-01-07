@@ -8,7 +8,6 @@ import * as clientActions from '../client/state/client.actions';
 import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { InsuranceCompanies } from 'release-builds/therapy-software-darwin-x64/therapy-software.app/Contents/Resources/app/src/app/client/models/clientModel';
 
 @Component({
   selector: 'pmt-panel',

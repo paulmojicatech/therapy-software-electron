@@ -49,10 +49,10 @@
 <div *ngIf="data.sendEmail" class="send-email-section">
   <div class="email-container" *ngIf="!showClientFilter.checked">
     <mat-form-field>
-      <input placeholder="Subject" matInput type="text" #subject />
+      <input placeholder="Subject" matInput type="text" [(ngModel)]="subject" />
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput rows="20" cols="50" placeholder="Email Message" #message></textarea>
+      <textarea matInput rows="20" cols="50" placeholder="Email Message" [(ngModel)]="message"></textarea>
     </mat-form-field>
   </div>
   <div class="clients-filter-section">
@@ -71,7 +71,7 @@
     <button mat-raised-button class="close-btn" (click)="close()">
       Close
     </button>
-    <button mat-raised-button color="primary" (click)="sendEmail(subject.value, message.value)">
+    <button mat-raised-button color="primary" (click)="sendEmail()">
       Send Email
     </button>
   </div>
