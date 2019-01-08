@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   view: string;
   appointments$: Observable<AppointmentsModel[]>;
   isActive: boolean;
-  daysToExclude: number[] = [0, 1, 6];
+  daysToExclude: number[] = [0, 6];
   allClients: Clients[] = [];
 
   ngOnInit(): void {
