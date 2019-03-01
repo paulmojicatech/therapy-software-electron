@@ -11,6 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "ng build --base-href ./ && electron .",
+    "package-win": "ng build --prod --base-href ./ && electron-packager . --overwrite --platform=win32 --arch=x64 --prune=true --out=release-builds",
     "package-mac": "ng build --prod --base-href ./ && electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds --electron-version=3.0.7"
   },
   "main": "main.js",
@@ -48,6 +49,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "electron": "^3.0.13",
+    "electron-packager": "^13.1.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
