@@ -103,7 +103,9 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         'clientCity': '',
         'clientState': '',
         'clientZip': '',
-        'assignedInsCo': -1
+        'assignedInsCo': -1,
+        'insuranceMemberID': '',
+        'insuranceCoPhone': ''
       });
     }
   }
