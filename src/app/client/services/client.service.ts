@@ -49,7 +49,12 @@ export class ClientService {
         }
     }
     public DeleteClient(clientId:number): Observable<Clients[]> {
-        
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            
+        }
         return null;
     }
 
