@@ -27,11 +27,11 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   clientDetailsGroup: FormGroup;
   isNew: boolean;
   allInsuranceCos$: Observable<InsuranceCompanies[]>;
-
+  currentId:number;
   ngOnInit() {
     this.isActive = true;
-    const id = +this._route.snapshot.paramMap.get('id');
-    this.isNew = id > -1 ? false : true;
+    this.currentId = +this._route.snapshot.paramMap.get('id');
+    this.isNew = this.currentId > -1 ? false : true;
     if (this.isNew) {
       this.loadClient();
     }
@@ -39,7 +39,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
-      const found = clients.filter(c => c.GeneralDetails.ClientID === id);
+      const found = clients.filter(c => c.GeneralDetails.ClientID === this.currentId);
       if (found) {
         this.currentClient = found[0];
         this.loadClient();
@@ -144,6 +144,31 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this._router.navigate(['']);
   }
   delete() {
-    
+    this.currentClient = {
+      GeneralDetails: {
+        'ClientName': this.clientDetailsGroup.value.clientName,
+        'ClientSSN': this.clientDetailsGroup.value.clientSSN,
+        'ClientDoB': this.clientDetailsGroup.value.clientDoB,
+        'ClientAddress': this.clientDetailsGroup.value.clientAddress,
+        'ClientCity': this.clientDetailsGroup.value.clientCity,
+        'ClientState': this.clientDetailsGroup.value.clientState,
+        'ClientZip': this.clientDetailsGroup.value.clientZip,
+        'ClientEmail': this.clientDetailsGroup.value.clientEmail,
+        'ClientID': this.currentClient.GeneralDetails.ClientID,
+        'ClientPhone': this.clientDetailsGroup.value.clientPhone,
+        'ClientSecondaryEmail': this.clientDetailsGroup.value.clientSecEmail,
+        'ClientSecondaryPhone': this.clientDetailsGroup.value.clientSecPhone,
+        'ClientLastName': this.currentClient.GeneralDetails.ClientLastName
+      },
+      InsuranceDetails: {
+        InsuranceCompany: {
+          InsuranceCompanyID: this.clientDetailsGroup.value.assignedInsCo
+        },
+        InsuranceCompanyPhone: this.clientDetailsGroup.value.insuranceCoPhone,
+        InsuranceMemberID: this.clientDetailsGroup.value.insuranceMemberID
+      }
+    };
+    this._store.dispatch(new clientActions.DeleteClient(this.currentClient));
+    this._router.navigate(['']);
   }
 }

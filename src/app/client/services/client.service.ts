@@ -48,14 +48,24 @@ export class ClientService {
             );
         }
     }
-    public DeleteClient(clientId:number): Observable<Clients[]> {
+    public DeleteClient(curClient:Clients): Observable<Clients[]> {
         let headers:Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let token = localStorage.getItem('session-token');
         if (token) {
-            
+            let opts = new RequestOptions({headers: headers, body:{ 'token': btoa(token), 'client': curClient}});
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/DeleteClient', opts).pipe(
+                map(resp => {
+                    const res:ResultStatus = JSON.parse(resp.json());
+                    if (res.Type === 1) {
+                        return JSON.parse(res.Message);
+                    }
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err.json()));
+                })
+            );
         }
-        return null;
     }
 
     public GetClientAppointments(startDate:string, endDate:string): Observable<Clients[]> {

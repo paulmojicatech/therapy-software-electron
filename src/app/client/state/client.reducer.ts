@@ -26,6 +26,7 @@ export function reducer(state:ClientState = initialState,
             case ClientActionTypes.UpdateClient:
             case ClientActionTypes.LoadClientAppointments:
             case ClientActionTypes.AddClientAppointment:
+            case ClientActionTypes.DeleteClient:
             case ClientActionTypes.DeleteClientAppointment:
             case ClientActionTypes.AddClient:
             case ClientActionTypes.LoadInsuranceCompanies:
@@ -67,6 +68,18 @@ export function reducer(state:ClientState = initialState,
                     msg: action.payload,
                     isLoading: false
                 };
+            case ClientActionTypes.DeleteClientSuccess:
+                return {
+                    ...state,
+                    allClients: action.payload,
+                    isLoading: false
+                }
+            case ClientActionTypes.DeleteClientFail:
+                return {
+                    ...state,
+                    msg: action.payload,
+                    isLoading: false
+                }
             case ClientActionTypes.LoadClientAppointmentsSuccess:
                 return {
                     ...state,

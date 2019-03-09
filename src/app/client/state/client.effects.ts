@@ -34,6 +34,15 @@ export class ClientEffects {
     ));
 
     @Effect()
+    deleteClient$: Observable<Action> = this.actions$.pipe(
+        ofType(fromClient.ClientActionTypes.DeleteClient),
+        mergeMap((action:fromClient.DeleteClient) => this._clientSvc.DeleteClient(action.payload).pipe(
+            map(clients => (new fromClient.DeleteClientSuccess(clients))),
+            catchError(err => of(new fromClient.DeleteClientAppointmentFail(err)))
+        ))
+    );
+
+    @Effect()
     loadClientAppointments$: Observable<Action> = this.actions$.pipe(
         ofType(fromClient.ClientActionTypes.LoadClientAppointments),
         mergeMap((action:fromClient.LoadClientAppointments) => this._clientSvc.GetClientAppointments(action.payload.startDate, action.payload.endDate).pipe(
