@@ -1,1 +1,7 @@
 <router-outlet></router-outlet>
+<div class="loading-section" *ngIf="isLoading$ | async">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="snackbar-section">
+
+</div>

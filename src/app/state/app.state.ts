@@ -3,5 +3,6 @@ import { ClientState } from '../client/state/client.reducer';
 
 export interface State {
     user: UserState,
-    client: ClientState
+    client: ClientState,
+    isLoading: boolean
 }

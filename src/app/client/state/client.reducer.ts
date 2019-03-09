@@ -7,28 +7,43 @@ export interface ClientState {
     currentClient: Clients,
     clientAppointments: Clients[],
     allInsuranceCos:InsuranceCompanies[],
-    errorMsg?: string,
+    isLoading: boolean
+    msg?: string
 }
 
 const initialState: ClientState = {
     allClients: [],
     currentClient: null,
     clientAppointments: [],
-    allInsuranceCos: []
+    allInsuranceCos: [],
+    isLoading: true
 };
 
 export function reducer(state:ClientState = initialState, 
     action: ClientActions): ClientState {
         switch (action.type){
+            case ClientActionTypes.LoadClients:
+            case ClientActionTypes.UpdateClient:
+            case ClientActionTypes.LoadClientAppointments:
+            case ClientActionTypes.AddClientAppointment:
+            case ClientActionTypes.DeleteClientAppointment:
+            case ClientActionTypes.AddClient:
+            case ClientActionTypes.LoadInsuranceCompanies:
+                return {
+                    ...state,
+                    isLoading: true
+                }
             case ClientActionTypes.LoadClientsSuccess:
                 return {
                     ...state,
-                    allClients: action.payload
+                    allClients: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.LoadClientsFail:
                 return {
-                    errorMsg: action.payload,
-                    ...state
+                    ...state,
+                    msg: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.SetCurrentClient:
                 return {
@@ -43,12 +58,14 @@ export function reducer(state:ClientState = initialState,
                 return {
                     ...state,
                     allClients:updatedClients,
-                    currentClient: action.payload
+                    currentClient: action.payload,
+                    isLoading: false
                 };  
             case ClientActionTypes.UpdateClientFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.LoadClientAppointmentsSuccess:
                 return {
@@ -58,7 +75,8 @@ export function reducer(state:ClientState = initialState,
             case ClientActionTypes.LoadClientAppointmentsFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.AddClientAppointmentSuccess:
                 const updatedClientsApptsSuccess = state.allClients.map(
@@ -67,42 +85,50 @@ export function reducer(state:ClientState = initialState,
                 );
                 return {
                     ...state,
-                    allClients: updatedClientsApptsSuccess
+                    allClients: updatedClientsApptsSuccess,
+                    isLoading: false
                 };
             case ClientActionTypes.AddClientAppointmentFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.DeleteClientAppointmentSuccess:
                 return {
                     ...state,
-                    allClients: action.payload
+                    allClients: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.DeleteClientAppointmentFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 };
             case ClientActionTypes.AddClientSuccess:
                 return {
                     ...state,
-                    allClients: [...state.allClients, action.payload]
+                    allClients: [...state.allClients, action.payload],
+                    isLoading: false
                 }
             case ClientActionTypes.AddClientFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 }
             case ClientActionTypes.LoadInsuranceCompaniesSuccess:
                 return {
                     ...state,
-                    allInsuranceCos: action.payload                    
+                    allInsuranceCos: action.payload,
+                    isLoading: false                 
                 }
             case ClientActionTypes.LoadInsuranceCompaniesFail:
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    msg: action.payload,
+                    isLoading: false
                 }
             default:
                 return state;

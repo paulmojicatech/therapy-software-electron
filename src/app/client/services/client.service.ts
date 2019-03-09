@@ -48,6 +48,10 @@ export class ClientService {
             );
         }
     }
+    public DeleteClient(clientId:number): Observable<Clients[]> {
+        
+        return null;
+    }
 
     public GetClientAppointments(startDate:string, endDate:string): Observable<Clients[]> {
         let headers:Headers = new Headers();

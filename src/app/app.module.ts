@@ -10,7 +10,8 @@ import { MatInputModule,
          MatDialogModule,
          MatSelectModule, 
          MatOptionModule,
-         MatCheckboxModule } from '@angular/material';
+         MatCheckboxModule
+        } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';

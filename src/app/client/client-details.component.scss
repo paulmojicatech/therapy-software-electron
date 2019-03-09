@@ -27,4 +27,9 @@ form {
     border: solid #6c6e70 2px;
     text-align: center;
     position: flex-end;
+    display: flex;
+    flex-direction: column;
+    i {
+        padding: 1rem;
+    }
 }

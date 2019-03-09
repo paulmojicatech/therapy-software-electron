@@ -43,3 +43,4 @@ Thumbs.db
 **/settings.json
 env.ts
 .vscode/launch.json
+local.settings.ts

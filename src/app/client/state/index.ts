@@ -3,6 +3,11 @@ import { ClientState } from './client.reducer';
 
 const getClientsFeatureState = createFeatureSelector<ClientState>('clients');
 
+export const getLoadState = createSelector(
+  getClientsFeatureState,
+  state => state.isLoading  
+);
+
 export const getAllClients = createSelector(
     getClientsFeatureState,
     state => state.allClients
@@ -15,7 +20,7 @@ export const getCurrentClient = createSelector(
 
 export const getErrorMsg = createSelector(
     getClientsFeatureState,
-    state => state.errorMsg
+    state => state.msg
 );
 
 export const getClientAppointments = createSelector(

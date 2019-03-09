@@ -143,4 +143,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     }
     this._router.navigate(['']);
   }
+  delete() {
+    
+  }
 }
