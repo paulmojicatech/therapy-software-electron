@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { State } from '../state/app.state';
 import * as fromClient from '../client/state/index';
+import * as clientActions from '../client/state/client.actions';
 import { Store, select } from '@ngrx/store';
-import { takeWhile, map } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
@@ -21,7 +22,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
               private _dialog: MatDialog) { }
 
   private _msPerDay: number = 1000 * 60 * 60 * 24;
-  isLoading: boolean;
   startDate: Date;
   endDate: Date;
   view: string;
@@ -40,7 +40,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   load() {
-    this.isLoading = true;
     // Default values
     this.startDate = new Date();
     this.view = 'week';
@@ -66,10 +65,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.endDate = this.addDays(this.endDate, 5);
 
+    this._store.dispatch(new clientActions.UpdateLoadState(true));
     this._store.pipe(
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
     ).subscribe(clients => {
+      this._store.dispatch(new clientActions.UpdateLoadState(false));
       let appointments:AppointmentsModel[] = [];
       if (clients && clients.length) {
         this.allClients = clients;
@@ -93,7 +94,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
         });
         this.appointments$ = of(appointments);
       }
-      this.isLoading = false;
     });
   }
 

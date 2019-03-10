@@ -26,7 +26,8 @@ export enum ClientActionTypes {
     DeleteClientAppointmentFail = '[CLIENTS] Delete Client Appointment Fail',
     LoadInsuranceCompanies = '[CLIENTS] Load Insurance Companies',
     LoadInsuranceCompaniesSuccess = '[CLIENTS] Load Insurance Companies Success',
-    LoadInsuranceCompaniesFail = '[CLIENTS] Load Insurance Companies Fail'
+    LoadInsuranceCompaniesFail = '[CLIENTS] Load Insurance Companies Fail',
+    UpdateLoadState = '[CLIENTS] Update Load State'
 }
 
 export class LoadClients implements Action {
@@ -154,6 +155,11 @@ export class LoadInsuranceCompaniesFail implements Action {
     readonly type = ClientActionTypes.LoadInsuranceCompaniesFail;
 }
 
+export class UpdateLoadState implements Action {
+    constructor(public payload:boolean){ }
+    readonly type = ClientActionTypes.UpdateLoadState
+}
+
 export type ClientActions = LoadClients |
             LoadClientsSuccess | 
             LoadClientsFail |
@@ -178,4 +184,5 @@ export type ClientActions = LoadClients |
             DeleteClientAppointmentFail |
             LoadInsuranceCompanies |
             LoadInsuranceCompaniesSuccess |
-            LoadInsuranceCompaniesFail;
+            LoadInsuranceCompaniesFail | 
+            UpdateLoadState;

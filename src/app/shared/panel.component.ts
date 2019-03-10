@@ -28,8 +28,8 @@ export class PanelComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isActive = true;
     
-    // Load Insurance Companies
-    this._store.dispatch(new clientActions.LoadInsuranceCompanies());
+    // Set Load State
+    this._store.dispatch(new clientActions.UpdateLoadState(true));
 
     // Load Clients
     this._store.dispatch(new clientActions.LoadClients());
@@ -39,6 +39,7 @@ export class PanelComponent implements OnInit, OnDestroy {
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
     ).subscribe(c => {
+      this._store.dispatch(new clientActions.UpdateLoadState(false));
       this.allClients = c;
       this.filteredClients = c;
     });

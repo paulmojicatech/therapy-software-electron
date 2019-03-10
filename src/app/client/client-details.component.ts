@@ -28,6 +28,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   isNew: boolean;
   allInsuranceCos$: Observable<InsuranceCompanies[]>;
   currentId:number;
+
   ngOnInit() {
     this.isActive = true;
     this.currentId = +this._route.snapshot.paramMap.get('id');
@@ -35,6 +36,10 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     if (this.isNew) {
       this.loadClient();
     }
+
+    // Load Insurance Companies
+    this._store.dispatch(new clientActions.LoadInsuranceCompanies());
+
     this._store.pipe(
       select(fromClient.getAllClients),
       takeWhile(() => this.isActive)
@@ -46,8 +51,12 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       }
     });
     this.allInsuranceCos$ = this._store.pipe(
-      select(fromClient.getInsuranceCompanies)
+      select(fromClient.getInsuranceCompanies),
+      takeWhile(() => this.isActive)
     );
+    this.allInsuranceCos$.subscribe(insCos => {
+      this._store.dispatch(new clientActions.UpdateLoadState(false));
+    });
   }
 
   ngOnDestroy() {
@@ -111,6 +120,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    this._store.dispatch(new clientActions.UpdateLoadState(true));
     this.currentClient = {
       GeneralDetails: {
         'ClientName': this.clientDetailsGroup.value.clientName,
@@ -144,6 +154,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this._router.navigate(['']);
   }
   delete() {
+    this._store.dispatch(new clientActions.UpdateLoadState(true));
     this.currentClient = {
       GeneralDetails: {
         'ClientName': this.clientDetailsGroup.value.clientName,
