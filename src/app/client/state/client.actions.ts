@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Clients, InsuranceCompanies } from '../models/clientModel';
+import { Clients, InsuranceCompanies, DischargeDetail } from '../models/clientModel';
 
 export enum ClientActionTypes {
     LoadClients = '[CLIENTS] Load Clients',
@@ -15,6 +15,9 @@ export enum ClientActionTypes {
     DeleteClient = '[CLIENTS] Delete Client',
     DeleteClientSuccess = '[CLIENTS] Delete Client Success',
     DeleteClientFail = '[CLIENTS] Delete Client Fail',
+    DischargeClient = '[CLIENTS] Discharge Client',
+    DischargeClientSuccess = '[CLIENTS] Discharge Client Success',
+    DischargeClientFail = '[CLIENTS] Discharge Client Fail',
     LoadClientAppointments = '[CLIENTS] Load Client Appointments',
     LoadClientAppointmentsSuccess = '[CLIENTS] Load Client Appointments Success',
     LoadClientAppointmentsFail = '[CLIENTS] Load Client Appointments Fail',
@@ -95,6 +98,21 @@ export class DeleteClientFail implements Action {
     readonly type = ClientActionTypes.DeleteClientFail;
 }
 
+export class DischargeClient implements Action {
+    constructor (public payload: DischargeDetail){ }
+    readonly type = ClientActionTypes.DischargeClient;
+}
+
+export class DischargeClientSuccess implements Action {
+    constructor (public payload: Clients[]) { }
+    readonly type = ClientActionTypes.DischargeClientSuccess
+}
+
+export class DischargeClientFail implements Action {
+    constructor (public payload:string) { }
+    readonly type = ClientActionTypes.DischargeClientFail
+}
+
 export class LoadClientAppointments implements Action {
     constructor(public payload:any) { }
     readonly type = ClientActionTypes.LoadClientAppointments;
@@ -173,6 +191,9 @@ export type ClientActions = LoadClients |
             DeleteClient |
             DeleteClientSuccess |
             DeleteClientFail |
+            DischargeClient |
+            DischargeClientSuccess |
+            DischargeClientFail |
             LoadClientAppointments |
             LoadClientAppointmentsSuccess |
             LoadClientAppointmentsFail |

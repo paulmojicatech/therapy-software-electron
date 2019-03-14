@@ -21,15 +21,14 @@ form {
 }
 .action-section {
     background-color: #e8e9ea;
-    width: 5rem;
     font-size: 2rem;
-    height: 100%;
+    height: 100vh;
     border: solid #6c6e70 2px;
     text-align: center;
     position: flex-end;
     display: flex;
     flex-direction: column;
-    i {
-        padding: 1rem;
+    i, button {
+        margin: 1rem;
     }
 }

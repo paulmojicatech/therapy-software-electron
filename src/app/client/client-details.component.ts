@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import * as fromClient from './state/index';
 import * as clientActions from './state/client.actions';
@@ -8,6 +9,7 @@ import { Clients } from './models/clientModel';
 import { takeWhile } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InsuranceCompanies } from './models/clientModel';
+import { InputModalComponent } from '../shared/input-modal.component';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'pmt-client-details',
@@ -20,7 +22,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router,
     private _builder: FormBuilder,
-    private _store: Store<ClientState>) { }
+    private _store: Store<ClientState>,
+    private _dialog: MatDialog) { }
 
   currentClient: Clients;
   isActive: boolean;
@@ -181,5 +184,12 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     };
     this._store.dispatch(new clientActions.DeleteClient(this.currentClient));
     this._router.navigate(['']);
+  }
+  discharge() {
+    this._dialog.open(InputModalComponent, {
+      data: {
+        dischargeClient: this.currentId
+      }
+    });
   }
 }

@@ -46,3 +46,9 @@ export class ClientSessionDetails {
     ClientSessionICDCodes?:ICDCodes[];
     ClientSessionCPTCodes?:CPTCodes[];
 }
+
+export class DischargeDetail {
+    ClientID: number;
+    DischargeReason: string;
+    DischargeNote: string;
+}

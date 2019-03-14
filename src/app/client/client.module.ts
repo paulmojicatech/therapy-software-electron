@@ -7,7 +7,9 @@ import { MatFormFieldModule,
          MatInputModule,
          MatTabsModule,
          MatSelectModule,
-         MatOptionModule } from '@angular/material';
+         MatOptionModule,
+         MatButtonModule,
+         MatDialogModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './state/client.reducer';
@@ -16,6 +18,7 @@ import { ClientService } from './services/client.service';
 import { InsuranceService } from './services/insurance.service';
 import { ClientEffects } from './state/client.effects';
 import { InsuranceDetailsComponent } from './insurance-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const clientRoutes:Route[] = [
     {
@@ -25,6 +28,7 @@ const clientRoutes:Route[] = [
 
 @NgModule({
     imports: [
+        BrowserAnimationsModule,
         BrowserModule, 
         HttpModule,
         ReactiveFormsModule,
@@ -34,6 +38,8 @@ const clientRoutes:Route[] = [
         MatTabsModule,
         MatSelectModule,
         MatOptionModule,
+        MatButtonModule,
+        MatDialogModule,
         RouterModule.forChild(clientRoutes),
         StoreModule.forFeature('clients', reducer),
         EffectsModule.forFeature([ ClientEffects ])

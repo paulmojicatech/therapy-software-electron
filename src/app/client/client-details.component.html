@@ -65,7 +65,8 @@
     </form>
     <div class="action-section">
       <i (click)="save()" class="fa fa-floppy-o"></i>
-      <i (click)="delete()" class="fa fa-trash-o"></i>
+      <i (click)="delete()" class="fa fa-trash-o" *ngIf="currentId > -1"></i>
+      <button mat-raised-button color="accent" (click)="discharge()" *ngIf="currentId > -1">Discharge Client</button>
     </div>
   </div>
 </div>

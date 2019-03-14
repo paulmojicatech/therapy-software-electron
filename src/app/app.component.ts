@@ -1,25 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { ClientState } from './client/state/client.reducer'; 
 import * as fromClient from './client/state/index';
 import { Observable } from 'rxjs/observable';
+import { takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   constructor(private _store:Store<ClientState>){ }
 
   title = 'therapy-software';
-  isLoading$:Observable<boolean>;
+  isLoading:boolean;
+  isActive:boolean;
 
   ngOnInit():void {
-    this.isLoading$ = this._store.pipe(
-      select(fromClient.getLoadState)
-    );
+    this.isActive = true;
+    this._store.pipe(
+      select(fromClient.getLoadState),
+      takeWhile(() => !this.isActive)
+    ).subscribe(loading => {
+      this.isLoading = loading;
+    });
   }
-  loadComplete() {
-
+  ngOnDestroy(): void {
+    this.isActive = false;
   }
 }

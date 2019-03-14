@@ -59,9 +59,7 @@
     <mat-checkbox #showClientFilter>Show /Hide Clients</mat-checkbox>
     <div class="show-hide-clients-section" *ngIf="showClientFilter.checked">
       <mat-checkbox #selectAll (change)="toggleSelectAll($event)" [checked]="true">Select All</mat-checkbox>
-      <mat-checkbox *ngFor="let client of clients" 
-        value="client.GeneralDetails.CientID"
-        [checked]="isChecked(client)"
+      <mat-checkbox *ngFor="let client of clients" value="client.GeneralDetails.CientID" [checked]="isChecked(client)"
         (change)="toggleClientSelected($event, client)">
         {{client.GeneralDetails.ClientName}}
       </mat-checkbox>
@@ -78,4 +76,18 @@
 </div>
 <div *ngIf="data.addInsurance">
 
+</div>
+<div *ngIf="data.dischargeClient" class="discharge-client-section">
+  <mat-form-field>
+    <mat-select placeholder="Discharge Reason" [hidden]="hideDischargeReasonSelect()" (selectionChange)="dischargeReasonChanged($event.value)">
+      <mat-option *ngFor="let reason of dischargeReasons" [value]="reason">
+        {{ reason }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div [hidden]="dischargeReason !== 'Other'">
+    <mat-form-field>
+        <input matInput placeholder="Other reason" type="input" />
+    </mat-form-field>
+  </div>
 </div>

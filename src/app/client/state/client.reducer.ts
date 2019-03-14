@@ -62,6 +62,16 @@ export function reducer(state:ClientState = initialState,
                     ...state,
                     msg: action.payload
                 }
+            case ClientActionTypes.DischargeClientSuccess:
+                return {
+                    ...state,
+                    allClients: action.payload
+                }
+            case ClientActionTypes.DischargeClientFail:
+                return {
+                    ...state,
+                    msg: action.payload
+                }
             case ClientActionTypes.LoadClientAppointmentsSuccess:
                 return {
                     ...state,

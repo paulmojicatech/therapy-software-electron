@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Clients } from '../models/clientModel';
+import { Clients, DischargeDetail } from '../models/clientModel';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
@@ -63,6 +63,33 @@ export class ClientService {
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()));
+                })
+            );
+        }
+    }
+    public DischargeClient(dischargeDetail: DischargeDetail): Observable<Clients[]> {
+        let headers:Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let token = localStorage.getItem('session-token');
+        if (token) {
+            let opts = new RequestOptions({ 
+                    headers: headers, 
+                    body: { 
+                        'token': btoa(token), 
+                        'clientId': dischargeDetail.ClientID,
+                        'dischargeReason': dischargeDetail.DischargeReason,
+                        'dischargeNote': dischargeDetail.DischargeNote
+                    }
+            });
+            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/DischargeClient', opts).pipe(
+                map(resp => {
+                    const res:ResultStatus = JSON.parse(resp.json()); 
+                    if (res.Type === 1) {
+                        return JSON.parse(res.Message);
+                    }
+                }),
+                catchError(err => {
+                    return of(JSON.parse(err))
                 })
             );
         }

@@ -42,6 +42,15 @@ export class ClientEffects {
         ))
     );
 
+    @Effect() 
+    dischargeClient$: Observable<Action> = this.actions$.pipe(
+        ofType(fromClient.ClientActionTypes.DischargeClient),
+        mergeMap((action:fromClient.DischargeClient) => this._clientSvc.DischargeClient(action.payload).pipe(
+            map(clients => (new fromClient.DischargeClientSuccess(clients))),
+            catchError(err => of(new fromClient.DischargeClientFail(err)))
+        ))
+    );
+
     @Effect()
     loadClientAppointments$: Observable<Action> = this.actions$.pipe(
         ofType(fromClient.ClientActionTypes.LoadClientAppointments),

@@ -11,21 +11,26 @@ function createWindow() {
   let template = [
     {},
     {
-      // 'label': 'Clients',
-      // 'submenu': [
-      //     {
-      //         'label': 'Add',
-      //         'click': () => {
-      //           win.loadURL(
-      //             url.format({
-      //               pathname: path.join(__dirname, `/dist/index.html/clients/-1`),
-      //               protocol: "file:",
-      //               slashes: true
-      //             })
-      //           );
-      //         }
-      //     }
-      // ]
+      label: 'Edit',
+      submenu: [
+        {
+          label: 'Copy',
+          accelerator: 'CmdOrCtrl+C',
+          selector: 'copy:'
+        },
+        {
+          label: 'Paste',
+          accelerator: 'CmdOrCtrl+V',
+          selector: 'paste:'
+        },
+        {
+          label: 'Select All',
+          accelerator: 'CmdOrCtrl+A',
+          selector: 'selectAll:'
+        }
+      ]
+    },
+    {      
       label: 'Therapy Software',
       submenu: [
         {
@@ -51,7 +56,7 @@ function createWindow() {
   );
 
   // The following is optional and will open the DevTools:
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   win.on("closed", () => {
     win = null;

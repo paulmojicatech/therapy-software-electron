@@ -27,6 +27,14 @@ export class InputModalComponent implements OnInit, OnDestroy {
   subject: string = '';
   message: string = '';
 
+  dischargeReasons:string[] = [
+    'Lack of follow up',
+    'Case Closed',
+    'Insurance',
+    'Other'
+  ];
+  dischargeReason:string;
+
   ngOnInit():void {
     if (this.data.sendEmail) {
      this.isActive = true;
@@ -106,6 +114,14 @@ export class InputModalComponent implements OnInit, OnDestroy {
   isChecked(client:Clients) {
     const found = this.selectedClients.filter(c => c === client.GeneralDetails.ClientID);
     return found && found.length;
+  }
+  dischargeReasonChanged(ev) {
+    this.dischargeReason = ev;
+  }
+  hideDischargeReasonSelect(): boolean {
+    return this.dischargeReason !== 'Lack of follow up' 
+      && this.dischargeReason !== 'Case closed'
+      && this.dischargeReason !== 'Insurance';
   }
 
 }
