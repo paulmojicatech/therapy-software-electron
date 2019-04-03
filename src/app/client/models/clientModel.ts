@@ -22,6 +22,9 @@ export class GeneralDetails {
     ClientSecondaryPhone?: string;
     ClientSecondaryEmail?: string;
     IsDischarged?: boolean;
+    DischargeReason?: string;
+    DischargeDate?: Date;
+    DischargeNote?: string;
 }
 
 export class InsuranceDetails {

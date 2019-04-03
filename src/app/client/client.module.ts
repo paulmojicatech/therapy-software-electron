@@ -17,6 +17,7 @@ import { ClientDetailsComponent } from './client-details.component';
 import { ClientService } from './services/client.service';
 import { InsuranceService } from './services/insurance.service';
 import { ClientEffects } from './state/client.effects';
+import * as clientReducers from './state/client.reducer';
 import { InsuranceDetailsComponent } from './insurance-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 

@@ -135,5 +135,8 @@
       }
     }
   },
-  "defaultProject": "therapy-software"
+  "defaultProject": "therapy-software",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

@@ -76,7 +76,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.allClients = clients;
         clients.forEach(c => {
           // check client has appointments
-          const sessions = c ? c.ClientSessionDetails : [];
+          const sessions = c && c.ClientSessionDetails ? c.ClientSessionDetails : [];
           sessions.forEach(s => {
             if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
               const apptToAdd: AppointmentsModel = {
