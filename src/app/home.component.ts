@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './shared/input-modal.component';
 
-import { LoginService } from './user/services/login.service';
 import { USER, PWD } from '../env';
 import * as userActions from './user/state/user.actions';
 
@@ -23,8 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private _router:Router, 
     private _store:Store<UserState>,
-    private _dialog:MatDialog,
-    private _loginSvc:LoginService) { }
+    private _dialog:MatDialog) { }
 
   isActive:boolean;
   currentUser:User;
@@ -36,18 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive)
     ).subscribe(u => {
       if (u === null){
-        this._loginSvc.Login({userName: USER, password:btoa(PWD)})
-          .subscribe(resp => {
-            if (resp.Type === 1){
-              const curUser:User = {
-                email:USER,
-                name: 'Kirstin'
-              };
-              localStorage.setItem('session-token', resp.Message);
-              this._store.dispatch(new userActions.SetCurrentUser(curUser));
-            }
-          }
-        );
+        this._store.dispatch(new userActions.SetCurrentUser({userName: USER, password:btoa(PWD)}));
       }
       else {
         this.currentUser = u;

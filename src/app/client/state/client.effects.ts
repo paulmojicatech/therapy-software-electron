@@ -18,7 +18,7 @@ export class ClientEffects {
     @Effect() 
     loadClients$: Observable<Action> = this.actions$.pipe(
         ofType(fromClient.ClientActionTypes.LoadClients),
-        mergeMap(action => this._clientSvc.GetAllClients().pipe(
+        mergeMap(() => this._clientSvc.GetAllClients().pipe(
             map(clients => (new fromClient.LoadClientsSuccess(clients))),
             catchError(err => of(new fromClient.LoadClientsFail(err)))
         )

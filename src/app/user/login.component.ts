@@ -33,27 +33,27 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login() {
-    this.isLoading = true;
-    let obj = {
-      userName: this.loginForm.value.user,
-      password: btoa(this.loginForm.value.password)
-    };
-    this._loginSvc.Login(obj).subscribe(resp => {
-      if (resp.Type === 1) {
-        this.isLoading = false;
-        let curUser:User = { 
-          email: this.loginForm.value.user, 
-          name: 'Kirstin'
-        };
-        localStorage.setItem('session-token', resp.Message);
-        this._store.dispatch(new userActions.SetCurrentUser(curUser));
-        this._router.navigate(['']);
-      }
-      else {
-        this.isLoading = false;
-        this._snackbar.open(resp.Message, 'Dismiss');
-      }
-    });
-  }
+  // login() {
+  //   this.isLoading = true;
+  //   let obj = {
+  //     userName: this.loginForm.value.user,
+  //     password: btoa(this.loginForm.value.password)
+  //   };
+  //   this._loginSvc.Login(obj).subscribe(resp => {
+  //     if (resp.Type === 1) {
+  //       this.isLoading = false;
+  //       let curUser:User = { 
+  //         email: this.loginForm.value.user, 
+  //         name: 'Kirstin'
+  //       };
+  //       localStorage.setItem('session-token', resp.Message);
+  //       this._store.dispatch(new userActions.SetCurrentUser(curUser));
+  //       this._router.navigate(['']);
+  //     }
+  //     else {
+  //       this.isLoading = false;
+  //       this._snackbar.open(resp.Message, 'Dismiss');
+  //     }
+  //   });
+  // }
 }
