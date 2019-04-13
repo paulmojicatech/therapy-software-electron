@@ -15,6 +15,7 @@ import { MatInputModule,
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { reducer } from './state/app.reducer';
 import { UserModule } from './user/user.module';
 import { ClientModule } from './client/client.module';
 import { environment } from '../environments/environment';
@@ -67,7 +68,7 @@ const appRoutes: Route[] = [
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(reducer),
     StoreDevtoolsModule.instrument({
       name: 'Therapy Software DevTools',
       maxAge: 25,
