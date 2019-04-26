@@ -29,19 +29,18 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   isActive: boolean;
   clientDetailsGroup: FormGroup;
   isNew: boolean;
-  allInsuranceCos$: Observable<InsuranceCompanies[]>;
   currentId:number;
+  allInsuranceCos:InsuranceCompanies[];
 
   ngOnInit() {
     this.isActive = true;
     this.currentId = +this._route.snapshot.paramMap.get('id');
+    this.allInsuranceCos = this._route.snapshot.data.insuranceCos;
+
     this.isNew = this.currentId > -1 ? false : true;
     if (this.isNew) {
       this.loadClient();
     }
-
-    // Load Insurance Companies
-    this._store.dispatch(new clientActions.LoadInsuranceCompanies());
 
     this._store.pipe(
       select(fromClient.getAllClients),

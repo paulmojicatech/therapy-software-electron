@@ -16,14 +16,17 @@ import { reducer } from './state/client.reducer';
 import { ClientDetailsComponent } from './client-details.component';
 import { ClientService } from './services/client.service';
 import { InsuranceService } from './services/insurance.service';
+import { ClientDetailsResolver } from './services/client-details.resolver';
 import { ClientEffects } from './state/client.effects';
-import * as clientReducers from './state/client.reducer';
 import { InsuranceDetailsComponent } from './insurance-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const clientRoutes:Route[] = [
     {
-        path: 'clients/:id', component: ClientDetailsComponent, pathMatch: 'full'
+        path: 'clients/:id', 
+        component: ClientDetailsComponent, 
+        pathMatch: 'full',
+        resolve: { insuranceCos: ClientDetailsResolver }
     }
 ];
 
@@ -48,7 +51,8 @@ const clientRoutes:Route[] = [
     declarations: [ClientDetailsComponent, InsuranceDetailsComponent],
     providers: [
         ClientService,
-        InsuranceService
+        InsuranceService,
+        ClientDetailsResolver
     ]
 })
 

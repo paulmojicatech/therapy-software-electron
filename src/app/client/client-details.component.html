@@ -48,7 +48,7 @@
           <mat-form-field>
             <mat-select placeholder="Insurance Provider"
               formControlName="assignedInsCo">
-              <mat-option *ngFor="let ins of allInsuranceCos$ | async"
+              <mat-option *ngFor="let ins of allInsuranceCos"
                 [value]="+ins.InsuranceCompanyID">
                 {{ ins.InsuranceCompanyName }}
               </mat-option>

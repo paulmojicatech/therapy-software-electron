@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   msg:string;
   clients$:Observable<Clients[]>;
   isLoading$:Observable<boolean>;
-  
 
   ngOnInit() {
     this.isActive = true;   
@@ -38,12 +37,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       select(fromUser.getCurrentUser),
       takeWhile(() => this.isActive),
     ).subscribe((u:User) => {
-      if (!u){                     
+      if (!u){      
+        this._store.dispatch(new clientActions.LoadClients());                  
         this._store.dispatch(new userActions.SetCurrentUser({userName: USER, password:btoa(PWD)}));
       }
       else {
-        this.currentUser = u;  
-        this._store.dispatch(new clientActions.LoadClients());                 
+        this.currentUser = u;               
       }
     });    
     
