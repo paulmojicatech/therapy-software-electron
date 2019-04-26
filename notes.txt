@@ -1,0 +1,50 @@
+- AppComponent
+    + HomeComponent 
+        ^ InputModalComponent
+        * PanelComponent
+        * CalendarComponent
+            ^ InputModalComponent
+    + ClientDetailsComponent
+    + LoginComponent
+
+- AppComponent:
+    + State Changes: 
+        * Route
+    
+    (Functionality Complete)
+    (Test Complete)
+
+- HomeComponent:
+    + State Changes:
+        * IsLoading
+
+    
+
+- InputModalComponent
+    + State Changes:
+        * Add Client Appointments
+        * Delete Client Appointments
+        * Send Email
+        * IsLoading
+
+- PanelComponent
+    + State Changes:    
+        * Load Clients
+        * IsLoading
+        * Set Current Client
+
+- CalendarComponent
+    + State Changes:
+        * Load Client Appointments
+        * IsLoading
+
+- ClientDetailsComponent:
+    + State Changes:
+        * Update Client
+            * Set Current Client
+        * IsLoading
+
+- LoginComponent    
+    + State Changes:
+        * IsLoading
+        * Set Current Client

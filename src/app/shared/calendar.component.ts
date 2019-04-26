@@ -1,14 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
-import { State } from '../state/app.state';
-import * as fromClient from '../client/state/index';
-import * as clientActions from '../client/state/client.actions';
-import { Store, select } from '@ngrx/store';
-import { takeWhile } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
-import { of, Observable } from 'rxjs';
 
 @Component({
   selector: 'pmt-calendar',
@@ -16,27 +11,23 @@ import { of, Observable } from 'rxjs';
   styleUrls: ['./calendar.component.scss']
 })
 
-export class CalendarComponent implements OnInit, OnDestroy {
+export class CalendarComponent implements OnChanges {
 
-  constructor(private _store: Store<State>,
-              private _dialog: MatDialog) { }
+  constructor(private _dialog: MatDialog) { }
+
+  @Input() allClients: Clients[];
 
   private _msPerDay: number = 1000 * 60 * 60 * 24;
   startDate: Date;
   endDate: Date;
   view: string;
   appointments$: Observable<AppointmentsModel[]>;
-  isActive: boolean;
-  daysToExclude: number[] = [0, 6];
-  allClients: Clients[] = [];
+  daysToExclude: number[] = [0, 6];  
 
-  ngOnInit(): void {
-    this.isActive = true;
-    this.load();
-  }
-
-  ngOnDestroy(): void {
-    this.isActive = false;
+  ngOnChanges(ch: any) {
+    if (ch.allClients && ch.allClients.currentValue && ch.allClients.currentValue.length) {
+      this.load();
+    }
   }
 
   load() {
@@ -65,39 +56,32 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.endDate = this.addDays(this.endDate, 5);
 
-    this._store.dispatch(new clientActions.UpdateLoadState(true));
-    this._store.pipe(
-      select(fromClient.getAllClients),
-      takeWhile(() => this.isActive)
-    ).subscribe(clients => {
-      this._store.dispatch(new clientActions.UpdateLoadState(false));
-      let appointments:AppointmentsModel[] = [];
-      if (clients && clients.length) {
-        this.allClients = clients;
-        clients.forEach(c => {
-          // check client has appointments
-          const sessions = c && c.ClientSessionDetails ? c.ClientSessionDetails : [];
-          sessions.forEach(s => {
-            if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
-              const apptToAdd: AppointmentsModel = {
-                clientName: c.GeneralDetails.ClientName,
-                clientSessionId: s.ClientSessionID,
-                appointmentTime: new Date(s.ClientSessionDate),
-                title: c.GeneralDetails.ClientName,
-                start: new Date(s.ClientSessionDate),
-                end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
-                color: '#f7efb2'
-              };
-              appointments.push(apptToAdd);
-            }
-          });
-        });
-        this.appointments$ = of(appointments);
-      }
-    });
+
+    let appointments: AppointmentsModel[] = [];
+    if (this.allClients && this.allClients.length) {
+      this.allClients.map(c => {
+        // check client has appointments
+        const sessions = c && c.ClientSessionDetails ? c.ClientSessionDetails : [];
+        sessions.forEach(s => {
+          if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
+            const apptToAdd: AppointmentsModel = {
+              clientName: c.GeneralDetails.ClientName,
+              clientSessionId: s.ClientSessionID,
+              appointmentTime: new Date(s.ClientSessionDate),
+              title: c.GeneralDetails.ClientName,
+              start: new Date(s.ClientSessionDate),
+              end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
+              color: '#f7efb2'
+            };
+            appointments.push(apptToAdd);
+          }
+        });       
+      });    
+      this.appointments$ = of(appointments);      
+    }
   }
 
-  eventClicked(event:AppointmentsModel){
+  eventClicked(event: AppointmentsModel) {
     this._dialog.open(InputModalComponent, {
       data: {
         selectedEvent: event
@@ -105,15 +89,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  hourClicked(event:AppointmentsModel){
+  hourClicked(event: AppointmentsModel) {
     this._dialog.open(InputModalComponent, {
       data: {
         selectedDate: event,
         clients: this.allClients
       }
     });
-    
-    
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {
@@ -125,5 +107,4 @@ export class CalendarComponent implements OnInit, OnDestroy {
     let utc2 = Date.UTC(d2.getFullYear(), d2.getMonth() + 1, d2.getDate());
     return Math.floor((utc2 - utc1) / this._msPerDay);
   }
-
 }

@@ -17,7 +17,7 @@
         </button>
       </div>
       <div class="date-section">
-          <h3>{{ startDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
+          <h3>{{ startDate | calendarDate:(view + 'ViewTitle') }}</h3>
       </div>
       <div class="btn-group-right">
         <button mat-button color="primary" 
@@ -35,7 +35,7 @@
       </div>
     </div>
   <div class="day-view" *ngIf="view === 'day'">
-      <mwl-calendar-day-view [events]="appointments" 
+      <mwl-calendar-day-view [events]="appointments$ | async" 
       [viewDate]="startDate"
       [dayStartHour]="9"
       [dayEndHour]="18">
@@ -51,7 +51,7 @@
       </mwl-calendar-week-view>
   </div>
   <div class="month-view" *ngIf="view === 'month'">
-      <mwl-calendar-month-view [events]="appointments" 
+      <mwl-calendar-month-view [events]="appointments$ | async" 
         [viewDate]="startDate" 
         [tooltipPlacement]="none">
       </mwl-calendar-month-view>

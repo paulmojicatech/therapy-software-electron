@@ -5,17 +5,21 @@
     </mat-toolbar-row>
   </mat-toolbar>
 </header>
+
 <body>
-  <div class="container" *ngIf="currentUser">
+  <div class="container">
     <div class="panel-section">
-      <pmt-panel></pmt-panel>
+      <pmt-panel [allClients]="clients$ | async"></pmt-panel>
     </div>
     <div class="main-section">
-      <pmt-calendar></pmt-calendar>
+      <pmt-calendar [allClients]="clients$ | async"></pmt-calendar>
       <router-outlet></router-outlet>
     </div>
     <div class="action-section">
       <i class="fa fa-envelope-square" (click)="sendEmail()"></i>
     </div>
+  </div>
+  <div class="loading-section" *ngIf="isLoading$ | async">
+    <mat-spinner></mat-spinner>
   </div>
 </body>

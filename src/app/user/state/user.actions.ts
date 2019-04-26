@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
-import { User } from '../models/userModel';
 
 export enum UserActionTypes {
     SetCurrentUser = '[USER] Set current user',
     SetCurrentUserSuccess = '[USER] Set current user success',
-    SetCurrentUserFail = '[USER] Set current user fail'
+    UpdateMessage = '[USER] Update message',
+    UpdateLoadStatus = '[USER] Update load status'
 }
 
 export class SetCurrentUser implements Action {
@@ -17,11 +17,17 @@ export class SetCurrentUserSuccess implements Action {
     readonly type = UserActionTypes.SetCurrentUserSuccess;
 }
 
-export class SetCurrentUserFail implements Action {
-    constructor(public payload:string){ }
-    readonly type = UserActionTypes.SetCurrentUserFail;
+export class UpdateMessage implements Action {
+    constructor(public payload:string) { }
+    readonly type = UserActionTypes.UpdateMessage
+}
+
+export class UpdateLoadStatus implements Action {
+    constructor(public payload:boolean) { }
+    readonly type = UserActionTypes.UpdateLoadStatus;
 }
 
 export type UserAction = SetCurrentUser |
     SetCurrentUserSuccess |
-    SetCurrentUserFail;
+    UpdateMessage |
+    UpdateLoadStatus;

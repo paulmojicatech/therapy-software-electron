@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Route, RouterModule } from '@angular/router';
+import { Route, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
 import { MatInputModule, 
          MatFormFieldModule,
          MatToolbarModule,
@@ -15,7 +15,6 @@ import { MatInputModule,
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { reducer } from './state/app.reducer';
 import { UserModule } from './user/user.module';
 import { ClientModule } from './client/client.module';
 import { environment } from '../environments/environment';
@@ -27,6 +26,7 @@ import { CalendarComponent } from './shared/calendar.component';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { InputModalComponent } from './shared/input-modal.component';
+import { HomeRouteResolver } from './shared/services/home.resolver.service';
 
 const appRoutes: Route[] = [
   {
@@ -68,7 +68,7 @@ const appRoutes: Route[] = [
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
-    StoreModule.forRoot(reducer),
+    StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
       name: 'Therapy Software DevTools',
       maxAge: 25,
@@ -80,7 +80,9 @@ const appRoutes: Route[] = [
       useFactory: adapterFactory
     })
   ],
-  providers: [],
+  providers: [
+    
+  ],
   entryComponents: [
     InputModalComponent
   ],

@@ -8,3 +8,7 @@ export const getCurrentUser = createSelector(
     state => state.currentUser
 );
 
+export const getLoadState = createSelector(
+    getUserFeatureState,
+    state => state.isLoading
+);

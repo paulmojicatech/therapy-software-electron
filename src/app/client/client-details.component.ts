@@ -53,13 +53,6 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         this.loadClient();
       }
     });
-    this.allInsuranceCos$ = this._store.pipe(
-      select(fromClient.getInsuranceCompanies),
-      takeWhile(() => this.isActive)
-    );
-    this.allInsuranceCos$.subscribe(insCos => {
-      this._store.dispatch(new clientActions.UpdateLoadState(false));
-    });
   }
 
   ngOnDestroy() {
@@ -123,7 +116,6 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this._store.dispatch(new clientActions.UpdateLoadState(true));
     this.currentClient = {
       GeneralDetails: {
         'ClientName': this.clientDetailsGroup.value.clientName,
@@ -157,7 +149,6 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this._router.navigate(['']);
   }
   delete() {
-    this._store.dispatch(new clientActions.UpdateLoadState(true));
     this.currentClient = {
       GeneralDetails: {
         'ClientName': this.clientDetailsGroup.value.clientName,

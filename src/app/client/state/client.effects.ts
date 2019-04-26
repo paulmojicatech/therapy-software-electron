@@ -5,9 +5,11 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 
 import { ClientService } from '../services/client.service';
 import { InsuranceService } from '../services/insurance.service';
-import * as fromClient from '../state/client.actions';
+import * as clientActions from '../state/client.actions';
+import * as userActions from '../../user/state/user.actions';
+import * as appActions from '../../state/app.actions';
 import { Observable, of } from 'rxjs';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError, concatMap } from 'rxjs/operators';
 
 @Injectable()
 export class ClientEffects {
@@ -17,81 +19,82 @@ export class ClientEffects {
 
     @Effect() 
     loadClients$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.LoadClients),
-        mergeMap(() => this._clientSvc.GetAllClients().pipe(
-            map(clients => (new fromClient.LoadClientsSuccess(clients))),
-            catchError(err => of(new fromClient.LoadClientsFail(err)))
+        ofType(clientActions.ClientActionTypes.LoadClients),
+        concatMap(() => this._clientSvc.GetAllClients().pipe(            
+            map(clients => (new clientActions.LoadClientsSuccess(clients))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         )
     ));
 
     @Effect() 
     updateClient$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.UpdateClient),
-        mergeMap((action:fromClient.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
-            map(client => (new fromClient.UpdateClientSuccess(client))),
-            catchError(err => of(new fromClient.UpdateClientFail(err)))
+        ofType(clientActions.ClientActionTypes.UpdateClient),
+        concatMap((action:clientActions.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
+            map(client => (new clientActions.UpdateClientSuccess(client))),
+            map(user => (new userActions.UpdateLoadStatus(true))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         )
     ));
 
     @Effect()
     deleteClient$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.DeleteClient),
-        mergeMap((action:fromClient.DeleteClient) => this._clientSvc.DeleteClient(action.payload).pipe(
-            map(clients => (new fromClient.DeleteClientSuccess(clients))),
-            catchError(err => of(new fromClient.DeleteClientAppointmentFail(err)))
+        ofType(clientActions.ClientActionTypes.DeleteClient),
+        mergeMap((action:clientActions.DeleteClient) => this._clientSvc.DeleteClient(action.payload).pipe(
+            map(clients => (new clientActions.DeleteClientSuccess(clients))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         ))
     );
 
     @Effect() 
     dischargeClient$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.DischargeClient),
-        mergeMap((action:fromClient.DischargeClient) => this._clientSvc.DischargeClient(action.payload).pipe(
-            map(clients => (new fromClient.DischargeClientSuccess(clients))),
-            catchError(err => of(new fromClient.DischargeClientFail(err)))
+        ofType(clientActions.ClientActionTypes.DischargeClient),
+        mergeMap((action:clientActions.DischargeClient) => this._clientSvc.DischargeClient(action.payload).pipe(
+            map(clients => (new clientActions.DischargeClientSuccess(clients))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         ))
     );
 
     @Effect()
     loadClientAppointments$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.LoadClientAppointments),
-        mergeMap((action:fromClient.LoadClientAppointments) => this._clientSvc.GetClientAppointments(action.payload.startDate, action.payload.endDate).pipe(
-            map(clients => (new fromClient.LoadClientAppointmentsSuccess(clients))),
-            catchError(err => of(new fromClient.LoadClientAppointmentsFail(err)))
+        ofType(clientActions.ClientActionTypes.LoadClientAppointments),
+        mergeMap((action:clientActions.LoadClientAppointments) => this._clientSvc.GetClientAppointments(action.payload.startDate, action.payload.endDate).pipe(
+            map(clients => (new clientActions.LoadClientAppointmentsSuccess(clients))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         )
     ));
     
     @Effect()
     addClientSession$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.AddClientAppointment),
-        mergeMap((action:fromClient.AddClientAppointment) => this._clientSvc.AddClientAppointment(action.payload).pipe(
-            map(c => (new fromClient.AddClientAppointmentSuccess(c))),
-            catchError(err => of(new fromClient.AddClientAppointmentFail(err)))
+        ofType(clientActions.ClientActionTypes.AddClientAppointment),
+        mergeMap((action:clientActions.AddClientAppointment) => this._clientSvc.AddClientAppointment(action.payload).pipe(
+            map(c => (new clientActions.AddClientAppointmentSuccess(c))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         )
     ));
 
     @Effect()
     deleteClientSession$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.DeleteClientAppointment),
-        mergeMap((action:fromClient.DeleteClientAppointment) => this._clientSvc.DeleteClientAppointment(action.payload).pipe(
-            map(clients => (new fromClient.DeleteClientAppointmentSuccess(clients))),
-            catchError(err => of(new fromClient.DeleteClientAppointmentFail(err)))
+        ofType(clientActions.ClientActionTypes.DeleteClientAppointment),
+        mergeMap((action:clientActions.DeleteClientAppointment) => this._clientSvc.DeleteClientAppointment(action.payload).pipe(
+            map(clients => (new clientActions.DeleteClientAppointmentSuccess(clients))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         )
     ));
 
     @Effect()
     AddClient$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.AddClient),
-        mergeMap((action:fromClient.AddClient) => this._clientSvc.AddClient(action.payload).pipe(
-            map(c => (new fromClient.AddClientSuccess(c))),
-            catchError(err => of(new fromClient.AddClientFail(err)))
+        ofType(clientActions.ClientActionTypes.AddClient),
+        mergeMap((action:clientActions.AddClient) => this._clientSvc.AddClient(action.payload).pipe(
+            map(c => (new clientActions.AddClientSuccess(c))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         ))
     );
     @Effect()
     loadInsuranceCompanies$: Observable<Action> = this.actions$.pipe(
-        ofType(fromClient.ClientActionTypes.LoadInsuranceCompanies),
-        mergeMap((action:fromClient.LoadInsuranceCompanies) => this._insuranceSvc.GetAllInsurances().pipe(
-            map(insurancesCos => (new fromClient.LoadInsuranceCompaniesSuccess(insurancesCos))),
-            catchError(err => of(new fromClient.LoadInsuranceCompaniesFail(err)))
+        ofType(clientActions.ClientActionTypes.LoadInsuranceCompanies),
+        mergeMap((action:clientActions.LoadInsuranceCompanies) => this._insuranceSvc.GetAllInsurances().pipe(
+            map(insurancesCos => (new clientActions.LoadInsuranceCompaniesSuccess(insurancesCos))),
+            catchError(err => of(new appActions.UpdateMessage(err)))
         ))
     );
 }   

@@ -1,41 +1,45 @@
 import { Clients } from "../models/clientModel";
 import { ClientActions, ClientActionTypes } from "./client.actions";
 import { InsuranceCompanies } from "../models/clientModel";
+import { State } from '../../state/app.state';
 
-export interface ClientState {
+export interface ClientState extends State {
     allClients: Clients[],
     currentClient: Clients,
     clientAppointments: Clients[],
-    allInsuranceCos:InsuranceCompanies[],
-    isLoading: boolean
-    msg?: string
+    allInsuranceCos:InsuranceCompanies[]
 }
 
 const initialState: ClientState = {
     allClients: [],
     currentClient: null,
     clientAppointments: [],
-    allInsuranceCos: [],
-    isLoading: true
+    allInsuranceCos: []
 };
 
 export function reducer(state:ClientState = initialState, 
     action: ClientActions): ClientState {
         switch (action.type){
+            case ClientActionTypes.LoadClients:
+                return {
+                    ...state,
+                    isLoading: true
+                };
             case ClientActionTypes.LoadClientsSuccess:
                 return {
                     ...state,
+                    isLoading: false,
                     allClients: action.payload
-                };
-            case ClientActionTypes.LoadClientsFail:
-                return {
-                    ...state,
-                    msg: action.payload
                 };
             case ClientActionTypes.SetCurrentClient:
                 return {
                     ...state,
                     currentClient: action.payload
+                };
+            case ClientActionTypes.UpdateClient:
+                return {
+                    ...state,
+                    isLoading: true
                 };
             case ClientActionTypes.UpdateClientSuccess:
                 const updatedClients = state.allClients.map(
@@ -45,42 +49,46 @@ export function reducer(state:ClientState = initialState,
                 return {
                     ...state,
                     allClients:updatedClients,
+                    isLoading: false,
                     currentClient: action.payload
                 };  
-            case ClientActionTypes.UpdateClientFail:
+            case ClientActionTypes.DeleteClient:
                 return {
                     ...state,
-                    msg: action.payload
+                    isLoading: true
                 };
             case ClientActionTypes.DeleteClientSuccess:
                 return {
                     ...state,
-                    allClients: action.payload
-                }
-            case ClientActionTypes.DeleteClientFail:
+                    allClients: action.payload,
+                    isLoading: false
+                };
+            case ClientActionTypes.DischargeClient:
                 return {
                     ...state,
-                    msg: action.payload
-                }
+                    isLoading: true
+                };
             case ClientActionTypes.DischargeClientSuccess:
                 return {
                     ...state,
-                    allClients: action.payload
-                }
-            case ClientActionTypes.DischargeClientFail:
+                    allClients: action.payload,
+                    isLoading: false
+                };
+            case ClientActionTypes.LoadClientAppointments:
                 return {
                     ...state,
-                    msg: action.payload
-                }
+                    isLoading: true
+                };
             case ClientActionTypes.LoadClientAppointmentsSuccess:
                 return {
                     ...state,
-                    clientAppointments: action.payload
+                    clientAppointments: action.payload,
+                    isLoading: false
                 };
-            case ClientActionTypes.LoadClientAppointmentsFail:
+            case ClientActionTypes.AddClientAppointment:
                 return {
                     ...state,
-                    msg: action.payload
+                    isLoading: true
                 };
             case ClientActionTypes.AddClientAppointmentSuccess:
                 const updatedClientsApptsSuccess = state.allClients.map(
@@ -89,48 +97,42 @@ export function reducer(state:ClientState = initialState,
                 );
                 return {
                     ...state,
-                    allClients: updatedClientsApptsSuccess
+                    allClients: updatedClientsApptsSuccess,
+                    isLoading: false
                 };
-            case ClientActionTypes.AddClientAppointmentFail:
+            case ClientActionTypes.DeleteClientAppointment:
                 return {
                     ...state,
-                    msg: action.payload
+                    isLoading: true
                 };
             case ClientActionTypes.DeleteClientAppointmentSuccess:
                 return {
                     ...state,
-                    allClients: action.payload
+                    allClients: action.payload,
+                    isLoading: false
                 };
-            case ClientActionTypes.DeleteClientAppointmentFail:
+            case ClientActionTypes.AddClient:
                 return {
                     ...state,
-                    msg: action.payload
+                    isLoading: true
                 };
             case ClientActionTypes.AddClientSuccess:
                 return {
                     ...state,
-                    allClients: [...state.allClients, action.payload]
-                }
-            case ClientActionTypes.AddClientFail:
+                    allClients: [...state.allClients, action.payload],
+                    isLoading: false
+                };
+            case ClientActionTypes.LoadInsuranceCompanies:
                 return {
                     ...state,
-                    msg: action.payload
-                }
+                    isLoading: true
+                };
             case ClientActionTypes.LoadInsuranceCompaniesSuccess:
                 return {
                     ...state,
-                    allInsuranceCos: action.payload
-                }
-            case ClientActionTypes.LoadInsuranceCompaniesFail:
-                return {
-                    ...state,
-                    msg: action.payload
-                }
-            case ClientActionTypes.UpdateLoadState:
-                return {
-                    ...state,
-                    isLoading: action.payload
-                }
+                    allInsuranceCos: action.payload,
+                    isLoading: false
+                };
             default:
                 return state;
         }

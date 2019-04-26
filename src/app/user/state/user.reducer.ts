@@ -13,6 +13,11 @@ const initialState:UserState = {
 
 export function reducer(state: UserState = initialState, action:UserAction):UserState {
     switch (action.type){
+        case UserActionTypes.SetCurrentUser:
+            return {
+                ...state,
+                isLoading:true
+            };
         case UserActionTypes.SetCurrentUserSuccess:
             // TODO: FIX THIS
             const newUser:User = {
@@ -22,15 +27,8 @@ export function reducer(state: UserState = initialState, action:UserAction):User
             };
             return {
                 ...state, 
-                currentUser: newUser,
                 isLoading: false,
-                msg: 'Successfully logged in'
-            };
-        case UserActionTypes.SetCurrentUserFail:
-            return {
-                ...state,
-                isLoading: false,
-                msg: 'Login failed'
+                currentUser: newUser
             };
         default:
             return state;

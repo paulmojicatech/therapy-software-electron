@@ -1,11 +1,12 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ClientState } from './client.reducer';
+import { createFeatureSelector, createSelector, ActionReducerMap } from '@ngrx/store';
+import { State } from '../../state/app.state';
+import * as fromClient  from './client.reducer';
 
-const getClientsFeatureState = createFeatureSelector<ClientState>('clients');
+const getClientsFeatureState = createFeatureSelector<fromClient.ClientState>('clients');
 
 export const getLoadState = createSelector(
-  getClientsFeatureState,
-  state => state.isLoading  
+    getClientsFeatureState,
+    state => state.isLoading
 );
 
 export const getAllClients = createSelector(
@@ -16,11 +17,6 @@ export const getAllClients = createSelector(
 export const getCurrentClient = createSelector(
     getClientsFeatureState,
     state => state.currentClient
-);
-
-export const getErrorMsg = createSelector(
-    getClientsFeatureState,
-    state => state.msg
 );
 
 export const getClientAppointments = createSelector(

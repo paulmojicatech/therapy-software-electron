@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import * as userActions from './user.actions';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError, concatMap } from 'rxjs/operators';
 import { ResultStatus } from '../../user/models/userModel';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UserEffects {
     SetCurrentUser$: Observable<Action> = this.actions$.pipe(
         ofType(userActions.UserActionTypes.SetCurrentUser),
         switchMap((loginAction:userActions.SetCurrentUser) => this._loginSvc.Login(loginAction.payload).pipe(
-            catchError((err:string) => of(new userActions.SetCurrentUserFail(err))),
+            catchError((err:string) => of(new userActions.UpdateMessage(err))),
             map((resStatus:ResultStatus) => (new userActions.SetCurrentUserSuccess(resStatus.Message)))
         ))
     );
