@@ -7,7 +7,10 @@
 </header>
 
 <body>
-  <div class="container">
+  <div class="loading-section" *ngIf="(isLoading$ | async) as isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="container" *ngIf="!(isLoading$ | async) as isLoading">
     <div class="panel-section">
       <pmt-panel [allClients]="clients$ | async"></pmt-panel>
     </div>
@@ -18,8 +21,5 @@
     <div class="action-section">
       <i class="fa fa-envelope-square" (click)="sendEmail()"></i>
     </div>
-  </div>
-  <div class="loading-section" *ngIf="isLoading$ | async">
-    <mat-spinner></mat-spinner>
   </div>
 </body>

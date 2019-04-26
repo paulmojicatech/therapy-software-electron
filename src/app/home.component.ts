@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   msg:string;
   clients$:Observable<Clients[]>;
   isLoading$:Observable<boolean>;
-  loaded:boolean;
+  
 
   ngOnInit() {
     this.isActive = true;   
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     // getLoadState
     this.isLoading$ = this._store.pipe(
-      select(fromUser.getLoadState)
+      select(fromClient.getLoadState)
     );
 
     // // getClients
