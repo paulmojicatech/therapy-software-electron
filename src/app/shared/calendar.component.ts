@@ -92,6 +92,7 @@ export class CalendarComponent implements OnChanges {
   hourClicked(event: AppointmentsModel) {
     this._dialog.open(InputModalComponent, {
       data: {
+        loadSelectedDate: true,
         selectedDate: event,
         clients: this.allClients
       }

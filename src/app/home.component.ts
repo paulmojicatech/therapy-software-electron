@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isActive:boolean;
   currentUser:User;  
   msg:string;
-  clients$:Observable<Clients[]>;
+  clients:Clients[];
   isLoading$:Observable<boolean>;
 
   ngOnInit() {
@@ -37,12 +37,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       select(fromUser.getCurrentUser),
       takeWhile(() => this.isActive),
     ).subscribe((u:User) => {
-      if (!u){      
-        this._store.dispatch(new clientActions.LoadClients());                  
+      if (!u){                   
         this._store.dispatch(new userActions.SetCurrentUser({userName: USER, password:btoa(PWD)}));
       }
       else {
-        this.currentUser = u;               
+        this.currentUser = u;  
+        this._store.dispatch(new clientActions.LoadClients());         
       }
     });    
     
@@ -52,9 +52,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     // // getClients
-    this.clients$ = this._store.pipe(
+    this._store.pipe(
       select(fromClient.getAllClients)
-    );       
+    ).subscribe(clients => this.clients = clients);       
   }
 
   ngOnDestroy() {
@@ -64,7 +64,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   sendEmail() {
     this._dialog.open(InputModalComponent, {
       data: {
-        sendEmail: true
+        sendEmail: true,
+        clients: this.clients
       }
     });
   }  

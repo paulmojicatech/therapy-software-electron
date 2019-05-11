@@ -12,10 +12,10 @@
   </div>
   <div class="container" *ngIf="!(isLoading$ | async) as isLoading">
     <div class="panel-section">
-      <pmt-panel [allClients]="clients$ | async"></pmt-panel>
+      <pmt-panel [allClients]="clients"></pmt-panel>
     </div>
     <div class="main-section">
-      <pmt-calendar [allClients]="clients$ | async"></pmt-calendar>
+      <pmt-calendar [allClients]="clients"></pmt-calendar>
       <router-outlet></router-outlet>
     </div>
     <div class="action-section">

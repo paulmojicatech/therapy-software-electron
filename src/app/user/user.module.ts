@@ -13,15 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './state/user.reducer';
-import { LoginComponent } from './login.component';
 import { LoginService } from './services/login.service';
 import { UserEffects } from './state/user.effects';
-
-const userRoutes: Route[] = [
-    {
-        path: 'login', component: LoginComponent
-    }
-];
 
 @NgModule({
     imports: [
@@ -34,11 +27,9 @@ const userRoutes: Route[] = [
         MatButtonModule,
         MatProgressSpinnerModule,
         MatSnackBarModule,
-        RouterModule.forChild(userRoutes),
         StoreModule.forFeature('users', reducer),
         EffectsModule.forFeature([ UserEffects ])
     ],
-    declarations: [LoginComponent],
     providers: [
         LoginService
     ]

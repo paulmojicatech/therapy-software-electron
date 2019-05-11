@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Route, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { MatInputModule, 
          MatFormFieldModule,
          MatToolbarModule,
@@ -26,16 +26,11 @@ import { CalendarComponent } from './shared/calendar.component';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { InputModalComponent } from './shared/input-modal.component';
-import { HomeRouteResolver } from './shared/services/home.resolver.service';
 
 const appRoutes: Route[] = [
   {
     path: '', component: HomeComponent,
     children: [
-      {
-        path: 'login', 
-        loadChildren: './user/user.module#UserModule'
-      },
       {
         path: 'clients/:id',
         loadChildren: './client/client.module#ClientModule'
