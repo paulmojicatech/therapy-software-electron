@@ -10,7 +10,7 @@ export class Clients {
 export class GeneralDetails {
     ClientID: number;
     ClientName: string;
-    ClientLastName: string;
+    ClientLastName?: string;
     ClientSSN?: string;
     ClientAddress?: string;
     ClientCity?: string;
