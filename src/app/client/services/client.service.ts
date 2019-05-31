@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
-import { GetClientsUri, AUTH, SaveClientUri, AddClientUri } from '../../../env';
+import { GetClientsUri, AUTH, SaveClientUri, AddClientUri, AddClientSessionUri, DeleteClientSessionUri } from '../../../env';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
@@ -128,35 +128,6 @@ export class ClientService {
         }
     }
 
-    public GetClientAppointments(startDate: string, endDate: string): Observable<Clients[]> {
-        let headers: Headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const token = localStorage.getItem('session-token');
-        if (token) {
-            let opts = new RequestOptions({
-                headers: headers,
-                body: {
-                    'token': btoa(token),
-                    'startDate': startDate,
-                    'endDate': endDate
-                }
-            });
-            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/GetClientAppointments',
-                opts).pipe(
-                    map(resp => {
-                        const res: ResultStatus = JSON.parse(resp.json());
-                        if (res.Type === 1) {
-                            return res.Message;
-                        }
-                    }),
-                    catchError(err => {
-                        return of(JSON.parse(err.json()));
-                    })
-                );
-
-        }
-    }
-
     public AddClientAppointment(c: Clients): Observable<Clients> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
@@ -173,15 +144,12 @@ export class ClientService {
                     'apptDate': clientSessionTime
                 }
             });
-            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/AddClientSesson', opts).pipe(
+            return this._http.post(AddClientSessionUri, opts).pipe(
                 map(resp => {
                     const resStatus: ResultStatus = JSON.parse(resp.json());
                     if (resStatus.Type === 1) {
                         return JSON.parse(resStatus.Message);
                     }
-                }),
-                catchError(err => {
-                    return of(JSON.parse(err.json()));
                 })
             );
         }
@@ -198,7 +166,7 @@ export class ClientService {
                     'clientSessionId': id
                 }
             });
-            return this._http.delete('https://api.paulmojicatech.com/api/TherapySoftware/DeleteClientSession', opts).pipe(
+            return this._http.delete(DeleteClientSessionUri, opts).pipe(
                 map(resp => {
                     const respStatus: ResultStatus = JSON.parse(resp.json());
                     if (respStatus.Type === 1) {
