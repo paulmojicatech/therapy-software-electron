@@ -136,7 +136,7 @@ export class ClientService {
             const clientId = c.GeneralDetails.ClientID;
             // get last session
             const lastSession = c.ClientSessionDetails.length - 1;
-            const clientSessionTime = c.ClientSessionDetails[lastSession].ClientSessionDate;
+            const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
             let opts = new RequestOptions({
                 headers: headers, body: {
                     'token': btoa(token),
