@@ -94,7 +94,11 @@ export class CalendarComponent implements OnChanges {
       data: {
         loadSelectedDate: true,
         selectedDate: event,
-        clients: this.allClients
+        clients: this.allClients.sort((a,b) => {
+          var textA = a.GeneralDetails.ClientName.toUpperCase();
+          var textB = b.GeneralDetails.ClientName.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        })
       }
     });
   }

@@ -29,6 +29,10 @@ export class PanelComponent implements OnChanges {
     this.filteredClients = this.allClients.filter(c => {
       return c.GeneralDetails.ClientName.toLowerCase()
         .lastIndexOf(ev.target.value.toLowerCase()) > -1;
+    }).sort((a, b) => {
+      var textA = a.GeneralDetails.ClientName.toUpperCase();
+      var textB = b.GeneralDetails.ClientName.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
   }
 
