@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Clients, InsuranceCompanies, DischargeDetail } from '../models/clientModel';
+import { IClientsDbModel } from '../models/clients-db.interface';
 
 export enum ClientActionTypes {
     LoadClients = '[CLIENTS] Load Clients',

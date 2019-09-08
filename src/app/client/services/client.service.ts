@@ -5,13 +5,14 @@ import { GetClientsUri, AUTH, SaveClientUri, AddClientUri, AddClientSessionUri, 
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
+import { IClientsDbModel } from '../models/clients-db.interface';
 
 @Injectable()
 export class ClientService {
     constructor(private _http: Http) { }
 
     public GetAllClients(): Observable<Clients[]> {
-        let token = localStorage.getItem('session-token');
+        const token = localStorage.getItem('session-token');
         if (token) {
             let headers: Headers = new Headers();
             headers.append('Content-Type', 'application/json');
@@ -23,13 +24,29 @@ export class ClientService {
             });
             return this._http.post(GetClientsUri, opts).pipe(
                 map(resp => {
-                    return JSON.parse(JSON.parse(resp.json()).Message);
+                    const clients = this.convertDbModelToAppModel(resp.json());
+                    return clients;
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()));
                 })
             );
         }
+    }
+    private convertDbModelToAppModel(dbModel: IClientsDbModel[]): Clients[] {
+        const clients: Clients[] = [];
+        dbModel.forEach(client => {
+            const current:Clients = {
+                GeneralDetails: {
+                    ClientID: client.ClientID,
+                    ClientName: client.ClientName,
+                    ClientPhone: client.ClientPhone,
+                    ClientEmail: client.ClientEmail
+                }
+            };
+            clients.push(current);
+        });
+        return clients;
     }
     public SaveClientDetails(details: Clients): Observable<Clients> {
         let headers: Headers = new Headers();

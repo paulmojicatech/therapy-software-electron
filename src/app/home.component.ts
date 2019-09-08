@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       takeWhile(() => this.isActive),
     ).subscribe((u:User) => {
       if (!u){                   
+        console.log('PWD', btoa(PWD));
         this._store.dispatch(new userActions.SetCurrentUser({userName: USER, password:btoa(PWD)}));
       }
       else {
