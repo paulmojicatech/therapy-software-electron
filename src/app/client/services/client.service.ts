@@ -22,7 +22,7 @@ export class ClientService {
                     'token': btoa(token)
                 }
             });
-            return this._http.post(GetClientsUri, opts).pipe(
+            return this._http.get(GetClientsUri, opts).pipe(
                 map(resp => {
                     const clients = this.convertDbModelToAppModel(resp.json());
                     return clients;
@@ -33,7 +33,7 @@ export class ClientService {
             );
         }
     }
-    private convertDbModelToAppModel(dbModel: IClientsDbModel[]): Clients[] {
+    private convertDbModelToAppModel(dbModel: any[]): Clients[] {
         const clients: Clients[] = [];
         dbModel.forEach(client => {
             const current:Clients = {
@@ -42,7 +42,8 @@ export class ClientService {
                     ClientName: client.ClientName,
                     ClientPhone: client.ClientPhone,
                     ClientEmail: client.ClientEmail
-                }
+                },
+                ClientSessionDetails: client.SessionDetails
             };
             clients.push(current);
         });
