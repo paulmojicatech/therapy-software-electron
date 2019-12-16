@@ -56,6 +56,7 @@ export class InputModalComponent implements OnInit {
     this.dialogRef.close();
   }
   clientChanged(clientId: number) {
+    console.log('CLIENT ID', clientId);
     let newClient: Clients[] = this.data.clients.filter(c => c.GeneralDetails.ClientID === clientId);
     if (newClient && newClient.length) {
 
@@ -72,7 +73,7 @@ export class InputModalComponent implements OnInit {
     }
   }
   deleteSession() {
-    this._store.dispatch(new clientActions.DeleteClientAppointment(+this.data.selectedEvent.event.clientSessionId));
+    this._store.dispatch(new clientActions.DeleteClientAppointment({ clientId: +this.data.selectedEvent.event.clientId, clientSessionId: +this.data.selectedEvent.event.clientSessionId }));
     this.dialogRef.close();
   }
   sendEmail() {

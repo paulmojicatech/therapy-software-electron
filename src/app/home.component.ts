@@ -32,29 +32,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isActive = true;   
 
-    // getCurrentUser
-    this._store.pipe(
-      select(fromUser.getCurrentUser),
-      takeWhile(() => this.isActive),
-    ).subscribe((u:User) => {
-      if (!u){                   
-        console.log('PWD', btoa(PWD));
-        this._store.dispatch(new userActions.SetCurrentUser({userName: USER, password:btoa(PWD)}));
-      }
-      else {
-        this.currentUser = u;  
-        this._store.dispatch(new clientActions.LoadClients());         
-      }
-    });    
+    this._store.dispatch(new clientActions.LoadClients());
     
     // getLoadState
     this.isLoading$ = this._store.pipe(
       select(fromClient.getLoadState)
     );
 
-    // // getClients
+    // getClients
     this._store.pipe(
-      select(fromClient.getAllClients)
+      select(fromClient.getAllClients),
+      takeWhile(() => this.isActive)
     ).subscribe(clients => this.clients = clients);       
   }
 
