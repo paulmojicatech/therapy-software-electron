@@ -101,7 +101,7 @@ export class AddClientAppointmentSuccess implements Action {
 }
 
 export class DeleteClientAppointment implements Action {
-    constructor(public payload:number){ }
+    constructor(public payload:{clientId: number, clientSessionId: number}){ }
     readonly type = ClientActionTypes.DeleteClientAppointment;
 }
 

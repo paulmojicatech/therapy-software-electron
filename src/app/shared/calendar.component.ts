@@ -1,19 +1,21 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'pmt-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CalendarComponent implements OnChanges {
 
-  constructor(private _dialog: MatDialog) { }
+  constructor(private _dialog: MatDialog, private _cd: ChangeDetectorRef) { }
 
   @Input() allClients: Clients[];
 
@@ -27,6 +29,7 @@ export class CalendarComponent implements OnChanges {
   ngOnChanges(ch: any) {
     if (ch.allClients && ch.allClients.currentValue && ch.allClients.currentValue.length) {
       this.load();
+      this._cd.markForCheck();
     }
   }
 
@@ -66,6 +69,7 @@ export class CalendarComponent implements OnChanges {
           if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
             const apptToAdd: AppointmentsModel = {
               clientName: c.GeneralDetails.ClientName,
+              clientId: c.GeneralDetails.ClientID,
               clientSessionId: s.ClientSessionID,
               appointmentTime: new Date(s.ClientSessionDate),
               title: c.GeneralDetails.ClientName,

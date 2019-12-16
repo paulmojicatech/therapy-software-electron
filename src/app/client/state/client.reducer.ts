@@ -123,9 +123,15 @@ export function reducer(state: ClientState = initialState,
                 isLoading: true
             };
         case ClientActionTypes.AddClientSuccess:
+            const clientsWithAdd = [...state.allClients, action.payload];
+            const sortedClientsWithAdd = clientsWithAdd.sort((a, b) => {
+                const textA = a.GeneralDetails.ClientName.toUpperCase();
+                const textB = b.GeneralDetails.ClientName.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
             return {
                 ...state,
-                allClients: [...state.allClients, action.payload],
+                allClients: sortedClientsWithAdd,
                 isLoading: false
             };
         case ClientActionTypes.LoadInsuranceCompanies:

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
-import { GetClientsUri, AUTH, SaveClientUri, AddClientUri, AddClientSessionUri, DeleteClientSessionUri } from '../../../env';
+import { ClientsEndpoint, AUTH, SaveClientUri } from '../../../env';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
@@ -22,7 +22,7 @@ export class ClientService {
                     'token': btoa(token)
                 }
             });
-            return this._http.post(GetClientsUri, opts).pipe(
+            return this._http.get(`${ClientsEndpoint}`, opts).pipe(
                 map(resp => {
                     const clients = this.convertDbModelToAppModel(resp.json());
                     return clients;
@@ -33,7 +33,7 @@ export class ClientService {
             );
         }
     }
-    private convertDbModelToAppModel(dbModel: IClientsDbModel[]): Clients[] {
+    private convertDbModelToAppModel(dbModel: any[]): Clients[] {
         const clients: Clients[] = [];
         dbModel.forEach(client => {
             const current:Clients = {
@@ -42,7 +42,8 @@ export class ClientService {
                     ClientName: client.ClientName,
                     ClientPhone: client.ClientPhone,
                     ClientEmail: client.ClientEmail
-                }
+                },
+                ClientSessionDetails: client.SessionDetails
             };
             clients.push(current);
         });
@@ -148,47 +149,34 @@ export class ClientService {
     public AddClientAppointment(c: Clients): Observable<Clients> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        let token = localStorage.getItem('session-token');
-        if (token) {
-            const clientId = c.GeneralDetails.ClientID;
-            // get last session
-            const lastSession = c.ClientSessionDetails.length - 1;
-            const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
-            let opts = new RequestOptions({
-                headers: headers, body: {
-                    'token': btoa(token),
-                    'clientId': clientId,
-                    'apptDate': clientSessionTime
-                }
-            });
-            return this._http.post(AddClientSessionUri, opts).pipe(
-                map(resp => {
-                    const resStatus: ResultStatus = JSON.parse(resp.json());
-                    if (resStatus.Type === 1) {
-                        return JSON.parse(resStatus.Message);
-                    }
-                })
-            );
-        }
+        
+        const clientId = c.GeneralDetails.ClientID;
+        // get last session
+        const lastSession = c.ClientSessionDetails.length - 1;
+        const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
+        let opts = new RequestOptions({
+            headers: headers, body: {
+                'ClientSessionDate': clientSessionTime
+            }
+        });
+        return this._http.post(`${ClientsEndpoint}/${clientId}/clientSessions`, opts).pipe(
+            map(resp => {
+                return resp.json();
+            })
+        );
     }
 
-    public DeleteClientAppointment(id: number): Observable<Clients[]> {
+    public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<Clients[]> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let token = localStorage.getItem('session-token');
         if (token) {
             const opts = new RequestOptions({
-                headers: headers, body: {
-                    'token': btoa(token),
-                    'clientSessionId': id
-                }
+                headers: headers
             });
-            return this._http.delete(DeleteClientSessionUri, opts).pipe(
+            return this._http.delete(`${ClientsEndpoint}/${clientId}/clientSessions/${clientSessionId}`, opts).pipe(
                 map(resp => {
-                    const respStatus: ResultStatus = JSON.parse(resp.json());
-                    if (respStatus.Type === 1) {
-                        return JSON.parse(respStatus.Message);
-                    }
+                    return resp.json();
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()))
@@ -225,23 +213,18 @@ export class ClientService {
     public AddClient(client: Clients): Observable<Clients> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        let token = localStorage.getItem('session-token');
-        if (token) {
             const opts:RequestOptions = new RequestOptions({ 
                 headers: headers,
-                body: { 'token': btoa(token), 'client': client } 
+                body: { 'newClient': client.GeneralDetails } 
             });
-            return this._http.post(AddClientUri, opts).pipe(
+            return this._http.post(`${ClientsEndpoint}`, opts).pipe(
                 map(resp => {
-                    const resStatus: ResultStatus = JSON.parse(resp.json());
-                    if (resStatus.Type === 1) {
-                        return JSON.parse(resStatus.Message);
-                    }
+                    return resp.json();
                 }),
                 catchError(err => {
-                    return of(JSON.parse(err));
+                    return of(err);
                 })
             );
-        }
+       
     }
 }
