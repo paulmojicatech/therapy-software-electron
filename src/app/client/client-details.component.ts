@@ -182,4 +182,5 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 }
