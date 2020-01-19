@@ -61,7 +61,7 @@ export class ClientService {
 
         return this._http.put(`${ClientsEndpoint}/${details.GeneralDetails.ClientID}`, opts).pipe(
             map(resp => {
-                console.log('RESP', resp.json());
+              
                 return resp.json();
             }),
             catchError(err => {
@@ -138,23 +138,25 @@ export class ClientService {
         );
     }
 
-    public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<Clients[]> {
+    public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<{clientId: number, clientSessionId: number}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        let token = localStorage.getItem('session-token');
-        if (token) {
-            const opts = new RequestOptions({
-                headers: headers
-            });
-            return this._http.delete(`${ClientsEndpoint}/${clientId}/clientSessions/${clientSessionId}`, opts).pipe(
-                map(resp => {
-                    return resp.json();
-                }),
-                catchError(err => {
-                    return of(JSON.parse(err.json()))
-                })
-            );
-        }
+        
+        const opts = new RequestOptions({
+            headers: headers
+        });
+        
+        return this._http.delete(`${ClientsEndpoint}/${clientId}/clientSessions/${clientSessionId}`, opts).pipe(
+            map(resp => {
+                
+                return resp.json();
+            }),
+            catchError(err => {
+                console.log('ERR', err);
+                return of(JSON.parse(err.json()));
+            })
+        );
+        
     }
 
     public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<ResultStatus> {

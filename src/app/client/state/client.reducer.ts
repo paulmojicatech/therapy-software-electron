@@ -26,7 +26,7 @@ export function reducer(state: ClientState = initialState,
                 isLoading: true
             };
         case ClientActionTypes.LoadClientsSuccess:
-            console.log('CLIENTS', action.payload);
+         
             const sortedClients = action.payload.sort((a, b) => {
                 const textA = a.GeneralDetails.ClientName.toUpperCase();
                 const textB = b.GeneralDetails.ClientName.toUpperCase();
@@ -112,9 +112,17 @@ export function reducer(state: ClientState = initialState,
                 isLoading: true
             };
         case ClientActionTypes.DeleteClientAppointmentSuccess:
+            const updatedClientsWithSessions = state.allClients.map(client => {
+                if (!!client.ClientSessionDetails && client.GeneralDetails.ClientID === action.payload.clientId) {
+                    const updatedSessions = client.ClientSessionDetails.filter(session => session.ClientSessionID !== action.payload.clientSessionId);
+                    return {...client, ClientSessionDetails: updatedSessions};
+                } else {
+                    return client;
+                }
+            })
             return {
                 ...state,
-                allClients: action.payload,
+                allClients: updatedClientsWithSessions,
                 isLoading: false
             };
         case ClientActionTypes.AddClient:
