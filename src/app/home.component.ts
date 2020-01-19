@@ -18,20 +18,17 @@ import { USER, PWD } from '../env';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
 
   constructor(private _store:Store<State>,
     private _dialog:MatDialog) { }
 
-  isActive:boolean;
   currentUser:User;  
   msg:string;
-  clients:Clients[];
+  clients$: Observable<Clients[]>;
   isLoading$:Observable<boolean>;
 
-  ngOnInit() {
-    this.isActive = true;   
-
+  ngOnInit() { 
     this._store.dispatch(new clientActions.LoadClients());
     
     // getLoadState
@@ -40,21 +37,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     // getClients
-    this._store.pipe(
-      select(fromClient.getAllClients),
-      takeWhile(() => this.isActive)
-    ).subscribe(clients => this.clients = clients);       
-  }
-
-  ngOnDestroy() {
-    this.isActive = false;
+    this.clients$ = this._store.pipe(
+      select(fromClient.getAllClients)
+    );       
   }
 
   sendEmail() {
     this._dialog.open(InputModalComponent, {
       data: {
-        sendEmail: true,
-        clients: this.clients
+        sendEmail: true
       }
     });
   }  

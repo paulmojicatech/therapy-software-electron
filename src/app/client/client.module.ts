@@ -48,7 +48,6 @@ const clientRoutes:Route[] = [
     ],
     declarations: [ClientDetailsComponent, InsuranceDetailsComponent],
     providers: [
-        ClientService,
         InsuranceService
     ]
 })
