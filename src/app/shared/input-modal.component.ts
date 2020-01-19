@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
 import * as clientActions from '../client/state/client.actions';
+import * as fromClient from '../client/state/index';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 import { ClientService } from '../client/services/client.service';
 
@@ -11,7 +12,7 @@ import { ClientService } from '../client/services/client.service';
   templateUrl: './input-modal.component.html',
   styleUrls: ['./input-modal.component.scss']
 })
-export class InputModalComponent implements OnInit {
+export class InputModalComponent implements OnInit, OnDestroy {
 
   constructor(public dialogRef: MatDialogRef<InputModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,8 +35,13 @@ export class InputModalComponent implements OnInit {
   dischargeReason: string;
 
   ngOnInit(): void {
+    this.isActive = true;
+    this._store.pipe(
+      select(fromClient.getAllClients)
+    ).subscribe(clients => this.clients = clients);
+
     if (this.data.sendEmail) {
-      this.data.clients.forEach(c => {
+      this.clients.forEach(c => {
         const found = this.selectedClients.filter(f => c.GeneralDetails.ClientID === f);
         if (!found || !found.length) {
           this.selectedClients.push(c.GeneralDetails.ClientID);
@@ -57,7 +63,7 @@ export class InputModalComponent implements OnInit {
   }
   clientChanged(clientId: number) {
     console.log('CLIENT ID', clientId);
-    let newClient: Clients[] = this.data.clients.filter(c => c.GeneralDetails.ClientID === clientId);
+    let newClient: Clients[] = this.clients.filter(c => c.GeneralDetails.ClientID === clientId);
     if (newClient && newClient.length) {
 
       let sessions: ClientSessionDetails[] = newClient[0].ClientSessionDetails ? newClient[0].ClientSessionDetails : [];

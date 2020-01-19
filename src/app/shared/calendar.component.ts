@@ -1,10 +1,13 @@
-import { Component, Input, OnInit, OnChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { State } from '../state/app.state';
+import * as fromClient from '../client/state/index';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-calendar',
@@ -13,11 +16,9 @@ import { Store } from '@ngrx/store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class CalendarComponent implements OnChanges {
+export class CalendarComponent implements OnInit {
 
-  constructor(private _dialog: MatDialog, private _cd: ChangeDetectorRef) { }
-
-  @Input() allClients: Clients[];
+  constructor(private _dialog: MatDialog, private _store: Store<State>) { }
 
   private _msPerDay: number = 1000 * 60 * 60 * 24;
   startDate: Date;
@@ -25,12 +26,38 @@ export class CalendarComponent implements OnChanges {
   view: string;
   appointments$: Observable<AppointmentsModel[]>;
   daysToExclude: number[] = [0, 6];  
+  allClients: Clients[];
 
-  ngOnChanges(ch: any) {
-    if (ch.allClients && ch.allClients.currentValue && ch.allClients.currentValue.length) {
-      this.load();
-      this._cd.markForCheck();
-    }
+  ngOnInit(): void {
+    this.load();
+    this.appointments$ = this._store.pipe(
+      select(fromClient.getAllClients),
+      switchMap(clients => {
+        this.allClients = clients;
+
+        let appointments: AppointmentsModel[] = [];
+        clients.forEach(client => {
+          console.log('CLIENT', client);
+          const sessions = client && client.ClientSessionDetails ? client.ClientSessionDetails : [];
+          sessions.forEach(s => {
+            if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
+              const apptToAdd = {
+                clientName: client.GeneralDetails.ClientName,
+                clientId: client.GeneralDetails.ClientID,
+                clientSessionId: s.ClientSessionID,
+                appointmentTime: new Date(s.ClientSessionDate),
+                title: client.GeneralDetails.ClientName,
+                start: new Date(s.ClientSessionDate),
+                end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
+                color: '#f7efb2'
+              };
+              appointments = [...appointments, apptToAdd];
+            }
+        });
+      });
+      return of(appointments);
+      })
+    );
   }
 
   load() {
@@ -58,31 +85,6 @@ export class CalendarComponent implements OnChanges {
     }
 
     this.endDate = this.addDays(this.endDate, 5);
-
-
-    let appointments: AppointmentsModel[] = [];
-    if (this.allClients && this.allClients.length) {
-      this.allClients.map(c => {
-        // check client has appointments
-        const sessions = c && c.ClientSessionDetails ? c.ClientSessionDetails : [];
-        sessions.forEach(s => {
-          if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
-            const apptToAdd: AppointmentsModel = {
-              clientName: c.GeneralDetails.ClientName,
-              clientId: c.GeneralDetails.ClientID,
-              clientSessionId: s.ClientSessionID,
-              appointmentTime: new Date(s.ClientSessionDate),
-              title: c.GeneralDetails.ClientName,
-              start: new Date(s.ClientSessionDate),
-              end: new Date(new Date(s.ClientSessionDate).setHours(new Date(s.ClientSessionDate).getHours() + 1)),
-              color: '#f7efb2'
-            };
-            appointments.push(apptToAdd);
-          }
-        });       
-      });    
-      this.appointments$ = of(appointments);      
-    }
   }
 
   eventClicked(event: AppointmentsModel) {

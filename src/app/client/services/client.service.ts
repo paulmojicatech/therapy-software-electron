@@ -131,7 +131,9 @@ export class ClientService {
         });
         return this._http.post(`${ClientsEndpoint}/${clientId}/clientSessions`, opts).pipe(
             map(resp => {
-                return resp.json();
+                const updatedClient = resp.json();
+                const updatedSessions = updatedClient.SessionDetails;
+                return {GeneralDetails: updatedClient.GeneralDetails, ClientSessionDetails: updatedSessions};
             })
         );
     }
