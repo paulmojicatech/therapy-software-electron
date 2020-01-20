@@ -37,7 +37,6 @@ export class CalendarComponent implements OnInit {
 
         let appointments: AppointmentsModel[] = [];
         clients.forEach(client => {
-          console.log('CLIENT', client);
           const sessions = client && client.ClientSessionDetails ? client.ClientSessionDetails : [];
           sessions.forEach(s => {
             if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
