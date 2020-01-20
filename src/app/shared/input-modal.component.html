@@ -25,7 +25,7 @@
 <div *ngIf="data.selectedDate">
   <mat-form-field>
     <mat-select placeholder="Client Name" (selectionChange)="clientChanged($event.value)">
-      <mat-option *ngFor="let c of data.clients" [value]="c.GeneralDetails.ClientID">
+      <mat-option *ngFor="let c of clients" [value]="c.GeneralDetails.ClientID">
         {{ c.GeneralDetails.ClientName }}
       </mat-option>
     </mat-select>
@@ -59,7 +59,7 @@
     <mat-checkbox #showClientFilter>Show /Hide Clients</mat-checkbox>
     <div class="show-hide-clients-section" *ngIf="showClientFilter.checked">
       <mat-checkbox #selectAll (change)="toggleSelectAll($event)" [checked]="true">Select All</mat-checkbox>
-      <mat-checkbox *ngFor="let client of data.clients" value="client.GeneralDetails.CientID" [checked]="isChecked(client)"
+      <mat-checkbox *ngFor="let client of clients" value="client.GeneralDetails.CientID" [checked]="isChecked(client)"
         (change)="toggleClientSelected($event, client)">
         {{client.GeneralDetails.ClientName}}
       </mat-checkbox>

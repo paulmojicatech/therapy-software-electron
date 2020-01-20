@@ -16,7 +16,6 @@ export class LoginService {
         let opts = new RequestOptions({ headers: headers, body: details });
         return this._http.post<ResultStatus>(LoginUri, opts).pipe(
             tap((res) => {
-                console.log(res);
                 localStorage.setItem('session-token', res.Message);
             }),
             catchError(err => {
