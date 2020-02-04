@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
-import { ClientsEndpoint, EmailEndpont } from '../../../env';
+import { GetClientsUri, SendMassEmailUri, AddClientSessionUri, AddClientUri, DeleteClientSessionUri, DeleteClientUri, SaveClientUri } from '../../../env';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
@@ -18,12 +18,9 @@ export class ClientService {
             let headers: Headers = new Headers();
             headers.append('Content-Type', 'application/json');
             let opts = new RequestOptions({
-                headers: headers, 
-                body: {
-                    'token': btoa(token)
-                }
+                headers: headers
             });
-            return this._http.get(`${ClientsEndpoint}`, opts).pipe(
+            return this._http.get(`${GetClientsUri}`, opts).pipe(
                 map(resp => {
                     const clients = this.convertDbModelToAppModel(resp.json());
                     return clients;
@@ -42,9 +39,16 @@ export class ClientService {
                     ClientID: client.ClientID,
                     ClientName: client.ClientName,
                     ClientPhone: client.ClientPhone,
-                    ClientEmail: client.ClientEmail
+                    ClientEmail: client.ClientEmail,
+                    ClientAddress: client.ClientAddress,
+                    ClientCity: client.ClientCity,
+                    ClientState: client.State,
+                    ClientZip: client.ClientZip,
+                    ClientDoB: client.ClientDoB,
+                    ClientSecondaryPhone: client.ClientSecondaryPhone,
+                    ClientSecondaryEmail: client.ClientSecondaryEmail
                 },
-                ClientSessionDetails: client.SessionDetails
+                ClientSessionDetails: client.ClientSessions
             };
             clients.push(current);
         });
@@ -59,7 +63,7 @@ export class ClientService {
             }
         });
 
-        return this._http.put(`${ClientsEndpoint}/${details.GeneralDetails.ClientID}`, opts).pipe(
+        return this._http.put(`${SaveClientUri}`, opts).pipe(
             map(resp => {
               
                 return resp.json();
@@ -69,18 +73,15 @@ export class ClientService {
             })
         );
     }
-    public DeleteClient(curClient: Clients): Observable<Clients[]> {
+    public DeleteClient(curClient: Clients): Observable<any> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         let token = localStorage.getItem('session-token');
         if (token) {
-            let opts = new RequestOptions({ headers: headers, body: { 'token': btoa(token), 'client': curClient } });
-            return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/DeleteClient', opts).pipe(
+            let opts = new RequestOptions({ headers: headers, body: { 'clientId': curClient.GeneralDetails.ClientID } });
+            return this._http.delete(`${DeleteClientUri}`, opts).pipe(
                 map(resp => {
-                    const res: ResultStatus = JSON.parse(resp.json());
-                    if (res.Type === 1) {
-                        return JSON.parse(res.Message);
-                    }
+                    return resp.json();
                 }),
                 catchError(err => {
                     return of(JSON.parse(err.json()));
@@ -96,7 +97,6 @@ export class ClientService {
             let opts = new RequestOptions({
                 headers: headers,
                 body: {
-                    'token': btoa(token),
                     'clientId': dischargeDetail.ClientID,
                     'dischargeReason': dischargeDetail.DischargeReason,
                     'dischargeNote': dischargeDetail.DischargeNote
@@ -126,10 +126,11 @@ export class ClientService {
         const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
         let opts = new RequestOptions({
             headers: headers, body: {
-                'ClientSessionDate': clientSessionTime
+                'clientId': clientId,
+                'clientSessionDate': clientSessionTime
             }
         });
-        return this._http.post(`${ClientsEndpoint}/${clientId}/clientSessions`, opts).pipe(
+        return this._http.post(`${AddClientSessionUri}`, opts).pipe(
             map(resp => {
                 const updatedClient = resp.json();
                 const updatedSessions = updatedClient.SessionDetails;
@@ -138,15 +139,16 @@ export class ClientService {
         );
     }
 
-    public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<{clientId: number, clientSessionId: number}> {
+    public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<any> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         
         const opts = new RequestOptions({
-            headers: headers
+            headers: headers,
+            body: { clientSessionId }
         });
         
-        return this._http.delete(`${ClientsEndpoint}/${clientId}/clientSessions/${clientSessionId}`, opts).pipe(
+        return this._http.delete(`${DeleteClientSessionUri}`, opts).pipe(
             map(resp => {
                 
                 return resp.json();
@@ -159,7 +161,7 @@ export class ClientService {
         
     }
 
-    public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<ResultStatus> {
+    public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<any> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         
@@ -170,11 +172,8 @@ export class ClientService {
                 'clientsToInclude': clientsToInclude
             }
         });
-        return this._http.post(`${EmailEndpont}/massEmail`, opts).pipe(
-            map(resp => {
-                const resStatus: ResultStatus = JSON.parse(resp.json());
-                return resStatus;
-            }),
+        return this._http.post(`${SendMassEmailUri}`, opts).pipe(
+            map(resp => resp.json()),
             catchError(err => {
                 return of(JSON.parse(err.json()));
             })
@@ -182,17 +181,15 @@ export class ClientService {
     
     }
 
-    public AddClient(client: Clients): Observable<Clients> {
+    public AddClient(client: Clients): Observable<any> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
             const opts:RequestOptions = new RequestOptions({ 
                 headers: headers,
                 body: { 'newClient': client.GeneralDetails } 
             });
-            return this._http.post(`${ClientsEndpoint}`, opts).pipe(
-                map(resp => {
-                    return resp.json();
-                }),
+            return this._http.post(`${AddClientUri}`, opts).pipe(
+                map(resp => resp.json()),
                 catchError(err => {
                     return of(err);
                 })
