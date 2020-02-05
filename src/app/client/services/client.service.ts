@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
-import { GetClientsUri, SendMassEmailUri, AddClientSessionUri, AddClientUri, DeleteClientSessionUri, DeleteClientUri, SaveClientUri } from '../../../env';
+import { GetClientsUri,
+    SendMassEmailUri,
+    AddClientSessionUri,
+    AddClientUri,
+    DeleteClientSessionUri,
+    DeleteClientUri,
+    SaveClientUri } from '../../../env';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { ResultStatus } from 'src/app/user/models/userModel';
@@ -13,23 +19,22 @@ export class ClientService {
     constructor(private _http: Http) { }
 
     public GetAllClients(): Observable<Clients[]> {
-        const token = localStorage.getItem('session-token');
-        if (token) {
-            let headers: Headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let opts = new RequestOptions({
-                headers: headers
-            });
-            return this._http.get(`${GetClientsUri}`, opts).pipe(
-                map(resp => {
-                    const clients = this.convertDbModelToAppModel(resp.json());
-                    return clients;
-                }),
-                catchError(err => {
-                    return of(JSON.parse(err.json()));
-                })
-            );
-        }
+        
+    let headers: Headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let opts = new RequestOptions({
+        headers: headers
+    });
+    return this._http.get(`${GetClientsUri}`, opts).pipe(
+        map(resp => {
+            const clients = this.convertDbModelToAppModel(resp.json());
+            return clients;
+        }),
+        catchError(err => {
+            return of(JSON.parse(err.json()));
+        })
+    );
+        
     }
     private convertDbModelToAppModel(dbModel: any[]): Clients[] {
         const clients: Clients[] = [];
