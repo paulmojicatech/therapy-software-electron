@@ -102,7 +102,8 @@ export function reducer(state: ClientState = initialState,
                 { 
                     ClientSessionID: action.payload.clientSessionId, 
                     ClientSessionDate: action.payload.newClientSession
-                }];
+                }]
+                .filter(session => session.ClientSessionID > -1);
             updatedClient = {...updatedClient, ClientSessionDetails: sessionDetails};
             const updatedClientsAfterAddClientSession = state.allClients.map(c => (c.GeneralDetails.ClientID === action.payload.clientId ? updatedClient : c));
             return {

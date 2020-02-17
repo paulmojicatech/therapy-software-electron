@@ -103,10 +103,9 @@ export class ClientService {
         const clientId = c.GeneralDetails.ClientID;
         // get last session
         const lastSession = c.ClientSessionDetails.length - 1;
-        const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
-        let params = new HttpParams();
-        params.append('newClientSession', JSON.stringify({clientId, clientSessionTime}));
-        return this._http.post<{clientSessionId: number, clientId: number, newClientSession: string }>(`${AddClientSessionUri}`, {headers, params});
+        const clientSessionDate = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
+        const clientSessionToAdd = {clientId, clientSessionDate};
+        return this._http.post<{clientSessionId: number, clientId: number, newClientSession: string }>(`${AddClientSessionUri}`, {headers, clientSessionToAdd});
     }
 
     public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<any> {

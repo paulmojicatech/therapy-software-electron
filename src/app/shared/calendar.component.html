@@ -53,7 +53,7 @@
   <div class="month-view" *ngIf="view === 'month'">
       <mwl-calendar-month-view [events]="appointments$ | async" 
         [viewDate]="startDate" 
-        [tooltipPlacement]="none">
+        [tooltipPlacement]="'none'">
       </mwl-calendar-month-view>
   </div>
 </div>

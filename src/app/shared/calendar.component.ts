@@ -39,7 +39,7 @@ export class CalendarComponent implements OnInit {
         clients.forEach(client => {
           const sessions = client && client.ClientSessionDetails ? client.ClientSessionDetails : [];
           sessions.forEach(s => {
-            if (appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
+            if (!!s.ClientSessionID && appointments.findIndex(a => a.clientSessionId === s.ClientSessionID) === -1) {
               const apptToAdd = {
                 clientName: client.GeneralDetails.ClientName,
                 clientId: client.GeneralDetails.ClientID,
