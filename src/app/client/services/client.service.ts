@@ -111,10 +111,9 @@ export class ClientService {
     public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('clientSessionId', `${clientSessionId}`);
-
-        return this._http.delete(`${DeleteClientSessionUri}`, {headers, params}).pipe(
+        const sessionToDelete = { clientId, clientSessionId };
+        return this._http.request<{clientId: number, clientSessionId: number}>
+            ('delete', `${DeleteClientSessionUri}`, { body: sessionToDelete, headers }).pipe(
             catchError(err => {
                 console.log('ERR', err);
                 return of(JSON.parse(err.json()));
