@@ -97,13 +97,17 @@ export function reducer(state: ClientState = initialState,
                 isLoading: true
             };
         case ClientActionTypes.AddClientAppointmentSuccess:
-            const updatedClientsApptsSuccess = state.allClients.map(
-                c => c.GeneralDetails.ClientID === action.payload.GeneralDetails.ClientID ?
-                    action.payload : c
-            );
+            let updatedClient = state.allClients.filter(c => c.GeneralDetails.ClientID === action.payload.clientId)[0];
+            const sessionDetails = [...updatedClient.ClientSessionDetails, 
+                { 
+                    ClientSessionID: action.payload.clientSessionId, 
+                    ClientSessionDate: action.payload.newClientSession
+                }];
+            updatedClient = {...updatedClient, ClientSessionDetails: sessionDetails};
+            const updatedClientsAfterAddClientSession = state.allClients.map(c => (c.GeneralDetails.ClientID === action.payload.clientId ? updatedClient : c));
             return {
                 ...state,
-                allClients: updatedClientsApptsSuccess,
+                allClients: updatedClientsAfterAddClientSession,
                 isLoading: false
             };
         case ClientActionTypes.DeleteClientAppointment:

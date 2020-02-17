@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';

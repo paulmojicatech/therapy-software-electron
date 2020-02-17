@@ -96,7 +96,7 @@ export class ClientService {
     
     }
 
-    public AddClientAppointment(c: Clients): Observable<Clients> {
+    public AddClientAppointment(c: Clients): Observable<{clientSessionId: number, clientId: number, newClientSession: string }> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         
@@ -105,14 +105,8 @@ export class ClientService {
         const lastSession = c.ClientSessionDetails.length - 1;
         const clientSessionTime = new Date(c.ClientSessionDetails[lastSession].ClientSessionDate).toISOString();
         let params = new HttpParams();
-        params.append('clientId', `${c.GeneralDetails.ClientID}`);
-        params.append('clientSessionTime', clientSessionTime); 
-        return this._http.post(`${AddClientSessionUri}`, {headers, params}).pipe(
-            map((resp: any) => {
-                const updatedSessions = resp.SessionDetails;
-                return {GeneralDetails: resp.GeneralDetails, ClientSessionDetails: updatedSessions};
-            })
-        );
+        params.append('newClientSession', JSON.stringify({clientId, clientSessionTime}));
+        return this._http.post<{clientSessionId: number, clientId: number, newClientSession: string }>(`${AddClientSessionUri}`, {headers, params});
     }
 
     public DeleteClientAppointment(clientId: number, clientSessionId: number): Observable<any> {
