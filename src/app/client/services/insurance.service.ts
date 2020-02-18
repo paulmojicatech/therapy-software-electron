@@ -1,4 +1,4 @@
-import { Http, RequestOptions, Headers } from "@angular/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InsuranceCompanies } from '../models/clientModel';
 import * as env from '../../../env'
 import { Observable } from 'rxjs';
@@ -7,17 +7,15 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class InsuranceService {
-    constructor(private _http:Http){ }
+    constructor(private _http:HttpClient){ }
 
     public GetAllInsurances():Observable<InsuranceCompanies[]> {
-        let headers: Headers = new Headers();
+        let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        const opts = new RequestOptions({ headers: headers, body: {}}); 
-        return this._http.get(env.GetInsuranceUri + '&auth=' + env.AUTH, opts).pipe(
-            map(resp => {
-                const insCos:any[] = resp.json();
+        return this._http.get(env.GetInsuranceUri + '&auth=' + env.AUTH, {headers}).pipe(
+            map((resp: any[]) => {
                 let returnObj: InsuranceCompanies[] = [];
-                insCos.forEach(c => {
+                resp.forEach(c => {
                     const obj:InsuranceCompanies = {
                         InsuranceCompanyID: c.InsuranceCoID,
                         InsuranceCompanyName: c.InsuranceCoName,

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Route } from '@angular/router';
 import { MatFormFieldModule,
@@ -32,7 +32,7 @@ const clientRoutes:Route[] = [
     imports: [
         BrowserAnimationsModule,
         BrowserModule, 
-        HttpModule,
+        HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
         MatFormFieldModule,

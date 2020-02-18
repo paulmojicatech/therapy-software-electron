@@ -45,7 +45,7 @@ export class InsuranceCompanies {
 export class ClientSessionDetails {
     ClientSessionID: number;
     ClientSessionDate: string;
-    ClientSessionNotes: string;
+    ClientSessionNotes?: string;
     ClientSessionICDCodes?:ICDCodes[];
     ClientSessionCPTCodes?:CPTCodes[];
 }
