@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
 import { GetClientsUri,
     SendMassEmailUri,
@@ -58,13 +58,19 @@ export class ClientService {
     }
 
     public SaveClientDetails(details: Clients): Observable<Clients> {
-        let headers: Headers = new Headers();
+        let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('updatedClient', JSON.stringify(details));
-        return this._http.put(`${SaveClientUri}`, { headers, params}).pipe(
+        const updatedClient = details.GeneralDetails;
+        return this._http.request<boolean>('put', `${SaveClientUri}`, { headers, body: { updatedClient } }).pipe(
+            map(isSuccess => {
+                if (isSuccess) {
+                    return details;
+                } else {
+                    throwError('Error on saving client');
+                }
+            }),
             catchError(err => {
-                return of(JSON.parse(err.json()));
+                return of(err);
             })
         );
     }
@@ -90,7 +96,7 @@ export class ClientService {
         params.append('dischargeNote', dischargeDetail.DischargeNote);
         return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/DischargeClient', { headers, params }).pipe(
             catchError(err => {
-                return of(JSON.parse(err))
+                return of(JSON.parse(err));
             })
         );
     
@@ -151,5 +157,5 @@ export class ClientService {
             })
         );
        
-    }S
+    }
 }
