@@ -61,10 +61,11 @@ export class ClientService {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         const updatedClient = details.GeneralDetails;
-        return this._http.request<boolean>('put', `${SaveClientUri}`, { headers, body: { updatedClient } }).pipe(
-            map(isSuccess => {
-                if (isSuccess) {
-                    return details;
+        return this._http.request<any>('put', `${SaveClientUri}`, { headers, body: { updatedClient } }).pipe(
+            map(clientResp => {
+                if (!!clientResp) {
+                    const appModelClient = this.convertDbModelToAppModel([clientResp]);
+                    return appModelClient[0];
                 } else {
                     throwError('Error on saving client');
                 }

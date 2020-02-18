@@ -27,9 +27,8 @@ export class ClientEffects {
     @Effect() 
     updateClient$: Observable<Action> = this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.UpdateClient),
-        concatMap((action:clientActions.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
-            map(client => (new clientActions.UpdateClientSuccess(client))),
-            map(user => (new userActions.UpdateLoadStatus(true)))
+        mergeMap((action: clientActions.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
+            map(client => (new clientActions.UpdateClientSuccess(client)))
         )
     ));
 
