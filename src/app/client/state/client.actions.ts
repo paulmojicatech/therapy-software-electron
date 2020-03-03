@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
 import { Clients, InsuranceCompanies, DischargeDetail } from '../models/clientModel';
-import { IClientsDbModel } from '../models/clients-db.interface';
 
 export enum ClientActionTypes {
     LoadClients = '[CLIENTS] Load Clients',
@@ -66,7 +65,7 @@ export class DeleteClient implements Action {
 }
 
 export class DeleteClientSuccess implements Action {
-    constructor(public payload:Clients[]) { }
+    constructor(public payload:{ClientID: number}) { }
     readonly type = ClientActionTypes.DeleteClientSuccess;
 }
 

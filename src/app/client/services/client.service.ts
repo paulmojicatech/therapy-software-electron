@@ -76,14 +76,13 @@ export class ClientService {
         );
     }
 
-    public DeleteClient(curClient: Clients): Observable<any> {
+    public DeleteClient(curClient: Clients): Observable<{ClientID: number}> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('clientId', `${curClient.GeneralDetails.ClientID}`);
-        return this._http.delete(`${DeleteClientUri}`, { headers, params }).pipe(
+        
+        return this._http.request<{ClientID: number}>('delete', `${DeleteClientUri}`, { headers, body: { clientId: curClient.GeneralDetails.ClientID } }).pipe(
             catchError(err => {
-                return of(JSON.parse(err.json()));
+                return of(err);
             })
         );
     }
