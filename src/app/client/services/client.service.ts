@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Clients, DischargeDetail } from '../models/clientModel';
 import { GetClientsUri,
     SendMassEmailUri,
@@ -58,25 +58,31 @@ export class ClientService {
     }
 
     public SaveClientDetails(details: Clients): Observable<Clients> {
-        let headers: Headers = new Headers();
+        let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('updatedClient', JSON.stringify(details));
-        return this._http.put(`${SaveClientUri}`, { headers, params}).pipe(
+        const updatedClient = details.GeneralDetails;
+        return this._http.request<any>('put', `${SaveClientUri}`, { headers, body: { updatedClient } }).pipe(
+            map(clientResp => {
+                if (!!clientResp) {
+                    const appModelClient = this.convertDbModelToAppModel([clientResp]);
+                    return appModelClient[0];
+                } else {
+                    throwError('Error on saving client');
+                }
+            }),
             catchError(err => {
-                return of(JSON.parse(err.json()));
+                return of(err);
             })
         );
     }
 
-    public DeleteClient(curClient: Clients): Observable<any> {
+    public DeleteClient(curClient: Clients): Observable<{ClientID: number}> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('clientId', `${curClient.GeneralDetails.ClientID}`);
-        return this._http.delete(`${DeleteClientUri}`, { headers, params }).pipe(
+        
+        return this._http.request<{ClientID: number}>('delete', `${DeleteClientUri}`, { headers, body: { clientId: curClient.GeneralDetails.ClientID } }).pipe(
             catchError(err => {
-                return of(JSON.parse(err.json()));
+                return of(err);
             })
         );
     }
@@ -90,7 +96,7 @@ export class ClientService {
         params.append('dischargeNote', dischargeDetail.DischargeNote);
         return this._http.post('https://api.paulmojicatech.com/api/TherapySoftware/DischargeClient', { headers, params }).pipe(
             catchError(err => {
-                return of(JSON.parse(err))
+                return of(JSON.parse(err));
             })
         );
     
@@ -142,14 +148,17 @@ export class ClientService {
     public AddClient(client: Clients): Observable<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('newClient', JSON.stringify(client.GeneralDetails));
+        const newClient = client.GeneralDetails;
             
-        return this._http.post(`${AddClientUri}`, {headers, params}).pipe(
+        return this._http.post(`${AddClientUri}`, {headers, newClient}).pipe(
+            map((addedClient: any) => {
+                const clientToAdd = {...client, GeneralDetails: addedClient};
+                return clientToAdd;
+            }),
             catchError(err => {
                 return of(err);
             })
         );
        
-    }S
+    }
 }

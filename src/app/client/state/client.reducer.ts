@@ -64,9 +64,10 @@ export function reducer(state: ClientState = initialState,
                 isLoading: true
             };
         case ClientActionTypes.DeleteClientSuccess:
+            const updatedClientsAfterDelete = state.allClients.filter(client => client.GeneralDetails.ClientID !== action.payload.ClientID);
             return {
                 ...state,
-                allClients: action.payload,
+                allClients: updatedClientsAfterDelete,
                 isLoading: false
             };
         case ClientActionTypes.DischargeClient:

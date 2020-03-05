@@ -1,6 +1,9 @@
-import { Component, OnChanges, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Clients } from '../client/models/clientModel';
+import { Observable } from 'rxjs';
+import { FormGroup, FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
 
 
 @Component({
@@ -9,31 +12,41 @@ import { Clients } from '../client/models/clientModel';
   styleUrls: ['./panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PanelComponent implements OnChanges {
+export class PanelComponent implements OnInit, OnChanges {
   constructor(private _router:Router) { }
 
   @Input() allClients:Clients[];
 
   isExpanded:boolean = false;
-  filteredClients:Clients[] = [];
+  filteredClients$:Observable<Clients[]>;
+  form: FormGroup;
+  formControl: FormControl;
   
-  ngOnChanges(ch:any) {    
-    this.filteredClients = this.allClients;        
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      'searchInput': new FormControl()
+    });
+    this.formControl = <FormControl>this.form.get('searchInput');
+    this.filteredClients$ = this.formControl.valueChanges.pipe(
+      startWith(''),
+      map((searchString: string) => {
+        console.log('search', searchString);
+        if (!searchString) {
+          return this.allClients;
+        } else {
+          return this.allClients.filter(client => client.GeneralDetails.ClientName.toUpperCase()
+                                                    .lastIndexOf(searchString.toUpperCase()) > -1);
+        }
+      })
+    )
+  }
+
+  ngOnChanges(ch: any) {
+    this.allClients = ch.allClients.currentValue;
   }
 
   toggleExpander() {
     this.isExpanded = !this.isExpanded;
-  }
-
-  filterClients(ev:any){
-    this.filteredClients = this.allClients.filter(c => {
-      return c.GeneralDetails.ClientName.toLowerCase()
-        .lastIndexOf(ev.target.value.toLowerCase()) > -1;
-    }).sort((a, b) => {
-      var textA = a.GeneralDetails.ClientName.toUpperCase();
-      var textB = b.GeneralDetails.ClientName.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
   }
 
   selectClient(client:Clients){

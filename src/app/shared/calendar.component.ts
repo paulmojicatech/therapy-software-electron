@@ -7,7 +7,7 @@ import { Clients } from '../client/models/clientModel';
 import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
 import * as fromClient from '../client/state/index';
-import { switchMap } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-calendar',
@@ -32,7 +32,7 @@ export class CalendarComponent implements OnInit {
     this.load();
     this.appointments$ = this._store.pipe(
       select(fromClient.getAllClients),
-      switchMap(clients => {
+      concatMap(clients => {
         this.allClients = clients;
 
         let appointments: AppointmentsModel[] = [];
