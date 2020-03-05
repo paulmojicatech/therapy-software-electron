@@ -44,7 +44,7 @@ export class ClientService {
                     ClientEmail: client.ClientEmail,
                     ClientAddress: client.ClientAddress,
                     ClientCity: client.ClientCity,
-                    ClientState: client.State,
+                    ClientState: client.ClientState,
                     ClientZip: client.ClientZip,
                     ClientDoB: client.ClientDoB,
                     ClientSecondaryPhone: client.ClientSecondaryPhone,
