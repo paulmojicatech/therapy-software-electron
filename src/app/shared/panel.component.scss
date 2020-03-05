@@ -8,6 +8,10 @@
     margin-top:1em;
 }
 
+span {
+    cursor: pointer;
+}
+
 .filter-header-section {
     display: inline-flex;
     flex-direction: row;
@@ -20,4 +24,5 @@
 
 .clientsFilteredSection {
     flex: 1;
+    cursor: pointer;
 }
