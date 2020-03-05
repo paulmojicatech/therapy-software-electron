@@ -1,10 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Clients } from '../client/models/clientModel';
 import { Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
-
 
 @Component({
   selector: 'pmt-panel',
@@ -12,21 +11,25 @@ import { startWith, map } from 'rxjs/operators';
   styleUrls: ['./panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PanelComponent implements OnInit, OnChanges {
+export class PanelComponent implements AfterViewInit {
   constructor(private _router:Router) { }
 
   @Input() allClients:Clients[];
+  @Output() emitRefresh: EventEmitter<void> = new EventEmitter<void>();
 
   isExpanded:boolean = false;
   filteredClients$:Observable<Clients[]>;
   form: FormGroup;
   formControl: FormControl;
-  
+
   ngOnInit(): void {
     this.form = new FormGroup({
       'searchInput': new FormControl()
     });
     this.formControl = <FormControl>this.form.get('searchInput');
+  }
+  
+  ngAfterViewInit(): void {
     this.filteredClients$ = this.formControl.valueChanges.pipe(
       startWith(''),
       map((searchString: string) => {
@@ -38,11 +41,7 @@ export class PanelComponent implements OnInit, OnChanges {
                                                     .lastIndexOf(searchString.toUpperCase()) > -1);
         }
       })
-    )
-  }
-
-  ngOnChanges(ch: any) {
-    this.allClients = ch.allClients.currentValue;
+    );
   }
 
   toggleExpander() {
@@ -56,5 +55,9 @@ export class PanelComponent implements OnInit, OnChanges {
     else {
       this._router.navigate(['clients/-1']);
     }
+  }
+
+  refreshClients(): void {
+    this.emitRefresh.emit();
   }
 }

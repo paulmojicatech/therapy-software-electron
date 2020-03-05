@@ -12,7 +12,7 @@
   </div>
   <div class="container" *ngIf="!(isLoading$ | async) as isLoading">
     <div class="panel-section">
-      <pmt-panel [allClients]="clients$ | async"></pmt-panel>
+      <pmt-panel (emitRefresh)="refreshClients()" [allClients]="clients$ | async"></pmt-panel>
     </div>
     <div class="main-section">
       <pmt-calendar></pmt-calendar>
