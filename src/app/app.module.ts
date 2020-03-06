@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { MatInputModule, 
          MatFormFieldModule,
@@ -63,6 +63,7 @@ const appRoutes: Route[] = [
     BrowserAnimationsModule,
     UserModule,
     ClientModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
       name: 'Therapy Software DevTools',

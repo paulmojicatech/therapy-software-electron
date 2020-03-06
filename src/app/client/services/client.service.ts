@@ -44,7 +44,7 @@ export class ClientService {
                     ClientEmail: client.ClientEmail,
                     ClientAddress: client.ClientAddress,
                     ClientCity: client.ClientCity,
-                    ClientState: client.State,
+                    ClientState: client.ClientState,
                     ClientZip: client.ClientZip,
                     ClientDoB: client.ClientDoB,
                     ClientSecondaryPhone: client.ClientSecondaryPhone,
@@ -148,10 +148,13 @@ export class ClientService {
     public AddClient(client: Clients): Observable<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new HttpParams();
-        params.append('newClient', JSON.stringify(client.GeneralDetails));
+        const newClient = client.GeneralDetails;
             
-        return this._http.post(`${AddClientUri}`, {headers, params}).pipe(
+        return this._http.post(`${AddClientUri}`, {headers, newClient}).pipe(
+            map((addedClient: any) => {
+                const clientToAdd = {...client, GeneralDetails: addedClient};
+                return clientToAdd;
+            }),
             catchError(err => {
                 return of(err);
             })

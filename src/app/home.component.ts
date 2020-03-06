@@ -7,11 +7,10 @@ import * as userActions from './user/state/user.actions';
 import * as clientActions from './client/state/client.actions';
 import * as fromClient from './client/state/index';
 import { Clients } from './client/models/clientModel';
-import { takeWhile } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { User } from './user/models/userModel';
 import { MatDialog } from '@angular/material';
 import { InputModalComponent } from './shared/input-modal.component';
-import { USER, PWD } from '../env';
 
 @Component({
   selector: 'pmt-home',
@@ -27,8 +26,9 @@ export class HomeComponent implements OnInit {
   msg:string;
   clients$: Observable<Clients[]>;
   isLoading$:Observable<boolean>;
+  initialLoad: boolean;
 
-  ngOnInit() { 
+  ngOnInit(): void { 
     this._store.dispatch(new clientActions.LoadClients());
     
     // getLoadState
@@ -38,7 +38,8 @@ export class HomeComponent implements OnInit {
 
     // getClients
     this.clients$ = this._store.pipe(
-      select(fromClient.getAllClients)
+      select(fromClient.getAllClients),
+      tap(() => console.log('LOAD HOME FIRED'))
     );       
   }
 
@@ -49,4 +50,8 @@ export class HomeComponent implements OnInit {
       }
     });
   }  
+
+  refreshClients(): void {
+    this._store.dispatch(new clientActions.LoadClients());
+  }
 }
