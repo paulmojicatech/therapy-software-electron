@@ -59,10 +59,17 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   }
   loadClient() {
     if (this.currentClient) {
+      const formattedDoBParts = !!this.currentClient.GeneralDetails.ClientDoB ?
+                              new Date(this.currentClient.GeneralDetails.ClientDoB).toString()
+                                .split(' ') :
+                              null;
+      const formattedDoB = !!formattedDoBParts ? `${formattedDoBParts[1]} ${formattedDoBParts[2]}, ${formattedDoBParts[3]}` :
+                              null; 
+
       this.clientDetailsGroup = this._builder.group({
         'clientName': this.currentClient.GeneralDetails.ClientName,
         'clientSSN': this.currentClient.GeneralDetails.ClientSSN,
-        'clientDoB': this.currentClient.GeneralDetails.ClientDoB,
+        'clientDoB': formattedDoB,
         'clientEmail': this.currentClient.GeneralDetails.ClientEmail,
         'clientSecEmail': this.currentClient.GeneralDetails.ClientSecondaryEmail,
         'clientPhone': this.currentClient.GeneralDetails.ClientPhone,
