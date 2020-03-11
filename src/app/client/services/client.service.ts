@@ -18,7 +18,7 @@ export class ClientService {
     constructor(private _http: HttpClient) { }
 
     public GetAllClients(): Observable<Clients[]> {
-        
+
     let headers: HttpHeaders = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     return this._http.get(`${GetClientsUri}`, { headers }).pipe(
@@ -30,7 +30,7 @@ export class ClientService {
             return of(JSON.parse(err.json()));
         })
     );
-        
+
     }
 
     private convertDbModelToAppModel(dbModel: any[]): Clients[] {
@@ -79,7 +79,7 @@ export class ClientService {
     public DeleteClient(curClient: Clients): Observable<{ClientID: number}> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        
+
         return this._http.request<{ClientID: number}>('delete', `${DeleteClientUri}`, { headers, body: { clientId: curClient.GeneralDetails.ClientID } }).pipe(
             catchError(err => {
                 return of(err);
@@ -99,13 +99,13 @@ export class ClientService {
                 return of(JSON.parse(err));
             })
         );
-    
+
     }
 
     public AddClientAppointment(c: Clients): Observable<{clientSessionId: number, clientId: number, newClientSession: string }> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        
+
         const clientId = c.GeneralDetails.ClientID;
         // get last session
         const lastSession = c.ClientSessionDetails.length - 1;
@@ -125,31 +125,26 @@ export class ClientService {
                 return of(JSON.parse(err.json()));
             })
         );
-        
+
     }
-    
+
     public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        
-        let params = new HttpParams();
-        params.append('subject', emailSubject);
-        params.append('message', emailMsg);
-        params.append('clientsToInclude', `${clientsToInclude}`);
-        
-        return this._http.post(`${SendMassEmailUri}`, {headers, params}).pipe(
+
+        return this._http.request('post', `${SendMassEmailUri}`, {headers, body: { clientsToInclude, subject: emailSubject, message: emailMsg }}).pipe(
             catchError(err => {
                 return of(JSON.parse(err.json()));
             })
         );
-    
+
     }
 
     public AddClient(client: Clients): Observable<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         const newClient = client.GeneralDetails;
-            
+
         return this._http.post(`${AddClientUri}`, {headers, newClient}).pipe(
             map((addedClient: any) => {
                 const clientToAdd = {...client, GeneralDetails: addedClient};
@@ -159,6 +154,6 @@ export class ClientService {
                 return of(err);
             })
         );
-       
+
     }
 }
