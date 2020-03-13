@@ -62,6 +62,7 @@ export class CalendarComponent implements OnInit {
   load() {
     // Default values
     const dayOfWeek = new Date().getDay();
+    // logic: if day is Fri or Sat, go to next week.
     const startDate = dayOfWeek > 4 ? this.addDays(new Date(), 3) : new Date();
     this.startDate = startDate;
     this.view = 'week';
