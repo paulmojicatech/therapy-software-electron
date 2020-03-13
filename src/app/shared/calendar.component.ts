@@ -61,7 +61,9 @@ export class CalendarComponent implements OnInit {
 
   load() {
     // Default values
-    this.startDate = new Date();
+    const dayOfWeek = new Date().getDay();
+    const startDate = dayOfWeek > 4 ? this.addDays(new Date(), 3) : new Date();
+    this.startDate = startDate;
     this.view = 'week';
     this.loadCalendar();
   }
@@ -109,7 +111,9 @@ export class CalendarComponent implements OnInit {
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {
-    return new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate() + daysToAdd);
+    const updatedDate = curDate.getDate() + daysToAdd;
+    return new Date(curDate.setDate(updatedDate));
+    
   }
 
   private getDateDiff(d1: Date, d2: Date): number {
