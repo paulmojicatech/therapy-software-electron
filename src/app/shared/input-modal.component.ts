@@ -83,7 +83,9 @@ export class InputModalComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
   sendEmail() {
-    this._clientSvc.SendMassEmail(this.subject, this.message, this.selectedClients).subscribe(resp => {
+    this._store.dispatch(new clientActions.UpdateLoadState(true));
+    this._clientSvc.SendMassEmail(this.subject, this.message, this.selectedClients).subscribe(() => {
+      this._store.dispatch(new clientActions.UpdateLoadState(false));
       this.dialogRef.close();
     });
   }

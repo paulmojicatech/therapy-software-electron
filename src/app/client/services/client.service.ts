@@ -128,13 +128,14 @@ export class ClientService {
 
     }
 
-    public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<any> {
+    public SendMassEmail(emailSubject: string, emailMsg: string, clientsToInclude: number[]): Observable<boolean> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
 
         return this._http.request('post', `${SendMassEmailUri}`, {headers, body: { clientsToInclude, subject: emailSubject, message: emailMsg }}).pipe(
-            catchError(err => {
-                return of(JSON.parse(err.json()));
+            map(() => false),
+            catchError(() => {
+                return of(false);
             })
         );
 
