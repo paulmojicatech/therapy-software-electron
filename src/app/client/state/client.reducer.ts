@@ -7,14 +7,16 @@ export interface ClientState extends State {
     allClients: Clients[],
     currentClient: Clients,
     clientAppointments: Clients[],
-    allInsuranceCos: InsuranceCompanies[]
+    allInsuranceCos: InsuranceCompanies[],
+    currentCalendarWeek: Date
 }
 
 const initialState: ClientState = {
     allClients: [],
     currentClient: null,
     clientAppointments: [],
-    allInsuranceCos: []
+    allInsuranceCos: [],
+    currentCalendarWeek: new Date()
 };
 
 export function reducer(state: ClientState = initialState,
@@ -159,6 +161,11 @@ export function reducer(state: ClientState = initialState,
                 allInsuranceCos: action.payload,
                 isLoading: false
             };
+        case ClientActionTypes.SetCurrentCalendarWeek:
+            return {
+                ...state,
+                currentCalendarWeek: action.payload
+            }
         default:
             return state;
     }

@@ -21,7 +21,8 @@ export enum ClientActionTypes {
     DeleteClientAppointmentSuccess = '[CLIENTS] Delete Client Appointment Success',
     LoadInsuranceCompanies = '[CLIENTS] Load Insurance Companies',
     LoadInsuranceCompaniesSuccess = '[CLIENTS] Load Insurance Companies Success',
-    UpdateLoadState = '[CLIENTS] Update Load State'
+    UpdateLoadState = '[CLIENTS] Update Load State',
+    SetCurrentCalendarWeek = '[CALENDAR] Set Current Calendar Week'
 }
 
 export class LoadClients implements Action {
@@ -121,7 +122,12 @@ export class LoadInsuranceCompaniesSuccess implements Action {
 
 export class UpdateLoadState implements Action {
     constructor(public payload:boolean){ }
-    readonly type = ClientActionTypes.UpdateLoadState
+    readonly type = ClientActionTypes.UpdateLoadState;
+}
+
+export class SetCurrentCalendarWeek implements Action {
+    constructor(public payload: Date) { }
+    readonly type = ClientActionTypes.SetCurrentCalendarWeek;
 }
 
 export type ClientActions = LoadClients |
@@ -142,4 +148,5 @@ export type ClientActions = LoadClients |
             DeleteClientAppointment |
             DeleteClientAppointmentSuccess |
             LoadInsuranceCompanies |
-            LoadInsuranceCompaniesSuccess;
+            LoadInsuranceCompaniesSuccess | 
+            SetCurrentCalendarWeek;
