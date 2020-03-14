@@ -28,3 +28,8 @@ export const getInsuranceCompanies = createSelector(
     getClientsFeatureState,
     state => state.allInsuranceCos
 );
+
+export const getCurrentCalendarWeek = createSelector(
+    getClientsFeatureState,
+    state => state.currentCalendarWeek
+);

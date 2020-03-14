@@ -59,10 +59,9 @@ export class InputModalComponent implements OnInit, OnDestroy {
   }
   createClientSession() {
     this._store.dispatch(new clientActions.AddClientAppointment(this.currentClient));
-    this.dialogRef.close();
+    this.close();
   }
   clientChanged(clientId: number) {
-    console.log('CLIENT ID', clientId);
     let newClient: Clients[] = this.clients.filter(c => c.GeneralDetails.ClientID === clientId);
     if (newClient && newClient.length) {
 
