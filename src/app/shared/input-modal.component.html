@@ -23,13 +23,14 @@
   </div>
 </div>
 <div *ngIf="data.selectedDate">
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-select placeholder="Client Name" (selectionChange)="clientChanged($event.value)">
       <mat-option *ngFor="let c of clients" [value]="c.GeneralDetails.ClientID">
         {{ c.GeneralDetails.ClientName }}
       </mat-option>
     </mat-select>
-  </mat-form-field>
+  </mat-form-field> -->
+  <pmt-lookup-autocomplete (selectionMade)="clientChanged($event)" [items]="buildClientLookupModel()"></pmt-lookup-autocomplete>
   <mat-form-field>
     <mat-select disabled="true" placeholder="Appointment Date" [(value)]="data.selectedDate.date">
       <mat-option [value]="data.selectedDate.date">
