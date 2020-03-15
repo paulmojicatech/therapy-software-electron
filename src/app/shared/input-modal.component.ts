@@ -6,6 +6,7 @@ import * as clientActions from '../client/state/client.actions';
 import * as fromClient from '../client/state/index';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 import { ClientService } from '../client/services/client.service';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-input-modal',
@@ -37,7 +38,8 @@ export class InputModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isActive = true;
     this._store.pipe(
-      select(fromClient.getAllClients)
+      select(fromClient.getAllClients),
+      takeWhile(() => this.isActive)
     ).subscribe(clients => this.clients = clients);
 
     if (this.data.sendEmail) {
@@ -121,6 +123,13 @@ export class InputModalComponent implements OnInit, OnDestroy {
     return this.dischargeReason !== 'Lack of follow up'
       && this.dischargeReason !== 'Case closed'
       && this.dischargeReason !== 'Insurance';
+  }
+
+  buildClientLookupModel(): { id: number, label: string}[] {
+    const model: { id: number, label: string}[] = this.clients.map(
+      client => ({ id: client.GeneralDetails.ClientID, label: client.GeneralDetails.ClientName })
+    );
+    return model;
   }
 
 }

@@ -27,7 +27,7 @@ export class ClientService {
             return clients;
         }),
         catchError(err => {
-            return of(JSON.parse(err.json()));
+            return of(err);
         })
     );
 
