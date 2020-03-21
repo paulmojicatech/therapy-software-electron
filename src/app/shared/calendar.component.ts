@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
   endDate: Date;
   view: string;
   appointments$: Observable<AppointmentsModel[]>;
-  daysToExclude: number[] = [0, 6];  
+  daysToExclude: number[] = [0];  
   allClients: Clients[];
 
   ngOnInit(): void {
