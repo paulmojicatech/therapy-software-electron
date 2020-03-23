@@ -1,12 +1,15 @@
 <div class="container" [formGroup]="form">
   <div class="clientSection">
-    <span (click)="toggleExpander()">
-      <i [class]="isExpanded ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
-      Clients
-    </span>
-    <span class="refresh-section">
-      <i class="fa fa-refresh" (click)="refreshClients()"></i>
-    </span>
+    <div class="header-section">
+      <span (click)="toggleExpander()">
+        <i [class]="isExpanded ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
+        Clients
+      </span>
+      <span class="refresh-section">
+        <i class="fa fa-refresh" (click)="refreshClients()"></i>
+      </span>
+    </div>
+    
     <div class="filterSection" [hidden]="!isExpanded">
         <div class="filter-header-section">
             <mat-form-field>

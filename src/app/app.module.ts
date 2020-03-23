@@ -10,7 +10,8 @@ import { MatInputModule,
          MatDialogModule,
          MatSelectModule, 
          MatOptionModule,
-         MatCheckboxModule
+         MatCheckboxModule,
+         MatAutocompleteModule
         } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -26,6 +27,7 @@ import { CalendarComponent } from './shared/calendar.component';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { InputModalComponent } from './shared/input-modal.component';
+import { LookupAutocompleteComponent } from './shared/lookup-autocomplete/lookup-autocomplete.component';
 
 const appRoutes: Route[] = [
   {
@@ -45,7 +47,8 @@ const appRoutes: Route[] = [
     HomeComponent,
     PanelComponent,
     CalendarComponent,
-    InputModalComponent
+    InputModalComponent,
+    LookupAutocompleteComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +63,7 @@ const appRoutes: Route[] = [
     MatSelectModule,
     MatOptionModule,
     MatCheckboxModule,
+    MatAutocompleteModule,
     BrowserAnimationsModule,
     UserModule,
     ClientModule,

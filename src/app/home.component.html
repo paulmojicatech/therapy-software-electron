@@ -15,7 +15,7 @@
       <pmt-panel (emitRefresh)="refreshClients()" [allClients]="clients$ | async"></pmt-panel>
     </div>
     <div class="main-section">
-      <pmt-calendar></pmt-calendar>
+      <pmt-calendar [startDate]="currentCalendarWeek$ | async"></pmt-calendar>
       <router-outlet></router-outlet>
     </div>
     <div class="action-section">

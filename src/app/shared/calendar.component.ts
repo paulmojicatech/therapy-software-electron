@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';
@@ -6,8 +6,9 @@ import { InputModalComponent } from './input-modal.component';
 import { Clients } from '../client/models/clientModel';
 import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
+import * as clientActions from '../client/state/client.actions';
 import * as fromClient from '../client/state/index';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-calendar',
@@ -20,12 +21,13 @@ export class CalendarComponent implements OnInit {
 
   constructor(private _dialog: MatDialog, private _store: Store<State>) { }
 
+  @Input() startDate: Date;
+
   private _msPerDay: number = 1000 * 60 * 60 * 24;
-  startDate: Date;
   endDate: Date;
   view: string;
   appointments$: Observable<AppointmentsModel[]>;
-  daysToExclude: number[] = [0, 6];  
+  daysToExclude: number[] = [0];  
   allClients: Clients[];
 
   ngOnInit(): void {
@@ -61,7 +63,6 @@ export class CalendarComponent implements OnInit {
 
   load() {
     // Default values
-    this.startDate = new Date();
     this.view = 'week';
     this.loadCalendar();
   }
@@ -70,7 +71,14 @@ export class CalendarComponent implements OnInit {
     this.view = view;
   }
 
-  updateView() {
+  updateView(isGoBack: boolean) {
+    let updatedStartDate: Date = this.startDate;
+    if (isGoBack) {
+      updatedStartDate = this.addDays(updatedStartDate, -6);
+    } else {
+      updatedStartDate = this.addDays(updatedStartDate, 6);
+    }
+    this._store.dispatch(new clientActions.SetCurrentCalendarWeek(updatedStartDate));
     let dateDiff = this.getDateDiff(this.startDate, this.endDate);
     if (dateDiff < 6) {
       this.endDate = this.startDate;
@@ -99,6 +107,7 @@ export class CalendarComponent implements OnInit {
       data: {
         loadSelectedDate: true,
         selectedDate: event,
+        currentStartDate: this.startDate,
         clients: this.allClients.sort((a,b) => {
           var textA = a.GeneralDetails.ClientName.toUpperCase();
           var textB = b.GeneralDetails.ClientName.toUpperCase();
@@ -106,10 +115,13 @@ export class CalendarComponent implements OnInit {
         })
       }
     });
+
   }
 
   private addDays(curDate: Date, daysToAdd: number): Date {
-    return new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate() + daysToAdd);
+    const updatedDate = curDate.getDate() + daysToAdd;
+    return new Date(curDate.setDate(updatedDate));
+    
   }
 
   private getDateDiff(d1: Date, d2: Date): number {

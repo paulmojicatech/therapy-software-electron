@@ -1,9 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { State } from './state/app.state';
-import * as fromUser from './user/state/index';
-import * as userActions from './user/state/user.actions';
 import * as clientActions from './client/state/client.actions';
 import * as fromClient from './client/state/index';
 import { Clients } from './client/models/clientModel';
@@ -27,6 +25,7 @@ export class HomeComponent implements OnInit {
   clients$: Observable<Clients[]>;
   isLoading$:Observable<boolean>;
   initialLoad: boolean;
+  currentCalendarWeek$: Observable<Date>;
 
   ngOnInit(): void { 
     this._store.dispatch(new clientActions.LoadClients());
@@ -38,9 +37,13 @@ export class HomeComponent implements OnInit {
 
     // getClients
     this.clients$ = this._store.pipe(
-      select(fromClient.getAllClients),
-      tap(() => console.log('LOAD HOME FIRED'))
-    );       
+      select(fromClient.getAllClients)
+    );  
+    
+    // get current calendar week
+    this.currentCalendarWeek$ = this._store.pipe(
+      select(fromClient.getCurrentCalendarWeek)
+    );
   }
 
   sendEmail() {
