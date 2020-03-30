@@ -35,7 +35,7 @@ const appRoutes: Route[] = [
     children: [
       {
         path: 'clients/:id',
-        loadChildren: './client/client.module#ClientModule'
+        loadChildren: () => import('./client/client.module').then(m => m.ClientModule)
       }
     ]
   }
