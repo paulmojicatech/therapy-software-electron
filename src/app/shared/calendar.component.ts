@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AppointmentsModel } from '../models/appointmentsModel';
 import { Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material';
@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
 import * as clientActions from '../client/state/client.actions';
 import * as fromClient from '../client/state/index';
-import { concatMap, tap } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pmt-calendar',
@@ -17,7 +17,7 @@ import { concatMap, tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnChanges, OnInit {
 
   constructor(private _dialog: MatDialog, private _store: Store<State>) { }
 
@@ -29,6 +29,16 @@ export class CalendarComponent implements OnInit {
   appointments$: Observable<AppointmentsModel[]>;
   daysToExclude: number[] = [0];  
   allClients: Clients[];
+
+  ngOnChanges(ch: SimpleChanges): void {
+    console.log('START', new Date(this.startDate));
+    if (!!ch['startDate']) {
+      if (!this.endDate) {
+        this.endDate = new Date(ch['startDate'].currentValue);
+      }
+      this.endDate = this.addDays(this.endDate, 7);
+    }
+  }
 
   ngOnInit(): void {
     this.load();
@@ -71,27 +81,19 @@ export class CalendarComponent implements OnInit {
     this.view = view;
   }
 
-  updateView(isGoBack: boolean) {
-    let updatedStartDate: Date = this.startDate;
-    if (isGoBack) {
-      updatedStartDate = this.addDays(updatedStartDate, -6);
-    } else {
-      updatedStartDate = this.addDays(updatedStartDate, 6);
-    }
-    this._store.dispatch(new clientActions.SetCurrentCalendarWeek(updatedStartDate));
-    let dateDiff = this.getDateDiff(this.startDate, this.endDate);
-    if (dateDiff < 6) {
-      this.endDate = this.startDate;
-      this.loadCalendar();
-    }
+  updateView() {
+    
+    this._store.dispatch(new clientActions.SetCurrentCalendarWeek(this.startDate));
+
+
   }
 
   loadCalendar() {
-    if (!this.endDate) {
-      this.endDate = new Date();
-    }
-
-    this.endDate = this.addDays(this.endDate, 5);
+    // if (!this.endDate) {
+    //   this.endDate = new Date(this.startDate);
+    // }
+    // console.log(this.endDate);
+    //this.endDate = this.addDays(this.endDate, 6);
   }
 
   eventClicked(event: AppointmentsModel) {

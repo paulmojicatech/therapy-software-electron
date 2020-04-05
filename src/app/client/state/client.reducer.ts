@@ -11,12 +11,27 @@ export interface ClientState extends State {
     currentCalendarWeek: Date
 }
 
+const getInitialStartDay = (): Date => {
+    
+    const date = new Date();
+    const day = date.getDay();
+    let prevMonday;
+    if(date.getDay() == 0){
+        prevMonday = new Date().setDate(date.getDate() - 7);
+    }
+    else{
+        prevMonday = new Date().setDate(date.getDate() - day);
+    }
+
+    return prevMonday;
+};
+
 const initialState: ClientState = {
     allClients: [],
     currentClient: null,
     clientAppointments: [],
     allInsuranceCos: [],
-    currentCalendarWeek: new Date()
+    currentCalendarWeek: getInitialStartDay()
 };
 
 export function reducer(state: ClientState = initialState,
