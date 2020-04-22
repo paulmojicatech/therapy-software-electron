@@ -5,14 +5,14 @@
             mwlCalendarPreviousView 
             [(viewDate)]="startDate" 
             [view]="view" 
-            (viewDateChange)="updateView(true)">
+            (viewDateChange)="updateView()">
             Prev
         </button>
         <button mat-button color="primary" 
             mwlCalendarNextView 
             [(viewDate)]="startDate" 
             [view]="view" 
-            (viewDateChange)="updateView(false)">
+            (viewDateChange)="updateView()">
             Next
         </button>
       </div>
