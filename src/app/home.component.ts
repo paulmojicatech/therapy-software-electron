@@ -7,7 +7,7 @@ import * as fromClient from './client/state/index';
 import { Clients } from './client/models/clientModel';
 import { tap } from 'rxjs/operators';
 import { User } from './user/models/userModel';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from './shared/input-modal.component';
 
 @Component({
