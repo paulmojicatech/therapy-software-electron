@@ -67,7 +67,12 @@ const appRoutes: Route[] = [
     UserModule,
     ClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({},{runtimeChecks: {
+      strictStateImmutability: false,
+      strictActionImmutability: false,
+      // disabled until https://github.com/ngrx/platform/issues/2109 is resolved
+      /* strictActionImmutability: true, */
+    },}),
     StoreDevtoolsModule.instrument({
       name: 'Therapy Software DevTools',
       maxAge: 25,
