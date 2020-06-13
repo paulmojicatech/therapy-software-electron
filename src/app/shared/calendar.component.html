@@ -38,13 +38,13 @@
       <mwl-calendar-day-view [events]="appointments$ | async" 
       [viewDate]="startDate"
       [dayStartHour]="9"
-      [dayEndHour]="18">
+      [dayEndHour]="22">
       </mwl-calendar-day-view>
   </div>
   <div class="week-view" *ngIf="view === 'week'">
       <mwl-calendar-week-view [events]="appointments$ | async" 
           [excludeDays]="daysToExclude" [viewDate]="startDate" 
-          [dayStartHour]="9" [dayEndHour]="18"
+          [dayStartHour]="9" [dayEndHour]="22"
           (eventClicked)="eventClicked($event)" 
           (hourSegmentClicked)="hourClicked($event)"
           [tooltipAppendToBody]="false">
