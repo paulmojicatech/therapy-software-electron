@@ -2,17 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
-import { MatInputModule, 
-         MatFormFieldModule,
-         MatToolbarModule,
-         MatProgressSpinnerModule, 
-         MatButtonModule, 
-         MatDialogModule,
-         MatSelectModule, 
-         MatOptionModule,
-         MatCheckboxModule,
-         MatAutocompleteModule
-        } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -35,7 +34,7 @@ const appRoutes: Route[] = [
     children: [
       {
         path: 'clients/:id',
-        loadChildren: './client/client.module#ClientModule'
+        loadChildren: () => import('./client/client.module').then(m => m.ClientModule)
       }
     ]
   }
@@ -68,7 +67,12 @@ const appRoutes: Route[] = [
     UserModule,
     ClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({},{runtimeChecks: {
+      strictStateImmutability: false,
+      strictActionImmutability: false,
+      // disabled until https://github.com/ngrx/platform/issues/2109 is resolved
+      /* strictActionImmutability: true, */
+    },}),
     StoreDevtoolsModule.instrument({
       name: 'Therapy Software DevTools',
       maxAge: 25,
