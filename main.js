@@ -1,47 +1,17 @@
 const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
 const url = require("url");
+const MenuService = require("./services/menu.service");
 
 let win;
+let menuSvc;
 
 function createWindow() {
   win = new BrowserWindow({ width: 1280, height: 968 });
+  menuSvc = new MenuService.MenuService(win);
 
   // build menu
-  let template = [
-    {},
-    {
-      label: 'Edit',
-      submenu: [
-        {
-          label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
-          selector: 'copy:'
-        },
-        {
-          label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
-          selector: 'paste:'
-        },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:'
-        }
-      ]
-    },
-    {      
-      label: 'Therapy Software',
-      submenu: [
-        {
-          label: 'Exit',
-          click: () => {
-            app.quit();
-          }
-        }
-      ]
-    }
-  ];
+  let template = menuSvc.createMenu();
   
   let menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
