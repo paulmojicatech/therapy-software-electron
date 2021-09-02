@@ -66,14 +66,20 @@
       </mat-checkbox>
     </div>
   </div>
-  <div class="btn-group" *ngIf="!showClientFilter.checked">
-    <button mat-raised-button class="close-btn" (click)="close()">
-      Close
-    </button>
-    <button mat-raised-button color="primary" (click)="sendEmail()">
-      Send Email
-    </button>
+
+    <div class="footer-container">
+      <mat-checkbox #isTestEl [hidden]="showClientFilter.checked">Is Test?</mat-checkbox>
+      <div class="btn-group" *ngIf="!showClientFilter.checked">
+        <button mat-raised-button class="close-btn" (click)="close()">
+          Close
+        </button>
+        <button mat-raised-button color="primary" (click)="sendEmail()">
+          Send Email
+        </button>
+    </div>
+    
   </div>
+  
 </div>
 <div *ngIf="data.addInsurance">
 

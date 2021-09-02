@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
@@ -7,6 +7,7 @@ import * as fromClient from '../client/state/index';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 import { ClientService } from '../client/services/client.service';
 import { takeWhile } from 'rxjs/operators';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'pmt-input-modal',
@@ -20,6 +21,7 @@ export class InputModalComponent implements OnInit, OnDestroy {
     private _store: Store<State>,
     private _clientSvc: ClientService) { }
 
+  @ViewChild('isTestEl') isTestEl: MatCheckbox;
   private currentClient: Clients;
   isActive: boolean = false;
   clients: Clients[] = [];
@@ -84,8 +86,9 @@ export class InputModalComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
   sendEmail() {
+    const isTest = this.isTestEl.checked;
     this._store.dispatch(new clientActions.UpdateLoadState(true));
-    this._clientSvc.SendMassEmail(this.subject, this.message, this.selectedClients).subscribe(() => {
+    this._clientSvc.SendMassEmail(this.subject, this.message, this.selectedClients, isTest).subscribe(() => {
       this._store.dispatch(new clientActions.UpdateLoadState(false));
       this.dialogRef.close();
     });

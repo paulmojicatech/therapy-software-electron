@@ -18,6 +18,11 @@ mat-form-field {
     flex-direction: column;
     overflow: auto;
 
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+    }
+
     .show-hide-clients-section {
         display:flex;
         flex-direction: row;
