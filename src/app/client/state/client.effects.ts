@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Action } from '@ngrx/store';
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
 
 import { ClientService } from '../services/client.service';
 import { InsuranceService } from '../services/insurance.service';
@@ -16,66 +16,66 @@ export class ClientEffects {
         private _insuranceSvc:InsuranceService,
         private actions$:Actions) { }
 
-    @Effect() 
-    loadClients$: Observable<Action> = this.actions$.pipe(
+     
+    loadClients$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.LoadClients),
         concatMap(() => this._clientSvc.GetAllClients().pipe(            
             map(clients => (new clientActions.LoadClientsSuccess(clients)))
         )
-    ));
+    )));
 
-    @Effect() 
-    updateClient$: Observable<Action> = this.actions$.pipe(
+     
+    updateClient$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.UpdateClient),
         mergeMap((action: clientActions.UpdateClient) => this._clientSvc.SaveClientDetails(action.payload).pipe(
             map(client => (new clientActions.UpdateClientSuccess(client)))
         )
-    ));
+    )));
 
-    @Effect()
-    deleteClient$: Observable<Action> = this.actions$.pipe(
+    
+    deleteClient$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.DeleteClient),
         mergeMap((action:clientActions.DeleteClient) => this._clientSvc.DeleteClient(action.payload).pipe(
             map(clients => (new clientActions.DeleteClientSuccess(clients)))
         ))
-    );
+    ));
 
-    @Effect() 
-    dischargeClient$: Observable<Action> = this.actions$.pipe(
+     
+    dischargeClient$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.DischargeClient),
         mergeMap((action:clientActions.DischargeClient) => this._clientSvc.DischargeClient(action.payload).pipe(
             map(clients => (new clientActions.DischargeClientSuccess(clients)))
         ))
-    );
+    ));
     
-    @Effect()
-    addClientSession$: Observable<Action> = this.actions$.pipe(
+    
+    addClientSession$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.AddClientAppointment),
         mergeMap((action:clientActions.AddClientAppointment) => this._clientSvc.AddClientAppointment(action.payload).pipe(
             map(c => (new clientActions.AddClientAppointmentSuccess(c)))
         )
-    ));
+    )));
 
-    @Effect()
-    deleteClientSession$: Observable<Action> = this.actions$.pipe(
+    
+    deleteClientSession$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.DeleteClientAppointment),
         mergeMap((action:clientActions.DeleteClientAppointment) => this._clientSvc.DeleteClientAppointment(action.payload.clientId, action.payload.clientSessionId).pipe(
             map(clients => (new clientActions.DeleteClientAppointmentSuccess(clients)))
         )
-    ));
+    )));
 
-    @Effect()
-    AddClient$: Observable<Action> = this.actions$.pipe(
+    
+    AddClient$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.AddClient),
         mergeMap((action:clientActions.AddClient) => this._clientSvc.AddClient(action.payload).pipe(
             map(c => (new clientActions.AddClientSuccess(c)))
         ))
-    );
-    @Effect()
-    loadInsuranceCompanies$: Observable<Action> = this.actions$.pipe(
+    ));
+    
+    loadInsuranceCompanies$: Observable<Action> = createEffect(() => this.actions$.pipe(
         ofType(clientActions.ClientActionTypes.LoadInsuranceCompanies),
         mergeMap((action:clientActions.LoadInsuranceCompanies) => this._insuranceSvc.GetAllInsurances().pipe(
             map(insurancesCos => (new clientActions.LoadInsuranceCompaniesSuccess(insurancesCos)))
         ))
-    );
+    ));
 }   
