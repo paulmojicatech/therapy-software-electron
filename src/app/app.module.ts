@@ -41,55 +41,50 @@ const appRoutes: Route[] = [
 ]
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    PanelComponent,
-    CalendarComponent,
-    InputModalComponent,
-    LookupAutocompleteComponent
-  ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
-    FormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatCheckboxModule,
-    MatAutocompleteModule,
-    BrowserAnimationsModule,
-    UserModule,
-    ClientModule,
-    ReactiveFormsModule,
-    StoreModule.forRoot({},{runtimeChecks: {
-      strictStateImmutability: false,
-      strictActionImmutability: false,
-      // disabled until https://github.com/ngrx/platform/issues/2109 is resolved
-      /* strictActionImmutability: true, */
-    },}),
-    StoreDevtoolsModule.instrument({
-      name: 'Therapy Software DevTools',
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
-    EffectsModule.forRoot([]),
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    })
-  ],
-  providers: [
-    
-  ],
-  entryComponents: [
-    InputModalComponent
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        PanelComponent,
+        CalendarComponent,
+        InputModalComponent,
+        LookupAutocompleteComponent
+    ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
+        FormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatToolbarModule,
+        MatProgressSpinnerModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatCheckboxModule,
+        MatAutocompleteModule,
+        BrowserAnimationsModule,
+        UserModule,
+        ClientModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot({}, { runtimeChecks: {
+                strictStateImmutability: false,
+                strictActionImmutability: false,
+                // disabled until https://github.com/ngrx/platform/issues/2109 is resolved
+                /* strictActionImmutability: true, */
+            }, }),
+        StoreDevtoolsModule.instrument({
+            name: 'Therapy Software DevTools',
+            maxAge: 25,
+            logOnly: environment.production,
+        }),
+        EffectsModule.forRoot([]),
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory
+        })
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
