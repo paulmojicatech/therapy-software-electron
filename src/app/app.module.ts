@@ -77,7 +77,7 @@ const appRoutes: Route[] = [
             name: 'Therapy Software DevTools',
             maxAge: 25,
             logOnly: environment.production,
-        }),
+        connectInZone: true}),
         EffectsModule.forRoot([]),
         CalendarModule.forRoot({
             provide: DateAdapter,
