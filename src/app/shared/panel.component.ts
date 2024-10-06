@@ -2,7 +2,7 @@ import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter,
 import { Router } from '@angular/router';
 import { Clients } from '../client/models/clientModel';
 import { Observable } from 'rxjs';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 
 @Component({
@@ -19,14 +19,14 @@ export class PanelComponent implements AfterViewInit {
 
   isExpanded:boolean = false;
   filteredClients$:Observable<Clients[]>;
-  form: FormGroup;
-  formControl: FormControl;
+  form: UntypedFormGroup;
+  formControl: UntypedFormControl;
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      'searchInput': new FormControl()
+    this.form = new UntypedFormGroup({
+      'searchInput': new UntypedFormControl()
     });
-    this.formControl = <FormControl>this.form.get('searchInput');
+    this.formControl = <UntypedFormControl>this.form.get('searchInput');
   }
   
   ngAfterViewInit(): void {

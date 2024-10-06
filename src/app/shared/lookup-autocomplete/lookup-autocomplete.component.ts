@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { map, startWith, debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -13,18 +13,18 @@ export class LookupAutocompleteComponent implements OnInit {
   @Input() items: { id: string | number, label: string }[] = [];
 
   items$: Observable<{id: string | number, label: string }[]>;
-  formControl: FormControl;
-  form: FormGroup;
+  formControl: UntypedFormControl;
+  form: UntypedFormGroup;
 
   @Output() selectionMade: EventEmitter<string | number> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.form = this._fb.group({
-      'searchInput': new FormControl()
+      'searchInput': new UntypedFormControl()
     });
-    this.formControl = <FormControl>this.form.get('searchInput');
+    this.formControl = <UntypedFormControl>this.form.get('searchInput');
     this.items$ = this.formControl.valueChanges.pipe(
       map((searchString: string) => {
         if (!!searchString && typeof(searchString) === 'string') {

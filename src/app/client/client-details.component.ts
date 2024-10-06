@@ -7,7 +7,7 @@ import * as clientActions from './state/client.actions';
 import { ClientState } from './state/client.reducer';
 import { Clients } from './models/clientModel';
 import { takeWhile } from 'rxjs/operators';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InsuranceCompanies } from './models/clientModel';
 import { InputModalComponent } from '../shared/input-modal.component';
 import { Observable } from 'rxjs';
@@ -21,13 +21,13 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _builder: FormBuilder,
+    private _builder: UntypedFormBuilder,
     private _store: Store<ClientState>,
     private _dialog: MatDialog) { }
 
   currentClient: Clients;
   isActive: boolean;
-  clientDetailsGroup: FormGroup;
+  clientDetailsGroup: UntypedFormGroup;
   isNew: boolean;
   currentId:number;
   allInsuranceCos:InsuranceCompanies[];
