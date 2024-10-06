@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Store, select } from '@ngrx/store';
 import { State } from '../state/app.state';
 import * as clientActions from '../client/state/client.actions';
@@ -7,7 +7,7 @@ import * as fromClient from '../client/state/index';
 import { Clients, ClientSessionDetails } from '../client/models/clientModel';
 import { ClientService } from '../client/services/client.service';
 import { takeWhile } from 'rxjs/operators';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatLegacyCheckbox as MatCheckbox } from '@angular/material/legacy-checkbox';
 
 @Component({
   selector: 'pmt-input-modal',
