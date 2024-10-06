@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Route } from '@angular/router';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
@@ -28,11 +28,8 @@ const clientRoutes:Route[] = [
     }
 ];
 
-@NgModule({
-    imports: [
-        BrowserAnimationsModule,
-        BrowserModule, 
-        HttpClientModule,
+@NgModule({ declarations: [ClientDetailsComponent, InsuranceDetailsComponent], imports: [BrowserAnimationsModule,
+        BrowserModule,
         ReactiveFormsModule,
         FormsModule,
         MatFormFieldModule,
@@ -44,12 +41,9 @@ const clientRoutes:Route[] = [
         MatDialogModule,
         RouterModule.forChild(clientRoutes),
         StoreModule.forFeature('clients', reducer),
-        EffectsModule.forFeature([ ClientEffects ])
-    ],
-    declarations: [ClientDetailsComponent, InsuranceDetailsComponent],
-    providers: [
-        InsuranceService
-    ]
-})
+        EffectsModule.forFeature([ClientEffects])], providers: [
+        InsuranceService,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 
 export class ClientModule { }

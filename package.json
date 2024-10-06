@@ -18,17 +18,17 @@
   "main": "main.js",
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.3.12",
+    "@angular/animations": "^18.2.7",
     "@angular/cdk": "^17.3.10",
-    "@angular/common": "^17.3.12",
-    "@angular/compiler": "^17.3.12",
-    "@angular/core": "^17.3.12",
-    "@angular/forms": "^17.3.12",
-    "@angular/localize": "^17.3.12",
+    "@angular/common": "^18.2.7",
+    "@angular/compiler": "^18.2.7",
+    "@angular/core": "^18.2.7",
+    "@angular/forms": "^18.2.7",
+    "@angular/localize": "^18.2.7",
     "@angular/material": "^16.2.0",
-    "@angular/platform-browser": "^17.3.12",
-    "@angular/platform-browser-dynamic": "^17.3.12",
-    "@angular/router": "^17.3.12",
+    "@angular/platform-browser": "^18.2.7",
+    "@angular/platform-browser-dynamic": "^18.2.7",
+    "@angular/router": "^18.2.7",
     "@ngrx/effects": "^17.2.0",
     "@ngrx/store": "^17.2.0",
     "angular-calendar": "^0.31.1",
@@ -42,10 +42,10 @@
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.3.10",
-    "@angular/cli": "^17.3.10",
-    "@angular/compiler-cli": "^17.3.12",
-    "@angular/language-service": "^17.3.12",
+    "@angular-devkit/build-angular": "^18.2.7",
+    "@angular/cli": "^18.2.7",
+    "@angular/compiler-cli": "^18.2.7",
+    "@angular/language-service": "^18.2.7",
     "@babel/compat-data": "7.8.0",
     "@ngrx/schematics": "^17.2.0",
     "@ngrx/store-devtools": "^17.2.0",
@@ -66,6 +66,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
-    "typescript": "~5.2"
+    "typescript": "~5.5.4"
   }
 }
