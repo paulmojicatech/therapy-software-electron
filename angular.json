@@ -71,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "therapy-software:build"
+            "buildTarget": "therapy-software:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "therapy-software:build:production"
+              "buildTarget": "therapy-software:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "therapy-software:build"
+            "buildTarget": "therapy-software:build"
           }
         },
         "test": {
