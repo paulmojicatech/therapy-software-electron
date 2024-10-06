@@ -12,7 +12,7 @@ export class InsuranceService {
     public GetAllInsurances():Observable<InsuranceCompanies[]> {
         let headers: HttpHeaders = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        return this._http.get(env.GetInsuranceUri + '&auth=' + env.AUTH, {headers}).pipe(
+        return this._http.get(env.GetInsuranceUri, {headers}).pipe(
             map((resp: any[]) => {
                 let returnObj: InsuranceCompanies[] = [];
                 resp.forEach(c => {
