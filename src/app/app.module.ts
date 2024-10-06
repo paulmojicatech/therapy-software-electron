@@ -51,7 +51,7 @@ const appRoutes: Route[] = [
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
+        RouterModule.forRoot(appRoutes, {}),
         FormsModule,
         MatInputModule,
         MatFormFieldModule,
