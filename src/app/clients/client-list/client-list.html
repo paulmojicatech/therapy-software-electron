@@ -1,0 +1,83 @@
+<section class="client-list" aria-labelledby="clients-heading">
+  <div class="header">
+    <h2 id="clients-heading">Clients</h2>
+    <span class="count">{{ store.filteredClients().length }}</span>
+    <span class="pmt-spacer"></span>
+    <a matButton="filled" routerLink="/clients/new" (click)="navigated.emit()">
+      <mat-icon>person_add</mat-icon>
+      New
+    </a>
+  </div>
+
+  <mat-form-field class="search" subscriptSizing="dynamic">
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      type="search"
+      placeholder="Search name, email, phone"
+      aria-label="Search clients"
+      [value]="store.query()"
+      (input)="onQueryInput($event)"
+    />
+    @if (store.query()) {
+      <button matIconButton matSuffix aria-label="Clear search" (click)="clearQuery()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <mat-button-toggle-group
+    class="status-filter"
+    hideSingleSelectionIndicator
+    aria-label="Client status"
+    [value]="store.statusFilter()"
+    (change)="onStatusChange($event.value)"
+  >
+    <mat-button-toggle value="active">Active</mat-button-toggle>
+    <mat-button-toggle value="discharged">Discharged</mat-button-toggle>
+    <mat-button-toggle value="all">All</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <div class="items" role="list">
+    @if (store.loadStatus() === 'loading' && !store.clients().length) {
+      <div class="pmt-empty-state"><mat-spinner diameter="32" /></div>
+    } @else if (store.loadStatus() === 'error' && !store.clients().length) {
+      <div class="pmt-empty-state">
+        <mat-icon>cloud_off</mat-icon>
+        <span>Clients could not be loaded.</span>
+        <button matButton (click)="store.loadClients()">Try again</button>
+      </div>
+    } @else {
+      @for (item of items(); track item.client.id) {
+        <a
+          class="item"
+          role="listitem"
+          [routerLink]="['/clients', item.client.id]"
+          routerLinkActive="active"
+          (click)="navigated.emit()"
+        >
+          <span class="avatar" [class.discharged]="item.client.isDischarged">
+            {{ item.client.name | initials }}
+          </span>
+          <span class="text">
+            <span class="name">{{ item.client.name }}</span>
+            <span class="meta">
+              @if (item.client.isDischarged) {
+                Discharged
+              } @else if (item.nextSession) {
+                Next: {{ item.nextSession | date: 'EEE, MMM d · h:mm a' }}
+              } @else {
+                No upcoming sessions
+              }
+            </span>
+          </span>
+        </a>
+      } @empty {
+        <div class="pmt-empty-state">
+          <mat-icon>person_search</mat-icon>
+          <span>{{ store.query() ? 'No clients match your search.' : 'No clients yet.' }}</span>
+        </div>
+      }
+    }
+  </div>
+</section>
