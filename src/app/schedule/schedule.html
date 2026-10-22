@@ -1,0 +1,136 @@
+<div class="layout">
+  <section class="calendar pmt-card" aria-label="Calendar">
+    <header class="toolbar">
+      <div class="nav">
+        <button
+          matIconButton
+          aria-label="Previous"
+          mwlCalendarPreviousView
+          [view]="store.view()"
+          [viewDate]="store.viewDate()"
+          [excludeDays]="store.excludeDays()"
+          (viewDateChange)="store.setViewDate($event)"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button
+          matButton="outlined"
+          mwlCalendarToday
+          [viewDate]="store.viewDate()"
+          (viewDateChange)="store.setViewDate($event)"
+        >
+          Today
+        </button>
+        <button
+          matIconButton
+          aria-label="Next"
+          mwlCalendarNextView
+          [view]="store.view()"
+          [viewDate]="store.viewDate()"
+          [excludeDays]="store.excludeDays()"
+          (viewDateChange)="store.setViewDate($event)"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <h1 class="title">
+        {{
+          store.viewDate()
+            | calendarDate: store.view() + 'ViewTitle' : 'en' : weekStartsOn : store.excludeDays()
+        }}
+      </h1>
+
+      <span class="pmt-spacer"></span>
+
+      @if (store.view() !== CalendarView.Month) {
+        <mat-slide-toggle [checked]="store.showSunday()" (change)="store.toggleSunday()">
+          Sundays
+        </mat-slide-toggle>
+      }
+
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        aria-label="Calendar view"
+        [value]="store.view()"
+        (change)="store.setView($event.value)"
+      >
+        <mat-button-toggle [value]="CalendarView.Day">Day</mat-button-toggle>
+        <mat-button-toggle [value]="CalendarView.Week">Week</mat-button-toggle>
+        <mat-button-toggle [value]="CalendarView.Month">Month</mat-button-toggle>
+      </mat-button-toggle-group>
+    </header>
+
+    <div class="view">
+      @switch (store.view()) {
+        @case (CalendarView.Day) {
+          <mwl-calendar-day-view
+            [viewDate]="store.viewDate()"
+            [events]="store.appointments()"
+            [dayStartHour]="dayStartHour"
+            [dayEndHour]="dayEndHour"
+            [hourSegments]="2"
+            (eventClicked)="openAppointment($event.event)"
+            (hourSegmentClicked)="bookAppointment($event.date)"
+          />
+        }
+        @case (CalendarView.Week) {
+          <mwl-calendar-week-view
+            [viewDate]="store.viewDate()"
+            [events]="store.appointments()"
+            [excludeDays]="store.excludeDays()"
+            [weekStartsOn]="weekStartsOn"
+            [dayStartHour]="dayStartHour"
+            [dayEndHour]="dayEndHour"
+            [hourSegments]="2"
+            (eventClicked)="openAppointment($event.event)"
+            (hourSegmentClicked)="bookAppointment($event.date)"
+            (dayHeaderClicked)="openDay($event.day.date)"
+          />
+        }
+        @case (CalendarView.Month) {
+          <mwl-calendar-month-view
+            [viewDate]="store.viewDate()"
+            [events]="store.appointments()"
+            [weekStartsOn]="weekStartsOn"
+            (dayClicked)="openDay($event.day.date)"
+            (eventClicked)="openAppointment($event.event)"
+          />
+        }
+      }
+    </div>
+    <p class="hint">
+      <mat-icon inline>touch_app</mat-icon>
+      Click an open time slot to book a session.
+    </p>
+  </section>
+
+  <aside class="agenda pmt-card" aria-labelledby="agenda-heading">
+    <h2 id="agenda-heading">Today</h2>
+    <p class="agenda-date">{{ today | date: 'EEEE, MMMM d' }}</p>
+
+    @for (appointment of store.todaysAppointments(); track appointment.id) {
+      <button class="agenda-item" type="button" (click)="openAppointment(appointment)">
+        <span class="time">{{ appointment.start | date: 'h:mm a' }}</span>
+        <span class="avatar">{{ appointment.title | initials }}</span>
+        <span class="name">{{ appointment.title }}</span>
+      </button>
+    } @empty {
+      <div class="pmt-empty-state">
+        <mat-icon>event_available</mat-icon>
+        <span>No sessions today.</span>
+      </div>
+    }
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value">{{ clients.activeClients().length }}</span>
+        <span class="stat-label">Active clients</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ store.todaysAppointments().length }}</span>
+        <span class="stat-label">Sessions today</span>
+      </div>
+    </div>
+  </aside>
+</div>
