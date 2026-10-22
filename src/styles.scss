@@ -1,6 +1,173 @@
-/* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~font-awesome/css/font-awesome.min.css';
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@use '@angular/material' as mat;
+@use 'angular-calendar/scss/modules/week/calendar-week-view/calendar-week-view' as cal-week;
+@use 'angular-calendar/scss/modules/common/calendar-tooltip/calendar-tooltip' as cal-tooltip;
+
+html {
+  // `color-scheme` is switched at runtime by ThemeService (light / dark / system).
+  color-scheme: light dark;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$violet-palette,
+      ),
+      typography: (
+        plain-family: 'Roboto Variable, Roboto, system-ui, sans-serif',
+        brand-family: 'Roboto Variable, Roboto, system-ui, sans-serif',
+      ),
+      density: 0,
+    )
+  );
+
+  // App-level tokens used by component styles.
+  --pmt-radius: 16px;
+  --pmt-sidenav-width: 320px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+.pmt-snackbar-error {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--mat-sys-error-container),
+      supporting-text-color: var(--mat-sys-on-error-container),
+      button-color: var(--mat-sys-on-error-container),
+    )
+  );
+}
+
+.pmt-card {
+  background: var(--mat-sys-surface);
+  border-radius: var(--pmt-radius);
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.pmt-spacer {
+  flex: 1 1 auto;
+}
+
+.pmt-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// angular-calendar: re-skin with Material 3 system tokens so it follows the
+// light/dark theme automatically.
+// ---------------------------------------------------------------------------
+$cal-tokens: (
+  bg-primary: var(--mat-sys-surface),
+  bg-secondary: var(--mat-sys-surface-container-lowest),
+  bg-active: var(--mat-sys-surface-container-high),
+  border-color: var(--mat-sys-outline-variant),
+  today-bg: var(--mat-sys-secondary-container),
+  weekend-color: var(--mat-sys-tertiary),
+  event-color-primary: var(--mat-sys-primary),
+  event-color-secondary: var(--mat-sys-secondary-container),
+  current-time-marker-color: var(--mat-sys-error),
+  white: var(--mat-sys-inverse-on-surface),
+  black: var(--mat-sys-inverse-surface),
+);
+
+@include cal-week.cal-week-view-theme($cal-tokens);
+@include cal-tooltip.cal-tooltip-theme($cal-tokens);
+
+.cal-week-view,
+.cal-month-view {
+  font: var(--mat-sys-body-small);
+}
+
+.cal-week-view .cal-day-headers .cal-header,
+.cal-week-view .cal-time {
+  font: var(--mat-sys-label-medium);
+}
+
+.cal-week-view .cal-day-headers .cal-header.cal-today {
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.cal-week-view .cal-hour-segment {
+  cursor: pointer;
+}
+
+.cal-week-view .cal-event {
+  border-radius: 8px;
+  border-width: 0 0 0 4px;
+  font: var(--mat-sys-label-medium);
+  cursor: pointer;
+}
+
+// The month view's Sass theme uses color functions that can't take CSS
+// variables, so it is themed by hand.
+.cal-month-view {
+  background-color: var(--mat-sys-surface);
+
+  .cal-cell-row:hover,
+  .cal-cell.cal-has-events.cal-open,
+  .cal-cell-row .cal-cell:hover {
+    background-color: var(--mat-sys-surface-container-high);
+  }
+
+  .cal-days,
+  .cal-days .cal-cell-row,
+  .cal-day-cell:not(:last-child) {
+    border-color: var(--mat-sys-outline-variant);
+  }
+
+  .cal-day-cell.cal-today {
+    background-color: var(--mat-sys-secondary-container);
+  }
+
+  .cal-day-cell.cal-weekend .cal-day-number {
+    color: var(--mat-sys-tertiary);
+  }
+
+  .cal-day-badge {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+  }
+
+  .cal-event {
+    background-color: var(--mat-sys-primary);
+    border-color: var(--mat-sys-primary-container);
+  }
+
+  .cal-day-number {
+    opacity: 0.7;
+  }
+
+  .cal-open-day-events {
+    background-color: var(--mat-sys-surface-container-highest);
+    color: var(--mat-sys-on-surface);
+    box-shadow: none;
+  }
+}

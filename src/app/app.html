@@ -1,0 +1,73 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    [mode]="isCompact() ? 'over' : 'side'"
+    [opened]="!isCompact()"
+  >
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <mat-icon>psychology</mat-icon>
+      </span>
+      <div>
+        <div class="brand-name">Therapy Software</div>
+        <div class="brand-caption">Case load manager</div>
+      </div>
+    </div>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <a
+        class="nav-item"
+        routerLink="/schedule"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="isCompact() && sidenav.close()"
+      >
+        <mat-icon>calendar_month</mat-icon>
+        Schedule
+      </a>
+    </nav>
+
+    <pmt-client-list (navigated)="isCompact() && sidenav.close()" />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <header class="topbar">
+      @if (isCompact()) {
+        <button matIconButton aria-label="Open navigation" (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <span class="pmt-spacer"></span>
+      <button
+        matIconButton
+        matTooltip="Refresh clients"
+        aria-label="Refresh clients"
+        [disabled]="clients.isLoading()"
+        (click)="refresh()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button matButton="tonal" (click)="composeEmail()">
+        <mat-icon>forward_to_inbox</mat-icon>
+        Email clients
+      </button>
+      <button
+        matIconButton
+        [matTooltip]="themeLabel()"
+        [attr.aria-label]="themeLabel()"
+        (click)="theme.cycle()"
+      >
+        <mat-icon>{{ themeIcon() }}</mat-icon>
+      </button>
+    </header>
+
+    @if (clients.isLoading() || clients.saving()) {
+      <mat-progress-bar class="progress" mode="indeterminate" />
+    }
+
+    <main class="page">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

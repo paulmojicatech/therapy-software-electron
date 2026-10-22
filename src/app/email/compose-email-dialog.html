@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Email clients</h2>
+<mat-dialog-content class="content">
+  <form class="compose" id="compose-email-form" [formGroup]="form" (ngSubmit)="send()">
+    <mat-form-field>
+      <mat-label>Subject</mat-label>
+      <input matInput formControlName="subject" required />
+      <mat-error>A subject is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Message</mat-label>
+      <textarea matInput rows="12" formControlName="message" required></textarea>
+      <mat-error>A message is required</mat-error>
+    </mat-form-field>
+    <mat-slide-toggle formControlName="isTest"> Send a test email to myself only </mat-slide-toggle>
+  </form>
+
+  <section class="recipients" aria-labelledby="recipients-heading">
+    <div class="recipients-header">
+      <mat-checkbox
+        [checked]="allSelected()"
+        [indeterminate]="someSelected()"
+        [disabled]="!recipients().length"
+        (change)="toggleAll($event.checked)"
+      >
+        <span id="recipients-heading">
+          Recipients ({{ selectedIds().size }}/{{ recipients().length }})
+        </span>
+      </mat-checkbox>
+    </div>
+    <mat-selection-list
+      class="recipient-list"
+      aria-labelledby="recipients-heading"
+      (selectionChange)="onSelectionChange($event)"
+    >
+      @for (client of recipients(); track client.id) {
+        <mat-list-option
+          togglePosition="before"
+          [value]="client.id"
+          [selected]="selectedIds().has(client.id)"
+        >
+          <span matListItemTitle>{{ client.name }}</span>
+          <span matListItemLine>{{ client.email }}</span>
+        </mat-list-option>
+      } @empty {
+        <p class="pmt-empty-state">No active clients have an email address.</p>
+      }
+    </mat-selection-list>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>Cancel</button>
+  <button
+    matButton="filled"
+    type="submit"
+    form="compose-email-form"
+    [disabled]="
+      store.saving() || form.invalid || (!form.controls.isTest.value && !selectedIds().size)
+    "
+  >
+    <mat-icon>send</mat-icon>
+    {{ form.controls.isTest.value ? 'Send test' : 'Send' }}
+  </button>
+</mat-dialog-actions>

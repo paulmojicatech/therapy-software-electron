@@ -1,0 +1,270 @@
+@if (notFound()) {
+  <div class="pmt-card pmt-empty-state not-found">
+    <mat-icon>person_off</mat-icon>
+    <h1>Client not found</h1>
+    <p>They may have been deleted.</p>
+    <a matButton="filled" routerLink="/schedule">Back to schedule</a>
+  </div>
+} @else {
+  <div class="page">
+    <header class="hero pmt-card">
+      <a matIconButton routerLink="/schedule" aria-label="Back to schedule" matTooltip="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+
+      <span class="avatar" [class.discharged]="client()?.isDischarged">
+        @if (isNew()) {
+          <mat-icon>person_add</mat-icon>
+        } @else {
+          {{ client()?.name | initials }}
+        }
+      </span>
+
+      <div class="identity">
+        <h1>{{ isNew() ? 'New client' : client()?.name }}</h1>
+        <div class="facts">
+          @if (client(); as c) {
+            @if (c.isDischarged) {
+              <mat-chip disableRipple class="chip-discharged">
+                Discharged{{ c.dischargeReason ? ' · ' + c.dischargeReason : '' }}
+              </mat-chip>
+            } @else {
+              <mat-chip disableRipple highlighted>Active</mat-chip>
+            }
+            @if (c.email) {
+              <span class="fact"><mat-icon inline>mail</mat-icon>{{ c.email }}</span>
+            }
+            @if (c.phone) {
+              <span class="fact"><mat-icon inline>call</mat-icon>{{ c.phone }}</span>
+            }
+          } @else if (isNew()) {
+            <span class="fact">Fill in the details below and save.</span>
+          }
+        </div>
+      </div>
+
+      <span class="pmt-spacer"></span>
+
+      <div class="actions">
+        @if (form.dirty) {
+          <button matButton (click)="revert()" [disabled]="store.saving()">Discard</button>
+        }
+        <button
+          matButton="filled"
+          (click)="save()"
+          [disabled]="store.saving() || (!isNew() && form.pristine)"
+        >
+          <mat-icon>save</mat-icon>
+          {{ isNew() ? 'Create client' : 'Save' }}
+        </button>
+        @if (client(); as c) {
+          <button matIconButton [matMenuTriggerFor]="moreMenu" aria-label="More actions">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #moreMenu xPosition="before">
+            <button mat-menu-item (click)="bookSession()" [disabled]="c.isDischarged">
+              <mat-icon>event</mat-icon>
+              Book session
+            </button>
+            <button mat-menu-item (click)="discharge()" [disabled]="c.isDischarged">
+              <mat-icon>logout</mat-icon>
+              Discharge client
+            </button>
+            <button mat-menu-item class="danger" (click)="delete()">
+              <mat-icon>delete</mat-icon>
+              Delete client
+            </button>
+          </mat-menu>
+        }
+      </div>
+    </header>
+
+    <form class="pmt-card body" [formGroup]="form" (ngSubmit)="save()">
+      <mat-tab-group
+        mat-stretch-tabs="false"
+        animationDuration="150ms"
+        [(selectedIndex)]="selectedTab"
+      >
+        <mat-tab label="Profile">
+          <div class="tab">
+            <section>
+              <h2>Contact</h2>
+              <div class="grid">
+                <mat-form-field class="span-2">
+                  <mat-label>Full name</mat-label>
+                  <input matInput formControlName="name" [readonly]="!isNew()" required />
+                  @if (!isNew()) {
+                    <mat-hint>Names can't be changed after the client is created.</mat-hint>
+                  }
+                  @if (form.controls.name.hasError('required')) {
+                    <mat-error>Name is required</mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <mat-icon matPrefix>mail</mat-icon>
+                  <input matInput type="email" formControlName="email" />
+                  <mat-error>Enter a valid email</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Secondary email</mat-label>
+                  <input matInput type="email" formControlName="secondaryEmail" />
+                  <mat-error>Enter a valid email</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Phone</mat-label>
+                  <mat-icon matPrefix>call</mat-icon>
+                  <input matInput type="tel" formControlName="phone" />
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Secondary phone</mat-label>
+                  <input matInput type="tel" formControlName="secondaryPhone" />
+                </mat-form-field>
+              </div>
+            </section>
+
+            <section>
+              <h2>Personal</h2>
+              <div class="grid">
+                <mat-form-field>
+                  <mat-label>Date of birth</mat-label>
+                  <input
+                    matInput
+                    formControlName="dateOfBirth"
+                    [matDatepicker]="dobPicker"
+                    [max]="maxBirthDate"
+                  />
+                  <mat-datepicker-toggle matIconSuffix [for]="dobPicker" />
+                  <mat-datepicker #dobPicker startView="multi-year" />
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Social Security number</mat-label>
+                  <input
+                    matInput
+                    formControlName="ssn"
+                    autocomplete="off"
+                    [type]="showSsn() ? 'text' : 'password'"
+                  />
+                  <button
+                    matIconButton
+                    matSuffix
+                    type="button"
+                    [attr.aria-label]="showSsn() ? 'Hide SSN' : 'Show SSN'"
+                    (click)="showSsn.set(!showSsn())"
+                  >
+                    <mat-icon>{{ showSsn() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-error>Use the format 123-45-6789</mat-error>
+                </mat-form-field>
+              </div>
+            </section>
+
+            <section>
+              <h2>Address</h2>
+              <div class="grid">
+                <mat-form-field class="span-2">
+                  <mat-label>Street address</mat-label>
+                  <input matInput formControlName="address" />
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" />
+                </mat-form-field>
+                <div class="split">
+                  <mat-form-field>
+                    <mat-label>State</mat-label>
+                    <input matInput formControlName="state" />
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>ZIP</mat-label>
+                    <input matInput formControlName="zip" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </section>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Insurance">
+          <div class="tab" formGroupName="insurance">
+            <section>
+              <h2>Coverage</h2>
+              <div class="grid">
+                <mat-form-field class="span-2">
+                  <mat-label>Insurance provider</mat-label>
+                  <mat-icon matPrefix>health_and_safety</mat-icon>
+                  <mat-select
+                    formControlName="companyId"
+                    (selectionChange)="onInsuranceCompanyChange($event.value)"
+                  >
+                    <mat-option [value]="null">None / self-pay</mat-option>
+                    @for (company of store.insuranceCompanies(); track company.id) {
+                      <mat-option [value]="company.id">{{ company.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Member ID</mat-label>
+                  <input matInput formControlName="memberId" />
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Insurance phone</mat-label>
+                  <mat-icon matPrefix>call</mat-icon>
+                  <input matInput type="tel" formControlName="companyPhone" />
+                </mat-form-field>
+              </div>
+            </section>
+          </div>
+        </mat-tab>
+
+        @if (client(); as c) {
+          <mat-tab [label]="'Sessions (' + c.sessions.length + ')'">
+            <div class="tab">
+              <section>
+                <div class="section-header">
+                  <h2>Upcoming</h2>
+                  <span class="pmt-spacer"></span>
+                  @if (!c.isDischarged) {
+                    <button matButton="tonal" type="button" (click)="bookSession()">
+                      <mat-icon>add</mat-icon>
+                      Book session
+                    </button>
+                  }
+                </div>
+                @for (session of sessions().upcoming; track session.id) {
+                  <div class="session">
+                    <mat-icon>event</mat-icon>
+                    <span>{{ session.start | date: 'EEEE, MMM d, y · h:mm a' }}</span>
+                    <span class="pmt-spacer"></span>
+                    <button
+                      matIconButton
+                      type="button"
+                      aria-label="Cancel session"
+                      matTooltip="Cancel session"
+                      (click)="cancelSession(session)"
+                    >
+                      <mat-icon>event_busy</mat-icon>
+                    </button>
+                  </div>
+                } @empty {
+                  <p class="muted">No upcoming sessions.</p>
+                }
+              </section>
+              <section>
+                <h2>History</h2>
+                @for (session of sessions().past; track session.id) {
+                  <div class="session past">
+                    <mat-icon>history</mat-icon>
+                    <span>{{ session.start | date: 'EEEE, MMM d, y · h:mm a' }}</span>
+                  </div>
+                } @empty {
+                  <p class="muted">No past sessions.</p>
+                }
+              </section>
+            </div>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    </form>
+  </div>
+}
